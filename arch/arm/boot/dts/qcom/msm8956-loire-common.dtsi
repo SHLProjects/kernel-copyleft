@@ -862,22 +862,27 @@
 
 &pmi8950_fg {
 	qcom,battery-data = <&loire_batterydata>;
-	qcom,hot-bat-decidegc = <550>;
+	qcom,hot-bat-decidegc = <500>;
 	qcom,warm-bat-decidegc = <450>;
-	qcom,cool-bat-decidegc = <100>;
-	qcom,cold-bat-decidegc = <50>;
-	qcom,cl-max-increment-deciperc = <0>;
+	qcom,cool-bat-decidegc = <250>;
+	qcom,cold-bat-decidegc = <270>;
+	qcom,cycle-counter-en;
+	qcom,capacity-learning-on;
+	qcom,capacity-learning-feedback;
+	qcom,capacity-estimation-on;
+	qcom,aging-eval-current-ma = <10>;
+	qcom,cl-max-increment-deciperc = <10>;
 	qcom,cl-max-decrement-deciperc = <20>;
 	qcom,cl-max-start-capacity = <40>;
 	qcom,hold-soc-while-full;
-	qcom,fg-chg-iterm-ma = <140>;
-	qcom,fg-iterm-ma = <140>;
+	qcom,fg-chg-iterm-ma = <250>;
+	qcom,fg-iterm-ma = <250>;
 	qcom,thermal-coefficients = [EC 85 75 4A FC 35];
 	qcom,ext-sense-type;
-	qcom,fg-cutoff-voltage-mv = <3200>;
+	qcom,fg-cutoff-voltage-mv = <3100>;
 	qcom,vbat-estimate-diff-mv = <200>;
-	qcom,cl-vbat-est-thr-uv = <300000>;
-	qcom,fg-cc-cv-threshold-mv = <4290>;
+	qcom,cl-vbat-est-thr-uv = <200000>;
+	qcom,fg-cc-cv-threshold-mv = <4340>;
 	somc,resume-soc-raw-full-normal = <0xF3>;
 	somc,resume-soc-raw-full-aging = <0xE3>;
 	somc,resume-soc-raw-not-full-normal = <0xFD>;
@@ -895,7 +900,11 @@
 	qcom,precharging-timeout-mins = <24>;
 	qcom,charging-timeout-mins = <768>;
 	qcom,bmd-pin-src = "bpd_none";
+	qcom,low-volt-dcin;
 	qcom,force-aicl-rerun;
+	qcom,parallel-main-chg-fcc-percent = <60>;
+	qcom,parallel-main-chg-icl-percent = <40>;
+	qcom,batt-aging-comp;
 	id_poll_enable;
 	id_poll_up_interval = <2000>;
 	id_poll_up_period = <50000>;
