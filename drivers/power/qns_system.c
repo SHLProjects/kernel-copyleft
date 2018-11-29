@@ -405,12 +405,12 @@ static ssize_t qns_param_store(struct class *dev,
 	case CHARGE_CURRENT:
 		ret = kstrtoint(buf, 10, &val);
 		qns_get_fcc(&full_charge, NULL);
-		if (!ret && (val > 0) && full_charge >= 2450)
+		if (!ret && (val > 0) && full_charge >= 2350)
 		{
 			qns_set_ibat(2500); //Sets charging current to QC tweak profile
 			return count;
 		}
-		if (!ret && (val > 0) && full_charge < 2450)
+		if (!ret && (val > 0) && full_charge < 2350)
 		{
 			qns_set_ibat(val); //Sets charging current to QNS profile
 			return count;
