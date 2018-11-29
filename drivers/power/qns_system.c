@@ -407,7 +407,7 @@ static ssize_t qns_param_store(struct class *dev,
 		qns_get_fcc(&full_charge, NULL);
 		if (!ret && (val > 0) && full_charge >= 2450)
 		{
-			qns_set_ibat(2400); //Sets charging current to QC tweak profile
+			qns_set_ibat(2500); //Sets charging current to QC tweak profile
 			return count;
 		}
 		if (!ret && (val > 0) && full_charge < 2450)

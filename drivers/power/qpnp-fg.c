@@ -235,22 +235,22 @@ enum fg_mem_data_index {
 
 static struct fg_mem_setting settings[FG_MEM_SETTING_MAX] = {
 	/*       ID                    Address, Offset, Value*/
-	SETTING(SOFT_COLD,       0x454,   0,      100),
+	SETTING(SOFT_COLD,       0x454,   0,      320),
 	SETTING(SOFT_HOT,        0x454,   1,      400),
-	SETTING(HARD_COLD,       0x454,   2,      50),
-	SETTING(HARD_HOT,        0x454,   3,      450),
+	SETTING(HARD_COLD,       0x454,   2,      200),
+	SETTING(HARD_HOT,        0x454,   3,      500),
 	SETTING(RESUME_SOC,      0x45C,   1,      0),
 	SETTING(BCL_LM_THRESHOLD, 0x47C,   2,      50),
 	SETTING(BCL_MH_THRESHOLD, 0x47C,   3,      752),
-	SETTING(TERM_CURRENT,	 0x40C,   2,      250),
-	SETTING(CHG_TERM_CURRENT, 0x4F8,   2,      250),
-	SETTING(IRQ_VOLT_EMPTY,	 0x458,   3,      3100),
-	SETTING(CUTOFF_VOLTAGE,	 0x40C,   0,      3200),
+	SETTING(TERM_CURRENT,	 0x40C,   2,      300),
+	SETTING(CHG_TERM_CURRENT, 0x4F8,   2,      300),
+	SETTING(IRQ_VOLT_EMPTY,	 0x458,   3,      2900),
+	SETTING(CUTOFF_VOLTAGE,	 0x40C,   0,      3100),
 	SETTING(VBAT_EST_DIFF,	 0x000,   0,      30),
 	SETTING(DELTA_SOC,	 0x450,   3,      1),
 	SETTING(SOC_MAX,	 0x458,   1,      85),
 	SETTING(SOC_MIN,	 0x458,   2,      15),
-	SETTING(BATT_LOW,	 0x458,   0,      4200),
+	SETTING(BATT_LOW,	 0x458,   0,      4100),
 };
 
 #define DATA(_idx, _address, _offset, _length,  _value)	\
@@ -333,7 +333,7 @@ module_param_named(
 	battery_type, fg_batt_type, charp, S_IRUSR | S_IWUSR
 );
 
-static int fg_sram_update_period_ms = 30000;
+static int fg_sram_update_period_ms = 1200;
 module_param_named(
 	sram_update_period_ms, fg_sram_update_period_ms, int, S_IRUSR | S_IWUSR
 );
@@ -2741,8 +2741,8 @@ out:
 #define BATT_TEMP_OFF		DISABLE_THERM_BIT
 #define BATT_TEMP_ON		(FORCE_RBIAS_ON_BIT | TEMP_SENSE_ALWAYS_BIT | \
 				TEMP_SENSE_CHARGE_BIT)
-#define TEMP_PERIOD_UPDATE_MS		10000
-#define TEMP_PERIOD_TIMEOUT_MS		3000
+#define TEMP_PERIOD_UPDATE_MS		5000
+#define TEMP_PERIOD_TIMEOUT_MS		2000
 #define BATT_TEMP_LOW_LIMIT		-600
 #define BATT_TEMP_HIGH_LIMIT		1500
 static void update_temp_data(struct work_struct *work)
@@ -3678,7 +3678,7 @@ fail:
 	return rc;
 }
 
-#define FG_CAP_LEARNING_INTERVAL_NS	30000000000
+#define FG_CAP_LEARNING_INTERVAL_NS	10000000000
 static enum alarmtimer_restart fg_cap_learning_alarm_cb(struct alarm *alarm,
 							ktime_t now)
 {
