@@ -389,7 +389,7 @@
 
 		qcom,cpr-fuse-corners = <3>;
 		qcom,cpr-voltage-ceiling = <950000 1050000 1145000>;
-		qcom,cpr-voltage-floor =   <795000  835000  910000>;
+		qcom,cpr-voltage-floor =   <795000  835000  905000>;
 		vdd-apc-supply = <&pm8950_s5>;
 
 		vdd-mx-supply = <&pm8950_s6_level_ao>;
@@ -610,7 +610,7 @@
 				1050000 1110000 1145000 1145000>;
 		qcom,cpr-voltage-floor =
 				<755000 755000 755000 795000 835000
-				855000 910000 925000 925000>;
+				855000 905000 925000 925000>;
 		vdd-gfx-supply = <&pm8004_s5>;
 
 		vdd-mx-supply = <&pm8950_s6_level_ao>;
