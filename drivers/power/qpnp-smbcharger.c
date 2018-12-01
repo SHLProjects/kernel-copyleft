@@ -431,30 +431,30 @@ module_param_named(
 	debug_mask, smbchg_debug_mask, int, S_IRUSR | S_IWUSR
 );
 
-static int smbchg_parallel_en = 1;
+int smbchg_parallel_en = 1;
 module_param_named(
 	parallel_en, smbchg_parallel_en, int, S_IRUSR | S_IWUSR
 );
 
-static int smbchg_main_chg_fcc_percent = 50;
+int smbchg_main_chg_fcc_percent = 50;
 module_param_named(
 	main_chg_fcc_percent, smbchg_main_chg_fcc_percent,
 	int, S_IRUSR | S_IWUSR
 );
 
-static int smbchg_main_chg_icl_percent = 60;
+int smbchg_main_chg_icl_percent = 60;
 module_param_named(
 	main_chg_icl_percent, smbchg_main_chg_icl_percent,
 	int, S_IRUSR | S_IWUSR
 );
 
-static int smbchg_default_hvdcp_icl_ma = 1500;
+int smbchg_default_hvdcp_icl_ma = 2000;
 module_param_named(
 	default_hvdcp_icl_ma, smbchg_default_hvdcp_icl_ma,
 	int, S_IRUSR | S_IWUSR
 );
 
-static int smbchg_default_dcp_icl_ma = 2050;
+int smbchg_default_dcp_icl_ma = 2100;
 module_param_named(
 	default_dcp_icl_ma, smbchg_default_dcp_icl_ma,
 	int, S_IRUSR | S_IWUSR
@@ -3270,7 +3270,7 @@ static int smbchg_float_voltage_comp_set(struct smbchg_chip *chip, int code)
 #define MID_RANGE_FLOAT_MIN_VAL		0x05
 #define MID_RANGE_FLOAT_STEP_MV		20
 
-#define HIGH_RANGE_FLOAT_MIN_MV		4340
+#define HIGH_RANGE_FLOAT_MIN_MV		4350
 #define HIGH_RANGE_FLOAT_MIN_VAL	0x2A
 #define HIGH_RANGE_FLOAT_STEP_MV	10
 
@@ -6522,7 +6522,7 @@ static int smbchg_battery_get_property(struct power_supply *psy,
 		val->intval = get_prop_batt_health(chip);
 		break;
 	case POWER_SUPPLY_PROP_TECHNOLOGY:
-		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
+		val->intval = POWER_SUPPLY_TECHNOLOGY_LIPO;
 		break;
 	case POWER_SUPPLY_PROP_FLASH_CURRENT_MAX:
 		val->intval = smbchg_calc_max_flash_current(chip);
