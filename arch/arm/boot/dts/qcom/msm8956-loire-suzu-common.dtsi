@@ -62,7 +62,7 @@
 &pmi8950_charger {
 	qcom,fastchg-current-ma = <2500>;
 	somc,usb-9v-current-max = <1600>;
-	somc,usb-5v-current-max = <2100>
+	somc,usb-5v-current-max = <2100>;
 	somc,usb-6v-current-max = <2000>;
 	somc,usb-7v-current-max = <1800>;
 	somc,usb-8v-current-max = <1900>;
