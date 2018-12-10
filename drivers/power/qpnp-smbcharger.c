@@ -454,7 +454,7 @@ module_param_named(
 	int, S_IRUSR | S_IWUSR
 );
 
-int smbchg_default_dcp_icl_ma = 2100;
+int smbchg_default_dcp_icl_ma = 2200;
 module_param_named(
 	default_dcp_icl_ma, smbchg_default_dcp_icl_ma,
 	int, S_IRUSR | S_IWUSR
@@ -1381,6 +1381,9 @@ static int dc_ilim_ma_table_8994[] = {
 	1950,
 	1970,
 	2000,
+	2050,
+	2100,
+	2200,
 };
 
 static int dc_ilim_ma_table_8996[] = {
@@ -7973,7 +7976,7 @@ static struct of_device_id smbchg_match_table[] = {
 };
 
 #define DC_MA_MIN 300
-#define DC_MA_MAX 2000
+#define DC_MA_MAX 2200
 #define OF_PROP_READ(chip, prop, dt_property, retval, optional)		\
 do {									\
 	if (retval)							\
@@ -8772,7 +8775,7 @@ static int smbchg_probe(struct spmi_device *spmi)
 
 	chip->fcc_votable = create_votable(&spmi->dev,
 			"SMBCHG: fcc",
-			VOTE_MIN, NUM_FCC_VOTER, 2000,
+			VOTE_MIN, NUM_FCC_VOTER, 2200,
 			set_fastchg_current_vote_cb);
 	if (IS_ERR(chip->fcc_votable))
 		return PTR_ERR(chip->fcc_votable);
