@@ -79,6 +79,7 @@
 	qcom,autoadjust-vfloat;
 	qcom,auto-voltage-comp-mv = <30>;
 	qcom,rparasitics-uohm = <50000>;
+	qcom,dc-psy-ma = <2200>;
 };
 
 &spmi_bus {
