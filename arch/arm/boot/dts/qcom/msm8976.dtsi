@@ -486,13 +486,13 @@
 				<  691200   805 >,	/* SVS   */
 				<  806400  4101 >,	/* SVS+  */
 				< 1017600  5712 >,	/* NOM   */
-				< 1190400  6152 >,	/* TURBO */
+				< 1190400  7104 >,	/* TURBO */
 				< 1440000  7104 >;
 			cpu-to-dev-map-4 =
 				<  883200   805 >,	/* SVS   */
 				< 1190400  4101 >,	/* SVS+  */
 				< 1382400  5712 >,	/* NOM   */
-				< 1612800  6152 >,	/* TURBO */
+				< 1612800  7104 >,	/* TURBO */
 				< 1958400  7104 >,
 				< 2016000  7104 >;
 		};
@@ -515,13 +515,13 @@
 				<  691200  307200 >,
 				<  806400  403200 >,
 				< 1017600  441600 >,
-				< 1190400  556800 >,
+				< 1190400  614400 >,
 				< 1440000  614400 >;
 			cpu-to-dev-map-4 =
 				<  883200 307200 >,
 				< 1190400 403200 >,
 				< 1382400 441600 >,
-				< 1612800 556800 >,
+				< 1612800 614400 >,
 				< 1958400 614400 >,
 				< 2016000 614400 >;
 		};
@@ -834,7 +834,7 @@
 		compatible = "qcom,msm-thermal";
 		qcom,sensor-id = <9>;
 		qcom,poll-ms = <250>;
-		qcom,limit-temp = <60>;
+		qcom,limit-temp = <70>;
 		qcom,temp-hysteresis = <10>;
 		qcom,freq-step = <2>;
 		qcom,core-limit-temp = <80>;
@@ -893,10 +893,10 @@
 		qcom,bcl-hotplug-list = <&CPU6 &CPU7>;
 		qcom,bcl-soc-hotplug-list = <&CPU4 &CPU5 &CPU6 &CPU7>;
 		qcom,ibat-monitor {
-			qcom,high-threshold-uamp = <1700000>;
-			qcom,low-threshold-uamp = <1200000>;
+			qcom,high-threshold-uamp = <2650000>;
+			qcom,low-threshold-uamp = <1750000>;
 			qcom,mitigation-freq-khz = <1190400>;
-			qcom,vph-high-threshold-uv = <3600000>;
+			qcom,vph-high-threshold-uv = <3500000>;
 			qcom,vph-low-threshold-uv = <3400000>;
 			qcom,soc-low-threshold = <15>;
 			qcom,thermal-handle = <&msm_thermal_freq>;
@@ -1622,7 +1622,7 @@
 		qcom,msm-bus,num-paths = <1>;
 		qcom,msm-bus,vectors-KBps =
 			<55 512 0 0>,
-			<55 512 393600 393600>;
+			<55 512 400000 400000>;
 		clocks = <&clock_gcc clk_crypto_clk_src>,
 			 <&clock_gcc clk_gcc_crypto_clk>,
 			 <&clock_gcc clk_gcc_crypto_ahb_clk>,
@@ -1653,7 +1653,7 @@
 		qcom,msm-bus,num-paths = <1>;
 		qcom,msm-bus,vectors-KBps =
 			<55 512 0 0>,
-			<55 512 393600 393600>;
+			<55 512 400000 400000>;
 		clocks = <&clock_gcc clk_crypto_clk_src>,
 			 <&clock_gcc clk_gcc_crypto_clk>,
 			 <&clock_gcc clk_gcc_crypto_ahb_clk>,
