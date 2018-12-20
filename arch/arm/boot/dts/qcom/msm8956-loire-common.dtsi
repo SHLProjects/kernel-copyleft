@@ -875,8 +875,8 @@
 	qcom,cl-max-decrement-deciperc = <32>;
 	qcom,cl-max-start-capacity = <35>;
 	qcom,hold-soc-while-full;
-	qcom,fg-chg-iterm-ma = <300>;
-	qcom,fg-iterm-ma = <300>;
+	qcom,fg-chg-iterm-ma = <50>;
+	qcom,fg-iterm-ma = <50>;
 	qcom,thermal-coefficients = [EC 85 75 4A FC 35];
 	qcom,ext-sense-type;
 	qcom,fg-cutoff-voltage-mv = <3100>;
@@ -900,10 +900,8 @@
 	qcom,precharging-timeout-mins = <24>;
 	qcom,charging-timeout-mins = <768>;
 	qcom,bmd-pin-src = "bpd_none";
-	qcom,low-volt-dcin;
-	qcom,force-aicl-rerun;
-	qcom,parallel-main-chg-fcc-percent = <60>;
-	qcom,parallel-main-chg-icl-percent = <40>;
+	qcom,parallel-main-chg-fcc-percent = <70>;
+	qcom,parallel-main-chg-icl-percent = <80>;
 	qcom,batt-aging-comp;
 	id_poll_enable;
 	id_poll_up_interval = <2000>;

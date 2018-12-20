@@ -140,7 +140,7 @@
 #define WCD9335_DEC_PWR_LVL_HP 0x04
 #define WCD9335_DEC_PWR_LVL_DF 0x00
 
-#define CALCULATE_VOUT_D(req_mv) (((req_mv - 200) * 10) / 25)
+#define CALCULATE_VOUT_D(req_mv) (((req_mv - 170) * 10) / 25)
 
 #define DAPM_LDO_H_STANDALONE "LDO_H"
 
@@ -204,7 +204,7 @@ static struct afe_param_slimbus_slave_port_cfg tasha_slimbus_slave_port_cfg = {
 	.slimbus_dev_id = AFE_SLIMBUS_DEVICE_1,
 	.slave_dev_pgd_la = 0,
 	.slave_dev_intfdev_la = 0,
-	.bit_width = 16,
+	.bit_width = 24,
 	.data_format = 0,
 	.num_channels = 1
 };
