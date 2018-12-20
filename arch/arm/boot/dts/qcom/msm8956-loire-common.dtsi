@@ -862,15 +862,15 @@
 
 &pmi8950_fg {
 	qcom,battery-data = <&loire_batterydata>;
-	qcom,hot-bat-decidegc = <500>;
-	qcom,warm-bat-decidegc = <450>;
+	qcom,hot-bat-decidegc = <450>;
+	qcom,warm-bat-decidegc = <400>;
 	qcom,cool-bat-decidegc = <250>;
 	qcom,cold-bat-decidegc = <270>;
 	qcom,cycle-counter-en;
 	qcom,capacity-learning-on;
 	qcom,capacity-learning-feedback;
 	qcom,capacity-estimation-on;
-	qcom,aging-eval-current-ma = <25>;
+	qcom,aging-eval-current-ma = <200>;
 	qcom,cl-max-increment-deciperc = <19>;
 	qcom,cl-max-decrement-deciperc = <32>;
 	qcom,cl-max-start-capacity = <35>;
@@ -903,6 +903,10 @@
 	qcom,parallel-main-chg-fcc-percent = <70>;
 	qcom,parallel-main-chg-icl-percent = <80>;
 	qcom,batt-aging-comp;
+	qcom,low-volt-dcin;
+	qcom,force-aicl-rerun;
+	qcom,aicl-rerun-period-s = <45>;
+	qcom,override-usb-current;
 	id_poll_enable;
 	id_poll_up_interval = <2000>;
 	id_poll_up_period = <50000>;
