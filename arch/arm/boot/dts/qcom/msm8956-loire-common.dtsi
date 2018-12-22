@@ -862,8 +862,8 @@
 
 &pmi8950_fg {
 	qcom,battery-data = <&loire_batterydata>;
-	qcom,hot-bat-decidegc = <450>;
-	qcom,warm-bat-decidegc = <400>;
+	qcom,hot-bat-decidegc = <520>;
+	qcom,warm-bat-decidegc = <470>;
 	qcom,cool-bat-decidegc = <250>;
 	qcom,cold-bat-decidegc = <270>;
 	qcom,cycle-counter-en;

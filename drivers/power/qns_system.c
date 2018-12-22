@@ -42,6 +42,7 @@
 #define QNS_ERROR	-1
 
 int32_t full_charge;
+int32_t capacity;
 
 static struct power_supply * ibat_psy = NULL;
 static struct power_supply * battery_psy = NULL;
@@ -202,6 +203,7 @@ static int qns_get_scvt(int *soc, int *c, int *v, int *tx10)
 		retVal = QNS_ERROR;
 	}
 	return retVal;
+	capacity = *soc;
 }
 static int qns_get_fcc(int *fcc, int *design)
 {
@@ -231,7 +233,6 @@ static int qns_get_fcc(int *fcc, int *design)
 			}
 			else
 				*fcc = ret.intval/1000;
-				//full_charge = *fcc;
 		}
 		if(design != NULL)
 		{
@@ -407,7 +408,22 @@ static ssize_t qns_param_store(struct class *dev,
 		qns_get_fcc(&full_charge, NULL);
 		if (!ret && (val > 0) && full_charge >= 2350)
 		{
-			qns_set_ibat(2500); //Sets charging current to QC tweak profile
+			if(capacity < 25)
+			{
+				qns_set_ibat(val); //Set charging current to QNS profile
+			}
+			if(capacity > 25 && capacity < 45)
+			{
+				qns_set_ibat(3000); //Push charging current to QC turbo
+			}
+			if(capacity > 45 && capacity < 75)
+			{
+				qns_set_ibat(2500); //Sets charging current to QC fast
+			}
+			if(capacity > 75)
+			{
+				qns_set_ibat(val); //Sets charging current to QNS constant charging profile
+			}
 			return count;
 		}
 		if (!ret && (val > 0) && full_charge < 2350)

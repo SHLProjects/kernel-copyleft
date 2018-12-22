@@ -53,15 +53,15 @@
 
 &pmi8950_fg {
 	qcom,battery-data = <&loire_suzu_batterydata>;
-	qcom,cold-hot-jeita-hysteresis = <27 45>;
-	somc,cool-warm-jeita-hysteresis = <25 40>;
+	qcom,cold-hot-jeita-hysteresis = <27 52>;
+	somc,cool-warm-jeita-hysteresis = <25 47>;
 	qcom,cold-bat-decidegc = <27>;
-	qcom,hot-bat-decidegc = <45>;
+	qcom,hot-bat-decidegc = <52>;
 };
 
 &pmi8950_charger {
-	qcom,fastchg-current-ma = <2500>;
-	qcom,ibat-ocp-threshold-ua = <2650000>;
+	qcom,fastchg-current-ma = <3000>;
+	qcom,ibat-ocp-threshold-ua = <3000000>;
 	somc,usb-9v-current-max = <1600>;
 	somc,usb-5v-current-max = <2000>;
 	somc,usb-6v-current-max = <2000>;
@@ -70,16 +70,16 @@
 	qcom,float-voltage-comp = <0x05>;
 	somc,fastchg-warm-current-ma = <1500>;
 	somc,fastchg-cool-current-ma = <1500>;
-	somc,thermal-engine-fastchg-current = <2500 2400 2300 2200 2100 2050 2000 1910 1880 1850 1800 1600 1500 1400 1200>;
-	somc,thermal-mitigation-usb-9v = <1600 1500 1450 1400 1200 1100 1000 950 900 700 650 600 550 500 475>;
+	somc,thermal-engine-fastchg-current = <3000 2500 2300 2200 2100 2050 2000 1910 1850 1800 1600 1500 1400 1000 0>;
+	somc,thermal-mitigation-usb-9v = <1600 1500 1450 1400 1200 1100 1000 950 900 700 650 600 550 550 550>;
 	somc,thermal-mitigation-usb-8v = <1800 1700 1600 1500 1400 1400 1200 1100 1100 900 700 500 500 500 500>;
 	somc,thermal-mitigation-usb-7v = <1900 1800 1700 1700 1600 1500 1400 1200 1100 900 700 500 500 500 500>;
 	somc,thermal-mitigation-usb-6v = <2000 1900 1800 1700 1600 1500 1400 1200 1100 900 700 500 500 500 500>;
-	somc,thermal-mitigation-usb-5v = <2000 1900 1800 1600 1600 1500 1500 1500 1500 1400 1200 1100 1000 900 700>;
+	somc,thermal-mitigation-usb-5v = <2000 1900 1800 1600 1600 1500 1500 1500 1500 1400 1200 1100 1000 1000 1000>;
 	somc,limit-usb-5v-level = <15>;
 	qcom,autoadjust-vfloat;
-	qcom,auto-voltage-comp-mv = <30>;
-	qcom,rparasitics-uohm = <127500>;
+	qcom,auto-voltage-comp-mv = <20>;
+	qcom,rparasitics-uohm = <122500>;
 	qcom,dc-psy-type = "Mains";
 	qcom,dc-psy-ma = <2000>;
 };
