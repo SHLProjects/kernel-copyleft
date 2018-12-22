@@ -70,7 +70,7 @@
 	qcom,float-voltage-comp = <0x05>;
 	somc,fastchg-warm-current-ma = <1500>;
 	somc,fastchg-cool-current-ma = <1500>;
-	somc,thermal-engine-fastchg-current = <3000 2500 2300 2200 2100 2050 2000 1910 1850 1800 1600 1500 1400 1000 0>;
+	somc,thermal-engine-fastchg-current = <3000 2500 2400 2300 2100 2050 2000 1910 1850 1800 1600 1500 1400 1000 0>;
 	somc,thermal-mitigation-usb-9v = <1600 1500 1450 1400 1200 1100 1000 950 900 700 650 600 550 550 550>;
 	somc,thermal-mitigation-usb-8v = <1800 1700 1600 1500 1400 1400 1200 1100 1100 900 700 500 500 500 500>;
 	somc,thermal-mitigation-usb-7v = <1900 1800 1700 1700 1600 1500 1400 1200 1100 900 700 500 500 500 500>;

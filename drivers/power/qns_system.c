@@ -43,6 +43,7 @@
 
 int32_t full_charge;
 int32_t capacity;
+int32_t batt_temp;
 
 static struct power_supply * ibat_psy = NULL;
 static struct power_supply * battery_psy = NULL;
@@ -203,7 +204,6 @@ static int qns_get_scvt(int *soc, int *c, int *v, int *tx10)
 		retVal = QNS_ERROR;
 	}
 	return retVal;
-	capacity = *soc;
 }
 static int qns_get_fcc(int *fcc, int *design)
 {
@@ -405,7 +405,9 @@ static ssize_t qns_param_store(struct class *dev,
 	{
 	case CHARGE_CURRENT:
 		ret = kstrtoint(buf, 10, &val);
+		qns_get_scvt(&capacity, NULL, NULL, NULL);
 		qns_get_fcc(&full_charge, NULL);
+		qns_get_scvt(NULL, NULL, NULL, &batt_temp);
 		if (!ret && (val > 0) && full_charge >= 2350)
 		{
 			if(capacity < 25)
@@ -414,11 +416,26 @@ static ssize_t qns_param_store(struct class *dev,
 			}
 			if(capacity > 25 && capacity < 45)
 			{
-				qns_set_ibat(3000); //Push charging current to QC turbo
+
+				if(batt_temp < 456)
+				{
+					qns_set_ibat(3000); //Push charging current to QC turbo
+				}
+				if(batt_temp > 456)
+				{
+					qns_set_ibat(2300); //Higher temp, lower current
+				}
 			}
 			if(capacity > 45 && capacity < 75)
 			{
-				qns_set_ibat(2500); //Sets charging current to QC fast
+				if(batt_temp < 456)
+				{
+					qns_set_ibat(2500); //Sets charging current to QC fast
+				}
+				if(batt_temp > 456)
+				{
+					qns_set_ibat(2100); //Higher temp, lower current
+				}
 			}
 			if(capacity > 75)
 			{
