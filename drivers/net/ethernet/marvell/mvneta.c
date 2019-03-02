@@ -1629,7 +1629,7 @@ static u32 mvneta_tx_done_gbe(struct mvneta_port *pp, u32 cause_tx_done,
 			break;
 
 		nq = netdev_get_tx_queue(pp->dev, txq->id);
-		__netif_tx_lock(nq, smp_processor_id());
+		__netif_tx_lock(nq, raw_smp_processor_id());
 
 		if (txq->count) {
 			tx_done += mvneta_txq_done(pp, txq);

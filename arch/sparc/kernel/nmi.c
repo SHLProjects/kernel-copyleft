@@ -77,7 +77,7 @@ static void die_nmi(const char *str, struct pt_regs *regs, int do_panic)
 
 	printk(KERN_EMERG "%s", str);
 	printk(" on CPU%d, ip %08lx, registers:\n",
-	       smp_processor_id(), regs->tpc);
+	       raw_smp_processor_id(), regs->tpc);
 	show_regs(regs);
 	dump_stack();
 

@@ -358,7 +358,7 @@ static int pnode_to_first_cpu(int pnode, struct bau_control *smaster)
 static void do_reset(void *ptr)
 {
 	int i;
-	struct bau_control *bcp = &per_cpu(bau_control, smp_processor_id());
+	struct bau_control *bcp = &per_cpu(bau_control, raw_smp_processor_id());
 	struct reset_args *rap = (struct reset_args *)ptr;
 	struct bau_pq_entry *msg;
 	struct ptc_stats *stat = bcp->statp;
@@ -437,7 +437,7 @@ static inline unsigned long cycles_2_us(unsigned long long cyc)
 {
 	unsigned long long ns;
 	unsigned long us;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	ns =  (cyc * per_cpu(cyc2ns, cpu)) >> CYC2NS_SCALE_FACTOR;
 	us = ns / 1000;
@@ -674,7 +674,7 @@ static inline cycles_t sec_2_cycles(unsigned long sec)
 	cycles_t cyc;
 
 	ns = sec * 1000000000;
-	cyc = (ns << CYC2NS_SCALE_FACTOR)/(per_cpu(cyc2ns, smp_processor_id()));
+	cyc = (ns << CYC2NS_SCALE_FACTOR)/(per_cpu(cyc2ns, raw_smp_processor_id()));
 	return cyc;
 }
 
@@ -1228,7 +1228,7 @@ void uv_bau_message_interrupt(struct pt_regs *regs)
 	ack_APIC_irq();
 	time_start = get_cycles();
 
-	bcp = &per_cpu(bau_control, smp_processor_id());
+	bcp = &per_cpu(bau_control, raw_smp_processor_id());
 	stat = bcp->statp;
 
 	msgdesc.queue_first = bcp->queue_first;
@@ -1332,7 +1332,7 @@ static inline unsigned long long usec_2_cycles(unsigned long microsec)
 	unsigned long long cyc;
 
 	ns = microsec * 1000;
-	cyc = (ns << CYC2NS_SCALE_FACTOR)/(per_cpu(cyc2ns, smp_processor_id()));
+	cyc = (ns << CYC2NS_SCALE_FACTOR)/(per_cpu(cyc2ns, raw_smp_processor_id()));
 	return cyc;
 }
 

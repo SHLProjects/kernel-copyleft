@@ -357,7 +357,7 @@ static int dlpar_online_cpu(struct device_node *dn)
 	cpu_maps_update_begin();
 	for (i = 0; i < nthreads; i++) {
 		for_each_present_cpu(cpu) {
-			if (get_hard_smp_processor_id(cpu) != intserv[i])
+			if (get_hard_raw_smp_processor_id(cpu) != intserv[i])
 				continue;
 			BUG_ON(get_cpu_current_state(cpu)
 					!= CPU_STATE_OFFLINE);
@@ -451,7 +451,7 @@ static int dlpar_offline_cpu(struct device_node *dn)
 	cpu_maps_update_begin();
 	for (i = 0; i < nthreads; i++) {
 		for_each_present_cpu(cpu) {
-			if (get_hard_smp_processor_id(cpu) != intserv[i])
+			if (get_hard_raw_smp_processor_id(cpu) != intserv[i])
 				continue;
 
 			if (get_cpu_current_state(cpu) == CPU_STATE_OFFLINE)

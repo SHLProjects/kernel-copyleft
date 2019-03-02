@@ -286,7 +286,7 @@ static int efx_poll(struct napi_struct *napi, int budget)
 
 	netif_vdbg(efx, intr, efx->net_dev,
 		   "channel %d NAPI poll executing on CPU %d\n",
-		   channel->channel, raw_smp_processor_id());
+		   channel->channel, raw_raw_smp_processor_id());
 
 	spent = efx_process_channel(channel, budget);
 
@@ -1785,7 +1785,7 @@ static void efx_monitor(struct work_struct *data)
 
 	netif_vdbg(efx, timer, efx->net_dev,
 		   "hardware monitor executing on CPU %d\n",
-		   raw_smp_processor_id());
+		   raw_raw_smp_processor_id());
 	BUG_ON(efx->type->monitor == NULL);
 
 	/* If the mac_lock is already held then it is likely a port
@@ -1900,7 +1900,7 @@ static int efx_net_open(struct net_device *net_dev)
 	int rc;
 
 	netif_dbg(efx, ifup, efx->net_dev, "opening device on CPU %d\n",
-		  raw_smp_processor_id());
+		  raw_raw_smp_processor_id());
 
 	rc = efx_check_disabled(efx);
 	if (rc)
@@ -1928,7 +1928,7 @@ static int efx_net_stop(struct net_device *net_dev)
 	struct efx_nic *efx = netdev_priv(net_dev);
 
 	netif_dbg(efx, ifdown, efx->net_dev, "closing on CPU %d\n",
-		  raw_smp_processor_id());
+		  raw_raw_smp_processor_id());
 
 	/* Stop the device and flush all the channels */
 	efx_stop_all(efx);

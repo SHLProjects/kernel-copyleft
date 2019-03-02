@@ -169,13 +169,13 @@ irqreturn_t falcon_legacy_interrupt_a1(int irq, void *dev_id)
 	if (unlikely(EFX_OWORD_IS_ZERO(*int_ker))) {
 		netif_vdbg(efx, intr, efx->net_dev,
 			   "IRQ %d on CPU %d not for me\n", irq,
-			   raw_smp_processor_id());
+			   raw_raw_smp_processor_id());
 		return IRQ_NONE;
 	}
-	efx->last_irq_cpu = raw_smp_processor_id();
+	efx->last_irq_cpu = raw_raw_smp_processor_id();
 	netif_vdbg(efx, intr, efx->net_dev,
 		   "IRQ %d on CPU %d status " EFX_OWORD_FMT "\n",
-		   irq, raw_smp_processor_id(), EFX_OWORD_VAL(*int_ker));
+		   irq, raw_raw_smp_processor_id(), EFX_OWORD_VAL(*int_ker));
 
 	/* Check to see if we have a serious error condition */
 	syserr = EFX_OWORD_FIELD(*int_ker, FSF_AZ_NET_IVEC_FATAL_INT);

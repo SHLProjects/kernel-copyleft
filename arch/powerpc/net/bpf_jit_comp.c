@@ -407,7 +407,7 @@ static int bpf_jit_build_body(struct sk_filter *fp, u32 *image,
 #ifdef CONFIG_SMP
 			/*
 			 * PACA ptr is r13:
-			 * raw_smp_processor_id() = local_paca->paca_index
+			 * raw_raw_smp_processor_id() = local_paca->paca_index
 			 */
 			BUILD_BUG_ON(FIELD_SIZEOF(struct paca_struct,
 						  paca_index) != 2);

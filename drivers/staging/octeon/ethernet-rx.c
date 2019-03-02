@@ -82,7 +82,7 @@ static struct cvm_oct_core_state core_state __cacheline_aligned_in_smp;
 
 static void cvm_oct_enable_napi(void *_)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	napi_schedule(&cvm_oct_napi[cpu].napi);
 }
 
@@ -110,7 +110,7 @@ static void cvm_oct_enable_one_cpu(void)
 
 static void cvm_oct_no_more_work(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/*
 	 * CPU zero is special.  It always has the irq enabled when

@@ -832,7 +832,7 @@ static inline u32 armv7pmu_read_counter(struct perf_event *event)
 
 	if (!armv7_pmnc_counter_valid(cpu_pmu, idx))
 		pr_err("CPU%u reading wrong counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 	else if (idx == ARMV7_IDX_CYCLE_COUNTER)
 		asm volatile("mrc p15, 0, %0, c9, c13, 0" : "=r" (value));
 	else if (armv7_pmnc_select_counter(idx) == idx)
@@ -849,7 +849,7 @@ static inline void armv7pmu_write_counter(struct perf_event *event, u32 value)
 
 	if (!armv7_pmnc_counter_valid(cpu_pmu, idx))
 		pr_err("CPU%u writing wrong counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 	else if (idx == ARMV7_IDX_CYCLE_COUNTER)
 		asm volatile("mcr p15, 0, %0, c9, c13, 0" : : "r" (value));
 	else if (armv7_pmnc_select_counter(idx) == idx)
@@ -961,7 +961,7 @@ static void armv7pmu_enable_event(struct perf_event *event)
 
 	if (!armv7_pmnc_counter_valid(cpu_pmu, idx)) {
 		pr_err("CPU%u enabling wrong PMNC counter IRQ enable %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return;
 	}
 
@@ -1010,7 +1010,7 @@ static void armv7pmu_disable_event(struct perf_event *event)
 
 	if (!armv7_pmnc_counter_valid(cpu_pmu, idx)) {
 		pr_err("CPU%u disabling wrong PMNC counter IRQ enable %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return;
 	}
 

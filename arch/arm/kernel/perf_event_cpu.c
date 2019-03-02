@@ -333,7 +333,7 @@ static int perf_cpu_pm_notifier(struct notifier_block *self, unsigned long cmd,
 	switch (cmd) {
 	case CPU_PM_ENTER:
 		if (cpu_pmu->save_pm_registers)
-			cpu_pmu->save_pm_registers((void *)smp_processor_id());
+			cpu_pmu->save_pm_registers((void *)raw_smp_processor_id());
 		if (cpu_has_active_perf((int)v)) {
 			armpmu_update_counters();
 			pmu = &cpu_pmu->pmu;
@@ -350,7 +350,7 @@ static int perf_cpu_pm_notifier(struct notifier_block *self, unsigned long cmd,
 
 		if (cpu_pmu->restore_pm_registers)
 			cpu_pmu->restore_pm_registers(
-				(void *)smp_processor_id());
+				(void *)raw_smp_processor_id());
 		if (cpu_has_active_perf((int)v)) {
 			/*
 			 * Flip this bit so armpmu_enable knows it needs

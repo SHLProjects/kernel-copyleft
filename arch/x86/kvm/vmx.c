@@ -1161,7 +1161,7 @@ static inline int crash_local_vmclear_enabled(int cpu)
 
 static void crash_vmclear_local_loaded_vmcss(void)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	struct loaded_vmcs *v;
 
 	if (!crash_local_vmclear_enabled(cpu))
@@ -1179,7 +1179,7 @@ static inline void crash_disable_local_vmclear(int cpu) { }
 static void __loaded_vmcs_clear(void *arg)
 {
 	struct loaded_vmcs *loaded_vmcs = arg;
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	if (loaded_vmcs->cpu != cpu)
 		return; /* vcpu migration can race with cpu offline */
@@ -2572,7 +2572,7 @@ static void kvm_cpu_vmxon(u64 addr)
 
 static int hardware_enable(void *garbage)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	u64 phys_addr = __pa(per_cpu(vmxarea, cpu));
 	u64 old, test_bits;
 
@@ -2617,7 +2617,7 @@ static int hardware_enable(void *garbage)
 
 static void vmclear_local_loaded_vmcss(void)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	struct loaded_vmcs *v, *n;
 
 	list_for_each_entry_safe(v, n, &per_cpu(loaded_vmcss_on_cpu, cpu),
@@ -2862,7 +2862,7 @@ static struct vmcs *alloc_vmcs_cpu(int cpu)
 
 static struct vmcs *alloc_vmcs(void)
 {
-	return alloc_vmcs_cpu(raw_smp_processor_id());
+	return alloc_vmcs_cpu(raw_raw_smp_processor_id());
 }
 
 static void free_vmcs(struct vmcs *vmcs)
@@ -7196,7 +7196,7 @@ static struct kvm_vcpu *vmx_create_vcpu(struct kvm *kvm, unsigned int id)
 	if (!vmx->loaded_vmcs->vmcs)
 		goto free_msrs;
 	if (!vmm_exclusive)
-		kvm_cpu_vmxon(__pa(per_cpu(vmxarea, raw_smp_processor_id())));
+		kvm_cpu_vmxon(__pa(per_cpu(vmxarea, raw_raw_smp_processor_id())));
 	loaded_vmcs_init(vmx->loaded_vmcs);
 	if (!vmm_exclusive)
 		kvm_cpu_vmxoff();
@@ -7252,7 +7252,7 @@ static void __init vmx_check_processor_compat(void *rtn)
 		*(int *)rtn = -EIO;
 	if (memcmp(&vmcs_config, &vmcs_conf, sizeof(struct vmcs_config)) != 0) {
 		printk(KERN_ERR "kvm: CPU %d feature inconsistency!\n",
-				smp_processor_id());
+				raw_smp_processor_id());
 		*(int *)rtn = -EIO;
 	}
 }

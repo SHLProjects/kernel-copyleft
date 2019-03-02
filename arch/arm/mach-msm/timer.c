@@ -370,7 +370,7 @@ static void msm_timer_set_mode(enum clock_event_mode mode,
 			chip->irq_mask(irq_get_irq_data(clock->irq));
 
 		if (!is_smp() || clock != &msm_clocks[MSM_CLOCK_DGT]
-				|| smp_processor_id())
+				|| raw_smp_processor_id())
 			__raw_writel(0, clock->regbase + TIMER_ENABLE);
 
 		if (msm_global_timer == MSM_CLOCK_DGT &&
@@ -895,7 +895,7 @@ int __cpuinit local_timer_setup(struct clock_event_device *evt)
 	struct msm_clock *clock = &msm_clocks[msm_global_timer];
 
 	/* Use existing clock_event for cpu 0 */
-	if (!smp_processor_id())
+	if (!raw_smp_processor_id())
 		return 0;
 
 	if (cpu_is_msm8x60() || soc_class_is_msm8960() ||

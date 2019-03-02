@@ -92,7 +92,7 @@ static int integrator_set_target(struct cpufreq_policy *policy,
 	 * we should be running on the right CPU.
 	 */
 	set_cpus_allowed(current, cpumask_of_cpu(cpu));
-	BUG_ON(cpu != smp_processor_id());
+	BUG_ON(cpu != raw_smp_processor_id());
 
 	/* get current setting */
 	cm_osc = __raw_readl(CM_OSC);
@@ -157,7 +157,7 @@ static unsigned int integrator_get(unsigned int cpu)
 	cpus_allowed = current->cpus_allowed;
 
 	set_cpus_allowed(current, cpumask_of_cpu(cpu));
-	BUG_ON(cpu != smp_processor_id());
+	BUG_ON(cpu != raw_smp_processor_id());
 
 	/* detect memory etc. */
 	cm_osc = __raw_readl(CM_OSC);

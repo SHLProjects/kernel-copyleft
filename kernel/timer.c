@@ -758,7 +758,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires,
 
 	debug_activate(timer, expires);
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 
 #ifdef CONFIG_SMP
 	if (base != tvec_base_deferral) {
@@ -806,7 +806,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires,
 	 * This test is needed for only CONFIG_SCHED_HMP, as !CONFIG_SCHED_HMP
 	 * selects non-idle cpu as target of timer migration.
 	 */
-	if (cpu != smp_processor_id() && leftmost)
+	if (cpu != raw_smp_processor_id() && leftmost)
 		wake_up_nohz_cpu(cpu);
 #endif
 
@@ -1369,7 +1369,7 @@ unsigned long get_next_timer_interrupt(unsigned long now)
 	 * Pretend that there is no timer pending if the cpu is offline.
 	 * Possible pending timers will be migrated later to an active cpu.
 	 */
-	if (cpu_is_offline(smp_processor_id()))
+	if (cpu_is_offline(raw_smp_processor_id()))
 		return expires;
 
 	spin_lock(&base->lock);
@@ -1394,7 +1394,7 @@ unsigned long get_next_timer_interrupt(unsigned long now)
 void update_process_times(int user_tick)
 {
 	struct task_struct *p = current;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* Note: this timer irq context must be accounted for as well. */
 	account_process_tick(p, user_tick);
@@ -1418,7 +1418,7 @@ static void run_timer_softirq(struct softirq_action *h)
 	hrtimer_run_pending();
 
 #ifdef CONFIG_SMP
-	if (smp_processor_id() == tick_do_timer_cpu &&
+	if (raw_smp_processor_id() == tick_do_timer_cpu &&
 	    time_after_eq(jiffies, tvec_base_deferral->timer_jiffies))
 		__run_timers(tvec_base_deferral);
 #endif
@@ -1714,7 +1714,7 @@ void __init init_timers(void)
 	BUILD_BUG_ON(__alignof__(struct tvec_base) & TIMER_FLAG_MASK);
 
 	err = timer_cpu_notify(&timers_nb, (unsigned long)CPU_UP_PREPARE,
-			       (void *)(long)smp_processor_id());
+			       (void *)(long)raw_smp_processor_id());
 	init_timer_stats();
 
 	BUG_ON(err != NOTIFY_OK);

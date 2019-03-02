@@ -376,7 +376,7 @@ static int iucv_query_maxconn(void)
  */
 static void iucv_allow_cpu(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union iucv_param *parm;
 
 	/*
@@ -417,7 +417,7 @@ static void iucv_allow_cpu(void *data)
  */
 static void iucv_block_cpu(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union iucv_param *parm;
 
 	/* Disable all iucv interrupts. */
@@ -437,7 +437,7 @@ static void iucv_block_cpu(void *data)
  */
 static void iucv_block_cpu_almost(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union iucv_param *parm;
 
 	/* Allow iucv control interrupts only */
@@ -462,7 +462,7 @@ static void iucv_block_cpu_almost(void *data)
  */
 static void iucv_declare_cpu(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union iucv_param *parm;
 	int rc;
 
@@ -517,7 +517,7 @@ static void iucv_declare_cpu(void *data)
  */
 static void iucv_retrieve_cpu(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union iucv_param *parm;
 
 	if (!cpumask_test_cpu(cpu, &iucv_buffer_cpumask))
@@ -705,7 +705,7 @@ static int iucv_sever_pathid(u16 pathid, u8 userdata[16])
 {
 	union iucv_param *parm;
 
-	parm = iucv_param_irq[smp_processor_id()];
+	parm = iucv_param_irq[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (userdata)
 		memcpy(parm->ctrl.ipuser, userdata, sizeof(parm->ctrl.ipuser));
@@ -875,7 +875,7 @@ int iucv_path_accept(struct iucv_path *path, struct iucv_handler *handler,
 		goto out;
 	}
 	/* Prepare parameter block. */
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	parm->ctrl.ippathid = path->pathid;
 	parm->ctrl.ipmsglim = path->msglim;
@@ -923,7 +923,7 @@ int iucv_path_connect(struct iucv_path *path, struct iucv_handler *handler,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	parm->ctrl.ipmsglim = path->msglim;
 	parm->ctrl.ipflags1 = path->flags;
@@ -983,7 +983,7 @@ int iucv_path_quiesce(struct iucv_path *path, u8 userdata[16])
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (userdata)
 		memcpy(parm->ctrl.ipuser, userdata, sizeof(parm->ctrl.ipuser));
@@ -1015,7 +1015,7 @@ int iucv_path_resume(struct iucv_path *path, u8 userdata[16])
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (userdata)
 		memcpy(parm->ctrl.ipuser, userdata, sizeof(parm->ctrl.ipuser));
@@ -1044,12 +1044,12 @@ int iucv_path_sever(struct iucv_path *path, u8 userdata[16])
 		rc = -EIO;
 		goto out;
 	}
-	if (iucv_active_cpu != smp_processor_id())
+	if (iucv_active_cpu != raw_smp_processor_id())
 		spin_lock_bh(&iucv_table_lock);
 	rc = iucv_sever_pathid(path->pathid, userdata);
 	iucv_path_table[path->pathid] = NULL;
 	list_del_init(&path->list);
-	if (iucv_active_cpu != smp_processor_id())
+	if (iucv_active_cpu != raw_smp_processor_id())
 		spin_unlock_bh(&iucv_table_lock);
 out:
 	preempt_enable();
@@ -1078,7 +1078,7 @@ int iucv_message_purge(struct iucv_path *path, struct iucv_message *msg,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	parm->purge.ippathid = path->pathid;
 	parm->purge.ipmsgid = msg->id;
@@ -1170,7 +1170,7 @@ int __iucv_message_receive(struct iucv_path *path, struct iucv_message *msg,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	parm->db.ipbfadr1 = (u32)(addr_t) buffer;
 	parm->db.ipbfln1f = (u32) size;
@@ -1243,7 +1243,7 @@ int iucv_message_reject(struct iucv_path *path, struct iucv_message *msg)
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	parm->db.ippathid = path->pathid;
 	parm->db.ipmsgid = msg->id;
@@ -1282,7 +1282,7 @@ int iucv_message_reply(struct iucv_path *path, struct iucv_message *msg,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (flags & IUCV_IPRMDATA) {
 		parm->dpl.ippathid = path->pathid;
@@ -1332,7 +1332,7 @@ int __iucv_message_send(struct iucv_path *path, struct iucv_message *msg,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (flags & IUCV_IPRMDATA) {
 		/* Message of 8 bytes can be placed into the parameter list. */
@@ -1419,7 +1419,7 @@ int iucv_message_send2way(struct iucv_path *path, struct iucv_message *msg,
 		rc = -EIO;
 		goto out;
 	}
-	parm = iucv_param[smp_processor_id()];
+	parm = iucv_param[raw_smp_processor_id()];
 	memset(parm, 0, sizeof(union iucv_param));
 	if (flags & IUCV_IPRMDATA) {
 		parm->dpl.ippathid = path->pathid;
@@ -1749,7 +1749,7 @@ static void iucv_tasklet_fn(unsigned long ignored)
 		tasklet_schedule(&iucv_tasklet);
 		return;
 	}
-	iucv_active_cpu = smp_processor_id();
+	iucv_active_cpu = raw_smp_processor_id();
 
 	spin_lock_irq(&iucv_queue_lock);
 	list_splice_init(&iucv_task_queue, &task_queue);
@@ -1779,7 +1779,7 @@ static void iucv_work_fn(struct work_struct *work)
 
 	/* Serialize tasklet, iucv_path_sever and iucv_path_connect. */
 	spin_lock_bh(&iucv_table_lock);
-	iucv_active_cpu = smp_processor_id();
+	iucv_active_cpu = raw_smp_processor_id();
 
 	spin_lock_irq(&iucv_queue_lock);
 	list_splice_init(&iucv_work_queue, &work_queue);
@@ -1810,7 +1810,7 @@ static void iucv_external_interrupt(struct ext_code ext_code,
 	struct iucv_irq_list *work;
 
 	inc_irq_stat(IRQEXT_IUC);
-	p = iucv_irq_data[smp_processor_id()];
+	p = iucv_irq_data[raw_smp_processor_id()];
 	if (p->ippathid >= iucv_max_pathid) {
 		WARN_ON(p->ippathid >= iucv_max_pathid);
 		iucv_sever_pathid(p->ippathid, iucv_error_no_listener);

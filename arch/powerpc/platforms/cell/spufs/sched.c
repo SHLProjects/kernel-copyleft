@@ -144,7 +144,7 @@ void __spu_update_sched_info(struct spu_context *ctx)
 	cpumask_copy(&ctx->cpus_allowed, tsk_cpus_allowed(current));
 
 	/* Save the current cpu id for spu interrupt routing. */
-	ctx->last_ran = raw_smp_processor_id();
+	ctx->last_ran = raw_raw_smp_processor_id();
 }
 
 void spu_update_sched_info(struct spu_context *ctx)
@@ -312,7 +312,7 @@ static struct spu *aff_ref_location(struct spu_context *ctx, int mem_aff,
 	 * TODO: A better algorithm could be used to find a good spu to be
 	 *       used as reference location for the ctxs chain.
 	 */
-	node = cpu_to_node(raw_smp_processor_id());
+	node = cpu_to_node(raw_raw_smp_processor_id());
 	for (n = 0; n < MAX_NUMNODES; n++, node++) {
 		/*
 		 * "available_spus" counts how many spus are not potentially
@@ -595,7 +595,7 @@ static struct spu *spu_get_idle(struct spu_context *ctx)
 		}
 		mutex_unlock(&ctx->gang->aff_mutex);
 	}
-	node = cpu_to_node(raw_smp_processor_id());
+	node = cpu_to_node(raw_raw_smp_processor_id());
 	for (n = 0; n < MAX_NUMNODES; n++, node++) {
 		node = (node < MAX_NUMNODES) ? node : 0;
 		if (!node_allowed(ctx, node))
@@ -643,7 +643,7 @@ static struct spu *find_victim(struct spu_context *ctx)
 	 * the future.
 	 */
  restart:
-	node = cpu_to_node(raw_smp_processor_id());
+	node = cpu_to_node(raw_raw_smp_processor_id());
 	for (n = 0; n < MAX_NUMNODES; n++, node++) {
 		node = (node < MAX_NUMNODES) ? node : 0;
 		if (!node_allowed(ctx, node))

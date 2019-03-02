@@ -84,7 +84,7 @@ static int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo,
 				 PAGE_SIZE));
 
 	if (version == VERSION_WIN8_1)
-		msg->target_vcpu = hv_context.vp_index[smp_processor_id()];
+		msg->target_vcpu = hv_context.vp_index[raw_smp_processor_id()];
 
 	/*
 	 * Add to list before we send the request since we may
@@ -330,7 +330,7 @@ void vmbus_on_event(unsigned long data)
 	u32 relid;
 	u32 *recv_int_page = NULL;
 	void *page_addr;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	union hv_synic_event_flags *event;
 
 	if ((vmbus_proto_version == VERSION_WS2008) ||

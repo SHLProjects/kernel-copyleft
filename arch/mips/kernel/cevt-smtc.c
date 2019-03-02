@@ -83,7 +83,7 @@ static int mips_next_event(unsigned long delta,
 	unsigned long timestamp, reference, previous;
 	unsigned long nextcomp = 0L;
 	int vpe = current_cpu_data.vpe_id;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	local_irq_save(flags);
 	mtflags = dmt();
 
@@ -198,7 +198,7 @@ repeat:
 			    /*
 			     * We don't send IPIs to ourself.
 			     */
-			    if (cpu != smp_processor_id()) {
+			    if (cpu != raw_smp_processor_id()) {
 				smtc_send_ipi(cpu, SMTC_CLOCK_TICK, 0);
 			    } else {
 				cd = &per_cpu(mips_clockevent_device, cpu);
@@ -234,7 +234,7 @@ repeat:
 
 irqreturn_t c0_compare_interrupt(int irq, void *dev_id)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* If we're running SMTC, we've got MIPS MT and therefore MIPS32R2 */
 	handle_perf_irq(1);
@@ -251,7 +251,7 @@ irqreturn_t c0_compare_interrupt(int irq, void *dev_id)
 int __cpuinit smtc_clockevent_init(void)
 {
 	uint64_t mips_freq = mips_hpt_frequency;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct clock_event_device *cd;
 	unsigned int irq;
 	int i;

@@ -330,9 +330,9 @@ static struct work_registers __cpuinit build_get_work_registers(u32 **p)
 {
 	struct work_registers r;
 
-	int smp_processor_id_reg;
-	int smp_processor_id_sel;
-	int smp_processor_id_shift;
+	int raw_smp_processor_id_reg;
+	int raw_smp_processor_id_sel;
+	int raw_smp_processor_id_shift;
 
 	if (scratch_reg > 0) {
 		/* Save in CPU local C0_KScratch? */
@@ -345,24 +345,24 @@ static struct work_registers __cpuinit build_get_work_registers(u32 **p)
 
 	if (num_possible_cpus() > 1) {
 #ifdef CONFIG_MIPS_PGD_C0_CONTEXT
-		smp_processor_id_shift = 51;
-		smp_processor_id_reg = 20; /* XContext */
-		smp_processor_id_sel = 0;
+		raw_smp_processor_id_shift = 51;
+		raw_smp_processor_id_reg = 20; /* XContext */
+		raw_smp_processor_id_sel = 0;
 #else
 # ifdef CONFIG_32BIT
-		smp_processor_id_shift = 25;
-		smp_processor_id_reg = 4; /* Context */
-		smp_processor_id_sel = 0;
+		raw_smp_processor_id_shift = 25;
+		raw_smp_processor_id_reg = 4; /* Context */
+		raw_smp_processor_id_sel = 0;
 # endif
 # ifdef CONFIG_64BIT
-		smp_processor_id_shift = 26;
-		smp_processor_id_reg = 4; /* Context */
-		smp_processor_id_sel = 0;
+		raw_smp_processor_id_shift = 26;
+		raw_smp_processor_id_reg = 4; /* Context */
+		raw_smp_processor_id_sel = 0;
 # endif
 #endif
-		/* Get smp_processor_id */
-		UASM_i_MFC0(p, K0, smp_processor_id_reg, smp_processor_id_sel);
-		UASM_i_SRL_SAFE(p, K0, K0, smp_processor_id_shift);
+		/* Get raw_smp_processor_id */
+		UASM_i_MFC0(p, K0, raw_smp_processor_id_reg, raw_smp_processor_id_sel);
+		UASM_i_SRL_SAFE(p, K0, K0, raw_smp_processor_id_shift);
 
 		/* handler_reg_save index in K0 */
 		UASM_i_SLL(p, K0, K0, ilog2(sizeof(struct tlb_reg_save)));
@@ -840,7 +840,7 @@ build_get_pmde64(u32 **p, struct uasm_label **l, struct uasm_reloc **r,
 	uasm_i_dsrl_safe(p, ptr, ptr, 19);
 # else
 	/*
-	 * 64 bit SMP running in XKPHYS has smp_processor_id() << 3
+	 * 64 bit SMP running in XKPHYS has raw_smp_processor_id() << 3
 	 * stored in CONTEXT.
 	 */
 	uasm_i_dmfc0(p, ptr, C0_CONTEXT);
@@ -950,7 +950,7 @@ build_get_pgde32(u32 **p, unsigned int tmp, unsigned int ptr)
 {
 	long pgdc = (long)pgd_current;
 
-	/* 32 bit SMP has smp_processor_id() stored in CONTEXT. */
+	/* 32 bit SMP has raw_smp_processor_id() stored in CONTEXT. */
 #ifdef CONFIG_SMP
 #ifdef	CONFIG_MIPS_MT_SMTC
 	/*
@@ -961,7 +961,7 @@ build_get_pgde32(u32 **p, unsigned int tmp, unsigned int ptr)
 	uasm_i_srl(p, ptr, ptr, 19);
 #else
 	/*
-	 * smp_processor_id() << 3 is stored in CONTEXT.
+	 * raw_smp_processor_id() << 3 is stored in CONTEXT.
 	 */
 	uasm_i_mfc0(p, ptr, C0_CONTEXT);
 	UASM_i_LA_mostly(p, tmp, pgdc);

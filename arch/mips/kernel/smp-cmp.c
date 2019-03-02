@@ -42,7 +42,7 @@
 static void ipi_call_function(unsigned int cpu)
 {
 	pr_debug("CPU%d: %s cpu %d status %08x\n",
-		 smp_processor_id(), __func__, cpu, read_c0_status());
+		 raw_smp_processor_id(), __func__, cpu, read_c0_status());
 
 	gic_send_ipi(plat_ipi_call_int_xlate(cpu));
 }
@@ -51,7 +51,7 @@ static void ipi_call_function(unsigned int cpu)
 static void ipi_resched(unsigned int cpu)
 {
 	pr_debug("CPU%d: %s cpu %d status %08x\n",
-		 smp_processor_id(), __func__, cpu, read_c0_status());
+		 raw_smp_processor_id(), __func__, cpu, read_c0_status());
 
 	gic_send_ipi(plat_ipi_resched_int_xlate(cpu));
 }
@@ -108,7 +108,7 @@ static void cmp_init_secondary(void)
 
 static void cmp_smp_finish(void)
 {
-	pr_debug("SMPCMP: CPU%d: %s\n", smp_processor_id(), __func__);
+	pr_debug("SMPCMP: CPU%d: %s\n", raw_smp_processor_id(), __func__);
 
 	/* CDFIXME: remove this? */
 	write_c0_compare(read_c0_count() + (8 * mips_hpt_frequency / HZ));
@@ -116,7 +116,7 @@ static void cmp_smp_finish(void)
 #ifdef CONFIG_MIPS_MT_FPAFF
 	/* If we have an FPU, enroll ourselves in the FPU-full mask */
 	if (cpu_has_fpu)
-		cpu_set(smp_processor_id(), mt_fpu_cpumask);
+		cpu_set(raw_smp_processor_id(), mt_fpu_cpumask);
 #endif /* CONFIG_MIPS_MT_FPAFF */
 
 	local_irq_enable();
@@ -124,7 +124,7 @@ static void cmp_smp_finish(void)
 
 static void cmp_cpus_done(void)
 {
-	pr_debug("SMPCMP: CPU%d: %s\n", smp_processor_id(), __func__);
+	pr_debug("SMPCMP: CPU%d: %s\n", raw_smp_processor_id(), __func__);
 }
 
 /*
@@ -140,7 +140,7 @@ static void cmp_boot_secondary(int cpu, struct task_struct *idle)
 	unsigned long pc = (unsigned long)&smp_bootstrap;
 	unsigned long a0 = 0;
 
-	pr_debug("SMPCMP: CPU%d: %s cpu %d\n", smp_processor_id(),
+	pr_debug("SMPCMP: CPU%d: %s cpu %d\n", raw_smp_processor_id(),
 		__func__, cpu);
 
 #if 0
@@ -160,7 +160,7 @@ void __init cmp_smp_setup(void)
 	int i;
 	int ncpu = 0;
 
-	pr_debug("SMPCMP: CPU%d: %s\n", smp_processor_id(), __func__);
+	pr_debug("SMPCMP: CPU%d: %s\n", raw_smp_processor_id(), __func__);
 
 #ifdef CONFIG_MIPS_MT_FPAFF
 	/* If we have an FPU, enroll ourselves in the FPU-full mask */
@@ -188,7 +188,7 @@ void __init cmp_smp_setup(void)
 void __init cmp_prepare_cpus(unsigned int max_cpus)
 {
 	pr_debug("SMPCMP: CPU%d: %s max_cpus=%d\n",
-		 smp_processor_id(), __func__, max_cpus);
+		 raw_smp_processor_id(), __func__, max_cpus);
 
 	/*
 	 * FIXME: some of these options are per-system, some per-core and

@@ -323,7 +323,7 @@ int set_l2_mode(struct low_power_ops *ops, int mode, bool notify_rpm)
 	int lpm = mode;
 	int rc = 0;
 	struct low_power_ops *cpu_ops = per_cpu(cpu_cluster,
-			smp_processor_id())->lpm_dev;
+			raw_smp_processor_id())->lpm_dev;
 
 
 	if (cpu_ops->tz_flag & MSM_SCM_L2_OFF ||
@@ -366,7 +366,7 @@ int set_l2_mode(struct low_power_ops *ops, int mode, bool notify_rpm)
 int set_l3_mode(struct low_power_ops *ops, int mode, bool notify_rpm)
 {
 	struct low_power_ops *cpu_ops = per_cpu(cpu_cluster,
-			smp_processor_id())->lpm_dev;
+			raw_smp_processor_id())->lpm_dev;
 
 	switch (mode) {
 	case MSM_SPM_MODE_POWER_COLLAPSE:
@@ -861,7 +861,7 @@ static int cluster_select(struct lpm_cluster *cluster, bool from_idle,
 	sleep_us = (uint32_t)get_cluster_sleep_time(cluster, NULL,
 						from_idle, &cpupred_us);
 
-	if (smp_processor_id() < 4)
+	if (raw_smp_processor_id() < 4)
 		cl0_sleep_us = sleep_us;
 	else
 		cl1_sleep_us = sleep_us;
@@ -958,7 +958,7 @@ static int cluster_configure(struct lpm_cluster *cluster, int idx,
 
 	spin_lock(&cluster->sync_lock);
 
-	if (smp_processor_id() < 4)
+	if (raw_smp_processor_id() < 4)
 		sleep_us = cl0_sleep_us;
 	else
 		sleep_us = cl1_sleep_us;
@@ -1150,7 +1150,7 @@ static void cluster_unprepare(struct lpm_cluster *cluster,
 		msm_mpm_exit_sleep(from_idle);
 	}
 
-	if (smp_processor_id() < 4)
+	if (raw_smp_processor_id() < 4)
 		cl0_sleep_us = 0;
 	else
 		cl1_sleep_us = 0;
@@ -1354,7 +1354,7 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 	}
 
 	pwr_params = &cluster->cpu->levels[idx].pwr;
-	sched_set_cpu_cstate(smp_processor_id(), idx + 1,
+	sched_set_cpu_cstate(raw_smp_processor_id(), idx + 1,
 		pwr_params->energy_overhead, pwr_params->latency_us);
 
 	trace_cpu_idle_enter(idx);
@@ -1378,7 +1378,7 @@ static int lpm_cpuidle_enter(struct cpuidle_device *dev,
 	cluster_unprepare(cluster, cpumask, idx, true);
 	cpu_unprepare(cluster, idx, true);
 
-	sched_set_cpu_cstate(smp_processor_id(), 0, 0, 0);
+	sched_set_cpu_cstate(raw_smp_processor_id(), 0, 0, 0);
 
 	time = ktime_to_ns(ktime_get()) - time;
 	do_div(time, 1000);

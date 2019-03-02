@@ -197,7 +197,7 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
 		 * pointed by PC. Do not update PC
 		 */
 		kgdb_arch_update_addr(linux_regs, remcom_in_buffer);
-		atomic_set(&kgdb_cpu_doing_single_step, raw_smp_processor_id());
+		atomic_set(&kgdb_cpu_doing_single_step, raw_raw_smp_processor_id());
 		kgdb_single_step =  1;
 
 		/*
@@ -251,7 +251,7 @@ static struct step_hook kgdb_step_hook = {
 
 static void kgdb_call_nmi_hook(void *ignored)
 {
-	kgdb_nmicallback(raw_smp_processor_id(), get_irq_regs());
+	kgdb_nmicallback(raw_raw_smp_processor_id(), get_irq_regs());
 }
 
 void kgdb_roundup_cpus(unsigned long flags)

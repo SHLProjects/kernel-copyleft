@@ -483,7 +483,7 @@ void msm_jtag_mm_save_state(void)
 {
 	int cpu;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	if (etm[cpu] && etm[cpu]->save_restore_enabled)
 		etm_save_state(etm[cpu]);
@@ -494,7 +494,7 @@ void msm_jtag_mm_restore_state(void)
 {
 	int cpu;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	/*
 	 * Check to ensure we attempt to restore only when save

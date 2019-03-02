@@ -540,7 +540,7 @@ void bpf_jit_compile(struct sk_filter *fp)
 			case BPF_S_ANC_CPU:
 #ifdef CONFIG_SMP
 				EMIT4(0x65, 0x8b, 0x04, 0x25); /* mov %gs:off32,%eax */
-				EMIT((u32)(unsigned long)&cpu_number, 4); /* A = smp_processor_id(); */
+				EMIT((u32)(unsigned long)&cpu_number, 4); /* A = raw_smp_processor_id(); */
 #else
 				CLEAR_A();
 #endif

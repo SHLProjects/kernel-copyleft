@@ -64,8 +64,8 @@ static int bc_set_next(ktime_t expires, struct clock_event_device *bc)
 	if (hrtimer_try_to_cancel(&bctimer) >= 0) {
 		hrtimer_start(&bctimer, expires, HRTIMER_MODE_ABS_PINNED);
 		/* Bind the "device" to the cpu */
-		bc->bound_on = smp_processor_id();
-	} else if (bc->bound_on == smp_processor_id()) {
+		bc->bound_on = raw_smp_processor_id();
+	} else if (bc->bound_on == raw_smp_processor_id()) {
 		hrtimer_set_expires(&bctimer, expires);
 	}
 	return 0;

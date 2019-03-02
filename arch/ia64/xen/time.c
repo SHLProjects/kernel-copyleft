@@ -90,7 +90,7 @@ consider_steal_time(unsigned long new_itm)
 {
 	unsigned long stolen, blocked;
 	unsigned long delta_itm = 0, stolentick = 0;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct vcpu_runstate_info runstate;
 	struct task_struct *p = current;
 
@@ -247,7 +247,7 @@ xen_timer_resume(void)
 static void ia64_cpu_local_tick_fn(void *unused)
 {
 	xen_local_tick_resume();
-	xen_init_missing_ticks_accounting(smp_processor_id());
+	xen_init_missing_ticks_accounting(raw_smp_processor_id());
 }
 
 void

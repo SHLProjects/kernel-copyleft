@@ -2958,7 +2958,7 @@ void lockdep_init_map(struct lockdep_map *lock, const char *name,
 		lock->class_cache[i] = NULL;
 
 #ifdef CONFIG_LOCK_STAT
-	lock->cpu = raw_smp_processor_id();
+	lock->cpu = raw_raw_smp_processor_id();
 #endif
 
 	/*
@@ -3730,7 +3730,7 @@ found_it:
 		stats->contention_point[contention_point]++;
 	if (contending_point < LOCKSTAT_POINTS)
 		stats->contending_point[contending_point]++;
-	if (lock->cpu != smp_processor_id())
+	if (lock->cpu != raw_smp_processor_id())
 		stats->bounces[bounce_contended + !!hlock->read]++;
 	put_lock_stats(stats);
 }
@@ -3772,7 +3772,7 @@ found_it:
 	if (hlock->instance != lock)
 		return;
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	if (hlock->waittime_stamp) {
 		now = lockstat_clock();
 		waittime = now - hlock->waittime_stamp;

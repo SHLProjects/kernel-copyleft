@@ -403,7 +403,7 @@ int a2_scom_startup_cpu(unsigned int lcpu, int thr_idx, struct device_node *np)
 
 	rc |= a2_scom_setspr(scom, thr_idx, SPRN_IAR, start_here);
 	rc |= a2_scom_setgpr(scom, thr_idx, 3, 0,
-			     get_hard_smp_processor_id(lcpu));
+			     get_hard_raw_smp_processor_id(lcpu));
 	/*
 	 * Tell book3e_secondary_core_init not to set up the TLB, we've
 	 * already done that.

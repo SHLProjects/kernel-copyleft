@@ -55,7 +55,7 @@ static inline int __kprobes notify_page_fault(struct pt_regs *regs)
 {
 	int ret = 0;
 
-	/* kprobe_running() needs smp_processor_id() */
+	/* kprobe_running() needs raw_smp_processor_id() */
 	if (kprobes_built_in() && !user_mode_vm(regs)) {
 		preempt_disable();
 		if (kprobe_running() && kprobe_fault_handler(regs, 14))

@@ -1703,7 +1703,7 @@ int ring_buffer_resize(struct ring_buffer *buffer, unsigned long size,
 
 			/* The update must run on the CPU that is being updated. */
 			preempt_disable();
-			if (cpu == smp_processor_id() || !cpu_online(cpu)) {
+			if (cpu == raw_smp_processor_id() || !cpu_online(cpu)) {
 				rb_update_pages(cpu_buffer);
 				cpu_buffer->nr_pages_to_update = 0;
 			} else {
@@ -1756,7 +1756,7 @@ int ring_buffer_resize(struct ring_buffer *buffer, unsigned long size,
 
 		preempt_disable();
 		/* The update must run on the CPU that is being updated. */
-		if (cpu_id == smp_processor_id() || !cpu_online(cpu_id))
+		if (cpu_id == raw_smp_processor_id() || !cpu_online(cpu_id))
 			rb_update_pages(cpu_buffer);
 		else {
 			/*
@@ -2913,7 +2913,7 @@ void ring_buffer_discard_commit(struct ring_buffer *buffer,
 	/* The event is discarded regardless */
 	rb_event_discard(event);
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	cpu_buffer = buffer->buffers[cpu];
 
 	/*
@@ -4799,7 +4799,7 @@ static __init int rb_test(void *arg)
 static __init void rb_ipi(void *ignore)
 {
 	struct rb_test_data *data;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	data = &rb_data[cpu];
 	rb_write_something(data, true);

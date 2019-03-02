@@ -172,7 +172,7 @@ void flush_remote(unsigned long cache_pfn, unsigned long cache_control,
 
 static void homecache_finv_page_va(void* va, int home)
 {
-	if (home == smp_processor_id()) {
+	if (home == raw_smp_processor_id()) {
 		finv_buffer_local(va, PAGE_SIZE);
 	} else if (home == PAGE_HOME_HASH) {
 		finv_buffer_remote(va, PAGE_SIZE, 1);
@@ -194,9 +194,9 @@ void homecache_finv_map_page(struct page *page, int home)
 	local_irq_save(flags);
 #ifdef CONFIG_HIGHMEM
 	va = __fix_to_virt(FIX_KMAP_BEGIN + kmap_atomic_idx_push() +
-			   (KM_TYPE_NR * smp_processor_id()));
+			   (KM_TYPE_NR * raw_smp_processor_id()));
 #else
-	va = __fix_to_virt(FIX_HOMECACHE_BEGIN + smp_processor_id());
+	va = __fix_to_virt(FIX_HOMECACHE_BEGIN + raw_smp_processor_id());
 #endif
 	ptep = virt_to_pte(NULL, (unsigned long)va);
 	pte = pfn_pte(page_to_pfn(page), PAGE_KERNEL);

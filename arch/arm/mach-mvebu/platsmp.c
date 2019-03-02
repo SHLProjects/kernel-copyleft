@@ -36,7 +36,7 @@ void __init set_secondary_cpus_clock(void)
 	struct clk *cpu_clk = NULL;
 	struct device_node *np = NULL;
 
-	thiscpu = smp_processor_id();
+	thiscpu = raw_smp_processor_id();
 	for_each_node_by_type(np, "cpu") {
 		int err;
 		int cpu;
@@ -109,7 +109,7 @@ void __init armada_xp_smp_prepare_cpus(unsigned int max_cpus)
 {
 	set_secondary_cpus_clock();
 	flush_cache_all();
-	set_cpu_coherent(cpu_logical_map(smp_processor_id()), 0);
+	set_cpu_coherent(cpu_logical_map(raw_smp_processor_id()), 0);
 	mvebu_mbus_add_window("bootrom", 0xfff00000, SZ_1M);
 }
 

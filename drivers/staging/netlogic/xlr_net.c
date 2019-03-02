@@ -306,7 +306,7 @@ static netdev_tx_t xlr_net_start_xmit(struct sk_buff *skb,
 
 static u16 xlr_net_select_queue(struct net_device *ndev, struct sk_buff *skb)
 {
-	return (u16)smp_processor_id();
+	return (u16)raw_smp_processor_id();
 }
 
 static void xlr_hw_set_mac_addr(struct net_device *ndev)

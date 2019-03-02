@@ -139,7 +139,7 @@ notrace unsigned int __check_irq_replay(void)
 {
 	/*
 	 * We use local_paca rather than get_paca() to avoid all
-	 * the debug_smp_processor_id() business in this low level
+	 * the debug_raw_smp_processor_id() business in this low level
 	 * function
 	 */
 	unsigned char happened = local_paca->irq_happened;
@@ -455,7 +455,7 @@ static inline void handle_one_irq(unsigned int irq)
 
 	/* Switch to the irq stack to handle this */
 	curtp = current_thread_info();
-	irqtp = hardirq_ctx[smp_processor_id()];
+	irqtp = hardirq_ctx[raw_smp_processor_id()];
 
 	if (curtp == irqtp) {
 		/* We're already on the irq stack, just handle it */
@@ -560,7 +560,7 @@ void exc_lvl_ctx_init(void)
 #ifdef CONFIG_PPC64
 		cpu_nr = i;
 #else
-		cpu_nr = get_hard_smp_processor_id(i);
+		cpu_nr = get_hard_raw_smp_processor_id(i);
 #endif
 		memset((void *)critirq_ctx[cpu_nr], 0, THREAD_SIZE);
 		tp = critirq_ctx[cpu_nr];
@@ -609,7 +609,7 @@ static inline void do_softirq_onstack(void)
 	unsigned long saved_sp_limit = current->thread.ksp_limit;
 
 	curtp = current_thread_info();
-	irqtp = softirq_ctx[smp_processor_id()];
+	irqtp = softirq_ctx[raw_smp_processor_id()];
 	irqtp->task = curtp->task;
 	irqtp->flags = 0;
 	current->thread.ksp_limit = (unsigned long)irqtp +
@@ -674,12 +674,12 @@ do_round_robin:
 			goto do_round_robin;
 	}
 
-	return get_hard_smp_processor_id(cpuid);
+	return get_hard_raw_smp_processor_id(cpuid);
 }
 #else
 int irq_choose_cpu(const struct cpumask *mask)
 {
-	return hard_smp_processor_id();
+	return hard_raw_smp_processor_id();
 }
 #endif
 

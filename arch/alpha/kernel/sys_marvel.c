@@ -426,7 +426,7 @@ marvel_get_rtc_time(struct rtc_time *time)
 #ifdef CONFIG_SMP
 	struct marvel_rtc_time mrt;
 
-	if (smp_processor_id() != boot_cpuid) {
+	if (raw_smp_processor_id() != boot_cpuid) {
 		mrt.time = time;
 		smp_call_function_single(boot_cpuid, smp_get_rtc_time, &mrt, 1);
 		return mrt.retval;
@@ -441,7 +441,7 @@ marvel_set_rtc_time(struct rtc_time *time)
 #ifdef CONFIG_SMP
 	struct marvel_rtc_time mrt;
 
-	if (smp_processor_id() != boot_cpuid) {
+	if (raw_smp_processor_id() != boot_cpuid) {
 		mrt.time = time;
 		smp_call_function_single(boot_cpuid, smp_set_rtc_time, &mrt, 1);
 		return mrt.retval;
@@ -453,7 +453,7 @@ marvel_set_rtc_time(struct rtc_time *time)
 static void
 marvel_smp_callin(void)
 {
-	int cpuid = hard_smp_processor_id();
+	int cpuid = hard_raw_smp_processor_id();
 	struct io7 *io7 = marvel_find_io7(cpuid);
 	unsigned int i;
 

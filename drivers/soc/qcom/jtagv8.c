@@ -870,7 +870,7 @@ void msm_jtag_save_state(void)
 {
 	int cpu;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	msm_jtag_save_cntr[cpu]++;
 	/* ensure counter is updated before moving forward */
@@ -886,7 +886,7 @@ void msm_jtag_restore_state(void)
 {
 	int cpu;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	/* Attempt restore only if save has been done. If power collapse
 	 * is disabled, hotplug off of non-boot core will result in WFI

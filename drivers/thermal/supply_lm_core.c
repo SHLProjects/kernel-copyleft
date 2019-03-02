@@ -1748,7 +1748,7 @@ static int supply_lm_cpu_pm_notify(struct notifier_block *nb,
 				unsigned long action,
 				void *data)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	unsigned int cpu_idle_cnt = 0x0;
 	struct input_device_info *modem =
 			&supply_lm_devices[SUPPLY_LM_MODEM_DEVICE];

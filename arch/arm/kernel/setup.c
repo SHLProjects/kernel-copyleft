@@ -402,7 +402,7 @@ static void __init feat_v6_fixup(void)
  */
 void notrace cpu_init(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct stack *stk = &stacks[cpu];
 
 	if (cpu >= NR_CPUS) {

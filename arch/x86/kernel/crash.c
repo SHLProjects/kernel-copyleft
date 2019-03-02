@@ -134,5 +134,5 @@ void native_machine_crash_shutdown(struct pt_regs *regs)
 #ifdef CONFIG_HPET_TIMER
 	hpet_disable();
 #endif
-	crash_save_cpu(regs, safe_smp_processor_id());
+	crash_save_cpu(regs, safe_raw_smp_processor_id());
 }

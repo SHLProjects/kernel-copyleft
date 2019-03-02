@@ -55,7 +55,7 @@ extern void pSeries_find_serial_port(void);
 
 void vpa_init(int cpu)
 {
-	int hwcpu = get_hard_smp_processor_id(cpu);
+	int hwcpu = get_hard_raw_smp_processor_id(cpu);
 	unsigned long addr;
 	long ret;
 	struct paca_struct *pp;
@@ -100,7 +100,7 @@ void vpa_init(int cpu)
 		ret = register_dtl(hwcpu, __pa(dtl));
 		if (ret)
 			pr_err("WARNING: DTL registration of cpu %d (hw %d) "
-			       "failed with %ld\n", smp_processor_id(),
+			       "failed with %ld\n", raw_smp_processor_id(),
 			       hwcpu, ret);
 		lppaca_of(cpu).dtl_enable_mask = 2;
 	}

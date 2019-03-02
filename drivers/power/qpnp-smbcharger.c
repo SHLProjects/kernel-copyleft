@@ -1488,11 +1488,12 @@ static int smbchg_charging_en(struct smbchg_chip *chip, bool en)
 #define CURRENT_100_MA		100
 #define CURRENT_150_MA		150
 #ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
-#define CURRENT_400_MA		400
+#define CURRENT_400_MA		500
 #endif
-#define CURRENT_500_MA		500
-#define CURRENT_900_MA		900
-#define CURRENT_1500_MA		1500
+#define CURRENT_500_MA		600
+#define CURRENT_900_MA		1000
+#define CURRENT_1500_MA		1600
+#define CURRENT_2000_MA		2000
 #define SUSPEND_CURRENT_MA	2
 #define ICL_OVERRIDE_BIT	BIT(2)
 static int smbchg_usb_suspend(struct smbchg_chip *chip, bool suspend)
@@ -1728,7 +1729,7 @@ static int smbchg_set_usb_current_max(struct smbchg_chip *chip,
 	case POWER_SUPPLY_TYPE_USB:
 #ifdef CONFIG_QPNP_SMBCHARGER_EXTENSION
 		if (current_ma >= CURRENT_1500_MA)
-			current_ma = CURRENT_1500_MA;
+			current_ma = CURRENT_2000_MA;
 		else if (current_ma >= CURRENT_400_MA)
 			current_ma = CURRENT_400_MA;
 		/* fall through */
@@ -4636,7 +4637,7 @@ static int smbchg_set_optimal_charging_mode(struct smbchg_chip *chip, int type)
 #else
 #define DEFAULT_SDP_MA		0
 #endif
-#define DEFAULT_CDP_MA		1500
+#define DEFAULT_CDP_MA		2100
 static int smbchg_change_usb_supply_type(struct smbchg_chip *chip,
 						enum power_supply_type type)
 {

@@ -1136,7 +1136,7 @@ void map_switcher_in_guest(struct lg_cpu *cpu, struct lguest_pages *pages)
 	 * run on the same CPU, we cache that, and only update the mappings
 	 * when we move.
 	 */
-	if (pgdir->last_host_cpu == raw_smp_processor_id())
+	if (pgdir->last_host_cpu == raw_raw_smp_processor_id())
 		return;
 
 	/* -1 means unknown so we remove everything. */
@@ -1159,7 +1159,7 @@ void map_switcher_in_guest(struct lg_cpu *cpu, struct lguest_pages *pages)
 	 */
 	/* Find the shadow PTE for this regs page. */
 	base = switcher_addr + PAGE_SIZE
-		+ raw_smp_processor_id() * sizeof(struct lguest_pages);
+		+ raw_raw_smp_processor_id() * sizeof(struct lguest_pages);
 	pte = find_spte(cpu, base, false, 0, 0);
 	regs_page = pfn_to_page(__pa(cpu->regs_page) >> PAGE_SHIFT);
 	get_page(regs_page);
@@ -1172,12 +1172,12 @@ void map_switcher_in_guest(struct lg_cpu *cpu, struct lguest_pages *pages)
 	 */
 	pte = find_spte(cpu, base + PAGE_SIZE, false, 0, 0);
 	percpu_switcher_page
-		= lg_switcher_pages[1 + raw_smp_processor_id()*2 + 1];
+		= lg_switcher_pages[1 + raw_raw_smp_processor_id()*2 + 1];
 	get_page(percpu_switcher_page);
 	set_pte(pte, mk_pte(percpu_switcher_page,
 			    __pgprot(__PAGE_KERNEL_RO & ~_PAGE_GLOBAL)));
 
-	pgdir->last_host_cpu = raw_smp_processor_id();
+	pgdir->last_host_cpu = raw_raw_smp_processor_id();
 }
 
 /*H:490

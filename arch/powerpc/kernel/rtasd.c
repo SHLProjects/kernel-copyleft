@@ -460,7 +460,7 @@ static void rtas_event_scan(struct work_struct *w)
 	get_online_cpus();
 
 	/* raw_ OK because just using CPU as starting point. */
-	cpu = cpumask_next(raw_smp_processor_id(), cpu_online_mask);
+	cpu = cpumask_next(raw_raw_smp_processor_id(), cpu_online_mask);
         if (cpu >= nr_cpu_ids) {
 		cpu = cpumask_first(cpu_online_mask);
 

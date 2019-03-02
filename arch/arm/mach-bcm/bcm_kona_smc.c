@@ -70,7 +70,7 @@ static void __bcm_kona_smc(void *info)
 	int rc = 0;
 
 	/* Must run on CPU 0 */
-	BUG_ON(smp_processor_id() != 0);
+	BUG_ON(raw_smp_processor_id() != 0);
 
 	/* Check map in the bounce area */
 	BUG_ON(!bridge_data.initialized);

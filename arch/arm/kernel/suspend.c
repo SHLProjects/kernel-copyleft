@@ -65,7 +65,7 @@ int cpu_suspend(unsigned long arg)
 int __cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
 {
 	struct mm_struct *mm = current->active_mm;
-	u32 __mpidr = cpu_logical_map(smp_processor_id());
+	u32 __mpidr = cpu_logical_map(raw_smp_processor_id());
 	int ret;
 
 	if (!idmap_pgd)
@@ -82,7 +82,7 @@ int __cpu_suspend(unsigned long arg, int (*fn)(unsigned long))
 		cpu_switch_mm(mm->pgd, mm);
 		local_flush_bp_all();
 		local_flush_tlb_all();
-		set_my_cpu_offset(per_cpu_offset(smp_processor_id()));
+		set_my_cpu_offset(per_cpu_offset(raw_smp_processor_id()));
 	}
 
 	return ret;

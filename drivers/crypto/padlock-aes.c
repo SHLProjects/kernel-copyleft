@@ -166,7 +166,7 @@ ok:
 /* These are the real call to PadLock. */
 static inline void padlock_reset_key(struct cword *cword)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	if (cword != per_cpu(paes_last_cword, cpu))
 #ifndef CONFIG_X86_64
@@ -178,7 +178,7 @@ static inline void padlock_reset_key(struct cword *cword)
 
 static inline void padlock_store_cword(struct cword *cword)
 {
-	per_cpu(paes_last_cword, raw_smp_processor_id()) = cword;
+	per_cpu(paes_last_cword, raw_raw_smp_processor_id()) = cword;
 }
 
 /*

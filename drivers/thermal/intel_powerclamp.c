@@ -512,7 +512,7 @@ static int start_power_clamp(void)
 	/* prefer BSP */
 	control_cpu = 0;
 	if (!cpu_online(control_cpu))
-		control_cpu = smp_processor_id();
+		control_cpu = raw_smp_processor_id();
 
 	clamping = true;
 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
@@ -595,7 +595,7 @@ static int powerclamp_cpu_callback(struct notifier_block *nfb,
 			kthread_stop(*percpu_thread);
 		}
 		if (cpu == control_cpu) {
-			control_cpu = smp_processor_id();
+			control_cpu = raw_smp_processor_id();
 			smp_mb();
 		}
 	}

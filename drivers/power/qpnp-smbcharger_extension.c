@@ -156,8 +156,8 @@ static int somc_chg_get_current_ma(struct smbchg_chip *chip,
 	else if (chip->somc_params.chg_det.sub_type ==
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY)
 		/* Flow chart: C-10 OUT OF RANGE */
-		/* Flow chart: C-11 PROPRIETARY 1.5A*/
-		current_limit_ma = CURRENT_1500_MA;
+		/* Flow chart: C-11 PROPRIETARY 2.0A*/
+		current_limit_ma = CURRENT_2000_MA;
 	else if (chip->somc_params.chg_det.sub_type ==
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY_1000MA)
 		/* Flow chart: C-11 PROPRIETARY 1A*/
@@ -168,7 +168,7 @@ static int somc_chg_get_current_ma(struct smbchg_chip *chip,
 		current_limit_ma = DEFAULT_PROP500_MA;
 	else if (is_usb_present(chip) &&
 				chip->somc_params.chg_det.settled_not_hvdcp)
-		if (chip->typec_current_ma > CURRENT_1500_MA)
+		if (chip->typec_current_ma > CURRENT_2000_MA)
 			/* Flow chart: C-3 */
 #ifndef CURRENT_LIMIT_TO_1500_DURING_DCP_CHARGING
 			current_limit_ma = somc_chg_get_typec_current_ma(chip,

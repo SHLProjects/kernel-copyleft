@@ -70,7 +70,7 @@ static inline void sirfsoc_timer_count_enable(int idx)
 static irqreturn_t sirfsoc_timer_interrupt(int irq, void *dev_id)
 {
 	struct clock_event_device *ce = dev_id;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* clear timer interrupt */
 	writel_relaxed(BIT(cpu), sirfsoc_timer_base + SIRFSOC_TIMER_INTR_STATUS);
@@ -100,7 +100,7 @@ static cycle_t sirfsoc_timer_read(struct clocksource *cs)
 static int sirfsoc_timer_set_next_event(unsigned long delta,
 	struct clock_event_device *ce)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	writel_relaxed(0, sirfsoc_timer_base + SIRFSOC_TIMER_COUNTER_0 +
 		4 * cpu);
@@ -124,7 +124,7 @@ static void sirfsoc_timer_set_mode(enum clock_event_mode mode,
 		break;
 	}
 
-	sirfsoc_timer_count_disable(smp_processor_id());
+	sirfsoc_timer_count_disable(raw_smp_processor_id());
 }
 
 static void sirfsoc_clocksource_suspend(struct clocksource *cs)
@@ -187,7 +187,7 @@ static struct irqaction sirfsoc_timer1_irq = {
 static int __cpuinit sirfsoc_local_timer_setup(struct clock_event_device *ce)
 {
 	/* Use existing clock_event for cpu 0 */
-	if (!smp_processor_id())
+	if (!raw_smp_processor_id())
 		return 0;
 
 	ce->irq = sirfsoc_timer1_irq.irq;

@@ -287,7 +287,7 @@ static irqreturn_t msm_l1_erp_irq(int irq, void *dev_id)
 	struct msm_l1_err_stats *l1_stats = dev_id;
 	unsigned int cesr = read_cesr();
 	unsigned int i_cesynr, d_cesynr;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	int print_regs = cesr & CESR_PRINT_MASK;
 	int log_event = cesr & CESR_LOG_EVENT_MASK;
 

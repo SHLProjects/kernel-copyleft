@@ -208,7 +208,7 @@ void arch_kgdb_breakpoint(void)
 
 static void kgdb_call_nmi_hook(void *ignored)
 {
-	kgdb_nmicallback(raw_smp_processor_id(), NULL);
+	kgdb_nmicallback(raw_raw_smp_processor_id(), NULL);
 }
 
 void kgdb_roundup_cpus(unsigned long flags)
@@ -297,7 +297,7 @@ static int kgdb_mips_notify(struct notifier_block *self, unsigned long cmd,
 		return NOTIFY_DONE;
 
 	if (atomic_read(&kgdb_active) != -1)
-		kgdb_nmicallback(smp_processor_id(), regs);
+		kgdb_nmicallback(raw_smp_processor_id(), regs);
 
 	if (kgdb_handle_exception(trap, compute_signal(trap), cmd, regs))
 		return NOTIFY_DONE;

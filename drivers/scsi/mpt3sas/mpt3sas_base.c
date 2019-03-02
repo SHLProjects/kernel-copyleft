@@ -2105,7 +2105,7 @@ _base_writeq(__u64 b, volatile void __iomem *addr, spinlock_t *writeq_lock)
 static inline u8
 _base_get_msix_index(struct MPT3SAS_ADAPTER *ioc)
 {
-	return ioc->cpu_msix_table[raw_smp_processor_id()];
+	return ioc->cpu_msix_table[raw_raw_smp_processor_id()];
 }
 
 /**

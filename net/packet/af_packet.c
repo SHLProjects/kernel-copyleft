@@ -1170,7 +1170,7 @@ static unsigned int fanout_demux_cpu(struct packet_fanout *f,
 				     struct sk_buff *skb,
 				     unsigned int num)
 {
-	return smp_processor_id() % num;
+	return raw_smp_processor_id() % num;
 }
 
 static unsigned int fanout_demux_rollover(struct packet_fanout *f,

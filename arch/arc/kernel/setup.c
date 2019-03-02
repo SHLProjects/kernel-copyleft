@@ -41,7 +41,7 @@ struct cpuinfo_arc cpuinfo_arc700[NR_CPUS];
 void __cpuinit read_arc_build_cfg_regs(void)
 {
 	struct bcr_perip uncached_space;
-	struct cpuinfo_arc *cpu = &cpuinfo_arc700[smp_processor_id()];
+	struct cpuinfo_arc *cpu = &cpuinfo_arc700[raw_smp_processor_id()];
 	FIX_PTR(cpu);
 
 	READ_BCR(AUX_IDENTITY, cpu->core);
@@ -237,7 +237,7 @@ char *arc_extn_mumbojumbo(int cpu_id, char *buf, int len)
 void __cpuinit arc_chk_ccms(void)
 {
 #if defined(CONFIG_ARC_HAS_DCCM) || defined(CONFIG_ARC_HAS_ICCM)
-	struct cpuinfo_arc *cpu = &cpuinfo_arc700[smp_processor_id()];
+	struct cpuinfo_arc *cpu = &cpuinfo_arc700[raw_smp_processor_id()];
 
 #ifdef CONFIG_ARC_HAS_DCCM
 	/*
@@ -271,7 +271,7 @@ void __cpuinit arc_chk_ccms(void)
  */
 void __cpuinit arc_chk_fpu(void)
 {
-	struct cpuinfo_arc *cpu = &cpuinfo_arc700[smp_processor_id()];
+	struct cpuinfo_arc *cpu = &cpuinfo_arc700[raw_smp_processor_id()];
 
 	if (cpu->dpfp.ver) {
 #ifndef CONFIG_ARC_FPU_SAVE_RESTORE
@@ -293,7 +293,7 @@ void __cpuinit arc_chk_fpu(void)
 void __cpuinit setup_processor(void)
 {
 	char str[512];
-	int cpu_id = smp_processor_id();
+	int cpu_id = raw_smp_processor_id();
 
 	read_arc_build_cfg_regs();
 	arc_init_IRQ();

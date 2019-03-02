@@ -146,7 +146,7 @@ static void set_evres(int event_groupsel, int event_reg, int event_group_code)
 static void set_evfilter_task_mode(int ctr, unsigned int is_slv)
 {
 	u32 filter_reg = (ctr * 16) + IA_L2PMXEVFILTER_BASE;
-	u32 filter_val = l2_orig_filter_prefix | 1 << smp_processor_id();
+	u32 filter_val = l2_orig_filter_prefix | 1 << raw_smp_processor_id();
 
 	if (is_slv)
 		filter_val = l2_slv_filter_prefix;
@@ -283,7 +283,7 @@ out:
 	raw_spin_unlock_irqrestore(&krait_l2_pmu_hw_events.pmu_lock, iflags);
 
 	pr_debug("%s: ctr: %d group: %ld group_code: %lld started from cpu:%d\n",
-	     __func__, idx, hwc->config_base, hwc->config, smp_processor_id());
+	     __func__, idx, hwc->config_base, hwc->config, raw_smp_processor_id());
 }
 
 static void krait_l2_disable(struct perf_event *event)

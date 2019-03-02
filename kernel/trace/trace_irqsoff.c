@@ -113,7 +113,7 @@ static int func_prolog_dec(struct trace_array *tr,
 	 * If we preempt and get a false positive, the flags
 	 * test will fail.
 	 */
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	if (likely(!per_cpu(tracing_cpu, cpu)))
 		return 0;
 
@@ -376,7 +376,7 @@ start_critical_timing(unsigned long ip, unsigned long parent_ip)
 	if (!tracer_enabled || !tracing_is_enabled())
 		return;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	if (per_cpu(tracing_cpu, cpu))
 		return;
@@ -409,7 +409,7 @@ stop_critical_timing(unsigned long ip, unsigned long parent_ip)
 	struct trace_array_cpu *data;
 	unsigned long flags;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	/* Always clear the tracing cpu on stopping the trace */
 	if (unlikely(per_cpu(tracing_cpu, cpu)))
 		per_cpu(tracing_cpu, cpu) = 0;

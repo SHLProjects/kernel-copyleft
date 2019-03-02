@@ -78,7 +78,7 @@ static inline int handle_dev_cpu_collision(struct sk_buff *skb,
 {
 	int ret;
 
-	if (unlikely(dev_queue->xmit_lock_owner == smp_processor_id())) {
+	if (unlikely(dev_queue->xmit_lock_owner == raw_smp_processor_id())) {
 		/*
 		 * Same CPU holding the lock. It may be a transient
 		 * configuration error, when hard_start_xmit() recurses. We
@@ -119,7 +119,7 @@ int sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
 	/* And release qdisc */
 	spin_unlock(root_lock);
 
-	HARD_TX_LOCK(dev, txq, smp_processor_id());
+	HARD_TX_LOCK(dev, txq, raw_smp_processor_id());
 	if (!netif_xmit_frozen_or_stopped(txq))
 		ret = dev_hard_start_xmit(skb, dev, txq);
 

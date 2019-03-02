@@ -72,7 +72,7 @@ static void avs_enable_local(void *data)
 
 static void avs_disable_local(void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	avs_set_avscsr(0);
 	msm_spm_set_vdd(cpu, msm_spm_get_vdd(cpu));

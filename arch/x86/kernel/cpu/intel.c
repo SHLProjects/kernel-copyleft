@@ -299,7 +299,7 @@ static void __cpuinit srat_detect_node(struct cpuinfo_x86 *c)
 {
 #ifdef CONFIG_NUMA
 	unsigned node;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* Don't do the funky fallback heuristics the AMD version employs
 	   for now. */

@@ -35,7 +35,7 @@ void __delay(unsigned long loops)
 
 void __const_udelay(unsigned long xloops)
 {
-	__delay(xloops * (HZ * cpu_data[raw_smp_processor_id()].loops_per_jiffy));
+	__delay(xloops * (HZ * cpu_data[raw_raw_smp_processor_id()].loops_per_jiffy));
 }
 
 void __udelay(unsigned long usecs)

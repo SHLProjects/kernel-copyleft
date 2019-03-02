@@ -122,7 +122,7 @@ void __irq_entry smp_kgdb_capture_client(int irq, struct pt_regs *regs)
 	flushw_all();
 
 	if (atomic_read(&kgdb_active) != -1)
-		kgdb_nmicallback(raw_smp_processor_id(), regs);
+		kgdb_nmicallback(raw_raw_smp_processor_id(), regs);
 
 	__asm__ __volatile__("wrpr	%0, 0, %%pstate"
 			     : : "r" (flags));

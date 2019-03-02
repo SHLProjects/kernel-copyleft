@@ -49,7 +49,7 @@ void msm_enable_cti_pmu_workaround(struct work_struct *work)
 	int trigin = 1;
 	int trigout = 2;
 	int ch = 2;
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	int ret;
 
 	if (per_cpu(msm_cti_pmu_wa_done, cpu) == true)

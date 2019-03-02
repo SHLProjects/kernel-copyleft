@@ -71,7 +71,7 @@ do_entInt(unsigned long type, unsigned long vector,
 		long cpu;
 
 		smp_percpu_timer_interrupt(regs);
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		if (cpu != boot_cpuid) {
 		        kstat_incr_irqs_this_cpu(RTC_IRQ, irq_to_desc(RTC_IRQ));
 		} else {
@@ -157,7 +157,7 @@ process_mcheck_info(unsigned long vector, unsigned long la_ptr,
 #endif
 
 	if (expected) {
-		int cpu = smp_processor_id();
+		int cpu = raw_smp_processor_id();
 		mcheck_expected(cpu) = 0;
 		mcheck_taken(cpu) = 1;
 		return;

@@ -44,7 +44,7 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs, unsigned long writ
 	unsigned int flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
 
 #if 0
-	printk("Cpu%d[%s:%d:%0*lx:%ld:%0*lx]\n", raw_smp_processor_id(),
+	printk("Cpu%d[%s:%d:%0*lx:%ld:%0*lx]\n", raw_raw_smp_processor_id(),
 	       current->comm, current->pid, field, address, write,
 	       field, regs->cp0_epc);
 #endif
@@ -120,7 +120,7 @@ good_area:
 			if (address == regs->cp0_epc && !(vma->vm_flags & VM_EXEC)) {
 #if 0
 				pr_notice("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] XI violation\n",
-					  raw_smp_processor_id(),
+					  raw_raw_smp_processor_id(),
 					  current->comm, current->pid,
 					  field, address, write,
 					  field, regs->cp0_epc);
@@ -130,7 +130,7 @@ good_area:
 			if (!(vma->vm_flags & VM_READ)) {
 #if 0
 				pr_notice("Cpu%d[%s:%d:%0*lx:%ld:%0*lx] RI violation\n",
-					  raw_smp_processor_id(),
+					  raw_raw_smp_processor_id(),
 					  current->comm, current->pid,
 					  field, address, write,
 					  field, regs->cp0_epc);
@@ -234,7 +234,7 @@ no_context:
 
 	printk(KERN_ALERT "CPU %d Unable to handle kernel paging request at "
 	       "virtual address %0*lx, epc == %0*lx, ra == %0*lx\n",
-	       raw_smp_processor_id(), field, address, field, regs->cp0_epc,
+	       raw_raw_smp_processor_id(), field, address, field, regs->cp0_epc,
 	       field,  regs->regs[31]);
 	die("Oops", regs);
 
@@ -293,7 +293,7 @@ vmalloc_fault:
 		pmd_t *pmd, *pmd_k;
 		pte_t *pte_k;
 
-		pgd = (pgd_t *) pgd_current[raw_smp_processor_id()] + offset;
+		pgd = (pgd_t *) pgd_current[raw_raw_smp_processor_id()] + offset;
 		pgd_k = init_mm.pgd + offset;
 
 		if (!pgd_present(*pgd_k))

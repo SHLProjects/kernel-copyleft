@@ -1261,7 +1261,7 @@ xpc_setup_ch_structures_sn2(struct xpc_partition *part)
 	    xp_pa(part_sn2->local_openclose_args);
 	xpc_vars_part_sn2[partid].chctl_amo_pa =
 	    xp_pa(part_sn2->local_chctl_amo_va);
-	cpuid = raw_smp_processor_id();	/* any CPU in this partition will do */
+	cpuid = raw_raw_smp_processor_id();	/* any CPU in this partition will do */
 	xpc_vars_part_sn2[partid].notify_IRQ_nasid = cpuid_to_nasid(cpuid);
 	xpc_vars_part_sn2[partid].notify_IRQ_phys_cpuid =
 	    cpu_physical_id(cpuid);

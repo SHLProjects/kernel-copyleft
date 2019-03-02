@@ -68,7 +68,7 @@ static int alloc_ldt(mm_context_t *pc, int mincount, int reload)
 		preempt_disable();
 		load_LDT(pc);
 		if (!cpumask_equal(mm_cpumask(current->mm),
-				   cpumask_of(smp_processor_id())))
+				   cpumask_of(raw_smp_processor_id())))
 			smp_call_function(flush_ldt, current->mm, 1);
 		preempt_enable();
 #else

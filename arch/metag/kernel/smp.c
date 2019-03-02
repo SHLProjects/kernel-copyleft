@@ -275,7 +275,7 @@ static DECLARE_COMPLETION(cpu_killed);
  */
 int __cpuexit __cpu_disable(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct task_struct *p;
 
 	/*
@@ -351,7 +351,7 @@ void __cpuinit smp_store_cpu_info(unsigned int cpuid)
 asmlinkage void secondary_start_kernel(void)
 {
 	struct mm_struct *mm = &init_mm;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	/*
 	 * All kernel threads share the same mm context; grab a
@@ -431,7 +431,7 @@ void __init smp_cpus_done(unsigned int max_cpus)
 
 void __init smp_prepare_cpus(unsigned int max_cpus)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	init_new_context(current, &init_mm);
 	current_thread_info()->cpu = cpu;
@@ -442,7 +442,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 
 void __init smp_prepare_boot_cpu(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	per_cpu(pTBI, cpu) = __TBI(TBID_ISTAT_BIT);
 
@@ -536,7 +536,7 @@ static DEFINE_SPINLOCK(stop_lock);
  */
 static int do_IPI(struct pt_regs *regs)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct ipi_data *ipi = &per_cpu(ipi_data, cpu);
 	struct pt_regs *old_regs = set_irq_regs(regs);
 	unsigned long msgs, nextmsg;
@@ -586,7 +586,7 @@ void smp_send_reschedule(int cpu)
 
 static void stop_this_cpu(void *data)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	if (system_state == SYSTEM_BOOTING ||
 	    system_state == SYSTEM_RUNNING) {

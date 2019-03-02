@@ -297,7 +297,7 @@ static inline void __cpuinit dsp_init(void) { }
  */
 asmlinkage void __cpuinit cpu_init(void)
 {
-	current_thread_info()->cpu = hard_smp_processor_id();
+	current_thread_info()->cpu = hard_raw_smp_processor_id();
 
 	/* First, probe the CPU */
 	cpu_probe();
@@ -322,7 +322,7 @@ asmlinkage void __cpuinit cpu_init(void)
 	/* Init the cache */
 	cache_init();
 
-	if (raw_smp_processor_id() == 0) {
+	if (raw_raw_smp_processor_id() == 0) {
 		shm_align_mask = max_t(unsigned long,
 				       current_cpu_data.dcache.way_size - 1,
 				       PAGE_SIZE - 1);
@@ -346,7 +346,7 @@ asmlinkage void __cpuinit cpu_init(void)
 	expmask_init();
 
 	/* Do the rest of the boot processor setup */
-	if (raw_smp_processor_id() == 0) {
+	if (raw_raw_smp_processor_id() == 0) {
 		/* Save off the BIOS VBR, if there is one */
 		sh_bios_vbr_init();
 

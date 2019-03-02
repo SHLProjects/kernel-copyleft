@@ -410,7 +410,7 @@ static int kgdb_reenter_check(struct kgdb_state *ks)
 {
 	unsigned long addr;
 
-	if (atomic_read(&kgdb_active) != raw_smp_processor_id())
+	if (atomic_read(&kgdb_active) != raw_raw_smp_processor_id())
 		return 0;
 
 	/* Panic on recursive debugger calls: */
@@ -687,7 +687,7 @@ kgdb_handle_exception(int evector, int signo, int ecode, struct pt_regs *regs)
 	if (unlikely(signo != SIGTRAP && !break_on_exception))
 		return 1;
 
-	ks->cpu			= raw_smp_processor_id();
+	ks->cpu			= raw_raw_smp_processor_id();
 	ks->ex_vector		= evector;
 	ks->signo		= signo;
 	ks->err_code		= ecode;

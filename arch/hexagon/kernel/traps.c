@@ -105,7 +105,7 @@ static void do_show_stack(struct task_struct *task, unsigned long *fp,
 		task = current;
 
 	printk(KERN_INFO "CPU#%d, %s/%d, Call Trace:\n",
-	       raw_smp_processor_id(), task->comm,
+	       raw_raw_smp_processor_id(), task->comm,
 	       task_pid_nr(task));
 
 	if (fp == NULL) {

@@ -62,7 +62,7 @@ static void spin_dump(raw_spinlock_t *lock, const char *msg)
 	if (lock->owner && lock->owner != SPINLOCK_OWNER_INIT)
 		owner = lock->owner;
 	printk(KERN_EMERG "BUG: spinlock %s on CPU#%d, %s/%d\n",
-		msg, raw_smp_processor_id(),
+		msg, raw_raw_smp_processor_id(),
 		current->comm, task_pid_nr(current));
 	printk(KERN_EMERG " lock: %pS, .magic: %08x, .owner: %s/%d, "
 			".owner_cpu: %d\n",
@@ -93,13 +93,13 @@ debug_spin_lock_before(raw_spinlock_t *lock)
 {
 	SPIN_BUG_ON(lock->magic != SPINLOCK_MAGIC, lock, "bad magic");
 	SPIN_BUG_ON(lock->owner == current, lock, "recursion");
-	SPIN_BUG_ON(lock->owner_cpu == raw_smp_processor_id(),
+	SPIN_BUG_ON(lock->owner_cpu == raw_raw_smp_processor_id(),
 							lock, "cpu recursion");
 }
 
 static inline void debug_spin_lock_after(raw_spinlock_t *lock)
 {
-	lock->owner_cpu = raw_smp_processor_id();
+	lock->owner_cpu = raw_raw_smp_processor_id();
 	lock->owner = current;
 }
 
@@ -108,7 +108,7 @@ static inline void debug_spin_unlock(raw_spinlock_t *lock)
 	SPIN_BUG_ON(lock->magic != SPINLOCK_MAGIC, lock, "bad magic");
 	SPIN_BUG_ON(!raw_spin_is_locked(lock), lock, "already unlocked");
 	SPIN_BUG_ON(lock->owner != current, lock, "wrong owner");
-	SPIN_BUG_ON(lock->owner_cpu != raw_smp_processor_id(),
+	SPIN_BUG_ON(lock->owner_cpu != raw_raw_smp_processor_id(),
 							lock, "wrong CPU");
 	lock->owner = SPINLOCK_OWNER_INIT;
 	lock->owner_cpu = -1;
@@ -176,7 +176,7 @@ static void rwlock_bug(rwlock_t *lock, const char *msg)
 		return;
 
 	printk(KERN_EMERG "BUG: rwlock %s on CPU#%d, %s/%d, %p\n",
-		msg, raw_smp_processor_id(), current->comm,
+		msg, raw_raw_smp_processor_id(), current->comm,
 		task_pid_nr(current), lock);
 #ifdef CONFIG_DEBUG_SPINLOCK_BITE_ON_BUG
 	msm_trigger_wdog_bite();
@@ -206,7 +206,7 @@ static void __read_lock_debug(rwlock_t *lock)
 			print_once = 0;
 			printk(KERN_EMERG "BUG: read-lock lockup on CPU#%d, "
 					"%s/%d, %p\n",
-				raw_smp_processor_id(), current->comm,
+				raw_raw_smp_processor_id(), current->comm,
 				current->pid, lock);
 			dump_stack();
 		}
@@ -243,13 +243,13 @@ static inline void debug_write_lock_before(rwlock_t *lock)
 {
 	RWLOCK_BUG_ON(lock->magic != RWLOCK_MAGIC, lock, "bad magic");
 	RWLOCK_BUG_ON(lock->owner == current, lock, "recursion");
-	RWLOCK_BUG_ON(lock->owner_cpu == raw_smp_processor_id(),
+	RWLOCK_BUG_ON(lock->owner_cpu == raw_raw_smp_processor_id(),
 							lock, "cpu recursion");
 }
 
 static inline void debug_write_lock_after(rwlock_t *lock)
 {
-	lock->owner_cpu = raw_smp_processor_id();
+	lock->owner_cpu = raw_raw_smp_processor_id();
 	lock->owner = current;
 }
 
@@ -257,7 +257,7 @@ static inline void debug_write_unlock(rwlock_t *lock)
 {
 	RWLOCK_BUG_ON(lock->magic != RWLOCK_MAGIC, lock, "bad magic");
 	RWLOCK_BUG_ON(lock->owner != current, lock, "wrong owner");
-	RWLOCK_BUG_ON(lock->owner_cpu != raw_smp_processor_id(),
+	RWLOCK_BUG_ON(lock->owner_cpu != raw_raw_smp_processor_id(),
 							lock, "wrong CPU");
 	lock->owner = SPINLOCK_OWNER_INIT;
 	lock->owner_cpu = -1;
@@ -281,7 +281,7 @@ static void __write_lock_debug(rwlock_t *lock)
 			print_once = 0;
 			printk(KERN_EMERG "BUG: write-lock lockup on CPU#%d, "
 					"%s/%d, %p\n",
-				raw_smp_processor_id(), current->comm,
+				raw_raw_smp_processor_id(), current->comm,
 				current->pid, lock);
 			dump_stack();
 		}

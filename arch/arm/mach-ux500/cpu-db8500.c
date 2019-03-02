@@ -109,7 +109,7 @@ static struct resource db8500_pmu_resources[] = {
 static irqreturn_t db8500_pmu_handler(int irq, void *dev, irq_handler_t handler)
 {
 	irqreturn_t ret = handler(irq, dev);
-	int other = !smp_processor_id();
+	int other = !raw_smp_processor_id();
 
 	if (ret == IRQ_NONE && cpu_online(other))
 		irq_set_affinity(irq, cpumask_of(other));

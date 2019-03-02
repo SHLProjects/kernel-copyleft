@@ -643,7 +643,7 @@ void native_machine_shutdown(void)
 
 	/* Make certain the cpu I'm about to reboot on is online */
 	if (!cpu_online(reboot_cpu_id))
-		reboot_cpu_id = smp_processor_id();
+		reboot_cpu_id = raw_smp_processor_id();
 
 	/* Make certain I only run on the appropriate processor */
 	set_cpus_allowed_ptr(current, cpumask_of(reboot_cpu_id));
@@ -764,7 +764,7 @@ static int crash_nmi_callback(unsigned int val, struct pt_regs *regs)
 {
 	int cpu;
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	/*
 	 * Don't do anything if this handler is invoked on crashing cpu.
@@ -804,7 +804,7 @@ void nmi_shootdown_cpus(nmi_shootdown_cb callback)
 	local_irq_disable();
 
 	/* Make a note of crashing cpu. Will be used in NMI callback. */
-	crashing_cpu = safe_smp_processor_id();
+	crashing_cpu = safe_raw_smp_processor_id();
 
 	shootdown_callback = callback;
 

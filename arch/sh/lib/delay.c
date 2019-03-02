@@ -36,7 +36,7 @@ inline void __const_udelay(unsigned long xloops)
 		"sts	mach, %0"
 		: "=r" (xloops)
 		: "0" (xloops),
-		  "r" (cpu_data[raw_smp_processor_id()].loops_per_jiffy * (HZ/4))
+		  "r" (cpu_data[raw_raw_smp_processor_id()].loops_per_jiffy * (HZ/4))
 		: "macl", "mach");
 	__delay(++xloops);
 }

@@ -122,7 +122,7 @@ static inline void __iomem *mvebu_gpioreg_edge_cause(struct mvebu_gpio_chip *mvc
 	case MVEBU_GPIO_SOC_VARIANT_MV78200:
 		return mvchip->membase + GPIO_EDGE_CAUSE_OFF;
 	case MVEBU_GPIO_SOC_VARIANT_ARMADAXP:
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		return mvchip->percpu_membase + GPIO_EDGE_CAUSE_ARMADAXP_OFF(cpu);
 	default:
 		BUG();
@@ -137,10 +137,10 @@ static inline void __iomem *mvebu_gpioreg_edge_mask(struct mvebu_gpio_chip *mvch
 	case MVEBU_GPIO_SOC_VARIANT_ORION:
 		return mvchip->membase + GPIO_EDGE_MASK_OFF;
 	case MVEBU_GPIO_SOC_VARIANT_MV78200:
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		return mvchip->membase + GPIO_EDGE_MASK_MV78200_OFF(cpu);
 	case MVEBU_GPIO_SOC_VARIANT_ARMADAXP:
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		return mvchip->percpu_membase + GPIO_EDGE_MASK_ARMADAXP_OFF(cpu);
 	default:
 		BUG();
@@ -155,10 +155,10 @@ static void __iomem *mvebu_gpioreg_level_mask(struct mvebu_gpio_chip *mvchip)
 	case MVEBU_GPIO_SOC_VARIANT_ORION:
 		return mvchip->membase + GPIO_LEVEL_MASK_OFF;
 	case MVEBU_GPIO_SOC_VARIANT_MV78200:
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		return mvchip->membase + GPIO_LEVEL_MASK_MV78200_OFF(cpu);
 	case MVEBU_GPIO_SOC_VARIANT_ARMADAXP:
-		cpu = smp_processor_id();
+		cpu = raw_smp_processor_id();
 		return mvchip->percpu_membase + GPIO_LEVEL_MASK_ARMADAXP_OFF(cpu);
 	default:
 		BUG();

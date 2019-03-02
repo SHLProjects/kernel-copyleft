@@ -1,16 +1,16 @@
 /*
- * lib/smp_processor_id.c
+ * lib/raw_smp_processor_id.c
  *
- * DEBUG_PREEMPT variant of smp_processor_id().
+ * DEBUG_PREEMPT variant of raw_smp_processor_id().
  */
 #include <linux/export.h>
 #include <linux/kallsyms.h>
 #include <linux/sched.h>
 
-notrace unsigned int debug_smp_processor_id(void)
+notrace unsigned int debug_raw_smp_processor_id(void)
 {
 	unsigned long preempt_count = preempt_count();
-	int this_cpu = raw_smp_processor_id();
+	int this_cpu = raw_raw_smp_processor_id();
 
 	if (likely(preempt_count))
 		goto out;
@@ -20,7 +20,7 @@ notrace unsigned int debug_smp_processor_id(void)
 
 	/*
 	 * Kernel threads bound to a single CPU can safely use
-	 * smp_processor_id():
+	 * raw_smp_processor_id():
 	 */
 	if (cpumask_equal(tsk_cpus_allowed(current), cpumask_of(this_cpu)))
 		goto out;
@@ -39,7 +39,7 @@ notrace unsigned int debug_smp_processor_id(void)
 	if (!printk_ratelimit())
 		goto out_enable;
 
-	printk(KERN_ERR "BUG: using smp_processor_id() in preemptible [%08x] "
+	printk(KERN_ERR "BUG: using raw_smp_processor_id() in preemptible [%08x] "
 			"code: %s/%d\n",
 			preempt_count() - 1, current->comm, current->pid);
 	print_symbol("caller is %s\n", (long)__builtin_return_address(0));
@@ -51,5 +51,5 @@ out:
 	return this_cpu;
 }
 
-EXPORT_SYMBOL(debug_smp_processor_id);
+EXPORT_SYMBOL(debug_raw_smp_processor_id);
 

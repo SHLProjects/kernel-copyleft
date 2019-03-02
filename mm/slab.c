@@ -636,7 +636,7 @@ static DEFINE_PER_CPU(struct delayed_work, slab_reap_work);
 
 static inline struct array_cache *cpu_cache_get(struct kmem_cache *cachep)
 {
-	return cachep->array[smp_processor_id()];
+	return cachep->array[raw_smp_processor_id()];
 }
 
 static size_t slab_mgmt_size(size_t nr_objs, size_t align)
@@ -1587,7 +1587,7 @@ void __init kmem_cache_init(void)
 		 */
 		spin_lock_init(&ptr->lock);
 
-		kmem_cache->array[smp_processor_id()] = ptr;
+		kmem_cache->array[raw_smp_processor_id()] = ptr;
 
 		ptr = kmalloc(sizeof(struct arraycache_init), GFP_NOWAIT);
 
@@ -1600,7 +1600,7 @@ void __init kmem_cache_init(void)
 		 */
 		spin_lock_init(&ptr->lock);
 
-		kmalloc_caches[INDEX_AC]->array[smp_processor_id()] = ptr;
+		kmalloc_caches[INDEX_AC]->array[raw_smp_processor_id()] = ptr;
 	}
 	/* 5) Replace the bootstrap kmem_cache_node */
 	{
@@ -1841,7 +1841,7 @@ static void store_stackinfo(struct kmem_cache *cachep, unsigned long *addr,
 
 	*addr++ = 0x12345678;
 	*addr++ = caller;
-	*addr++ = smp_processor_id();
+	*addr++ = raw_smp_processor_id();
 	size -= 3 * sizeof(unsigned long);
 	{
 		unsigned long *sptr = &caller;
@@ -2138,7 +2138,7 @@ static int __init_refok setup_cpu_cache(struct kmem_cache *cachep, gfp_t gfp)
 		 * The setup_node is taken care
 		 * of by the caller of __kmem_cache_create
 		 */
-		cachep->array[smp_processor_id()] = &initarray_generic.cache;
+		cachep->array[raw_smp_processor_id()] = &initarray_generic.cache;
 		slab_state = PARTIAL;
 	} else if (slab_state == PARTIAL) {
 		/*
@@ -2146,7 +2146,7 @@ static int __init_refok setup_cpu_cache(struct kmem_cache *cachep, gfp_t gfp)
 		 * that's used by kmalloc(24), otherwise the creation of
 		 * further caches will BUG().
 		 */
-		cachep->array[smp_processor_id()] = &initarray_generic.cache;
+		cachep->array[raw_smp_processor_id()] = &initarray_generic.cache;
 
 		/*
 		 * If the cache that's used by kmalloc(sizeof(kmem_cache_node)) is
@@ -2160,7 +2160,7 @@ static int __init_refok setup_cpu_cache(struct kmem_cache *cachep, gfp_t gfp)
 			slab_state = PARTIAL_ARRAYCACHE;
 	} else {
 		/* Remaining boot caches */
-		cachep->array[smp_processor_id()] =
+		cachep->array[raw_smp_processor_id()] =
 			kmalloc(sizeof(struct arraycache_init), gfp);
 
 		if (slab_state == PARTIAL_ARRAYCACHE) {
@@ -3913,8 +3913,8 @@ static void do_ccupdate_local(void *info)
 	check_irq_off();
 	old = cpu_cache_get(new->cachep);
 
-	new->cachep->array[smp_processor_id()] = new->new[smp_processor_id()];
-	new->new[smp_processor_id()] = old;
+	new->cachep->array[raw_smp_processor_id()] = new->new[raw_smp_processor_id()];
+	new->new[raw_smp_processor_id()] = old;
 }
 
 /* Always called with the slab_mutex held */

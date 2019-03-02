@@ -648,7 +648,7 @@ static void __cpuinit gic_cpu_init(struct gic_chip_data *gic)
 {
 	void __iomem *dist_base = gic_data_dist_base(gic);
 	void __iomem *base = gic_data_cpu_base(gic);
-	unsigned int cpu_mask, cpu = smp_processor_id();
+	unsigned int cpu_mask, cpu = raw_smp_processor_id();
 	int i;
 
 	/*

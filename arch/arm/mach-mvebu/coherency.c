@@ -183,7 +183,7 @@ int __init coherency_init(void)
 		pr_info("Initializing Coherency fabric\n");
 		coherency_base = of_iomap(np, 0);
 		coherency_cpu_base = of_iomap(np, 1);
-		set_cpu_coherent(cpu_logical_map(smp_processor_id()), 0);
+		set_cpu_coherent(cpu_logical_map(raw_smp_processor_id()), 0);
 		coherency_enabled = 1;
 		bus_register_notifier(&platform_bus_type,
 					&mvebu_hwcc_platform_nb);

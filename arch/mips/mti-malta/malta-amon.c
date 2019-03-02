@@ -57,7 +57,7 @@ void amon_cpu_start(int cpu,
 
 	if (!amon_cpu_avail(cpu))
 		return;
-	if (cpu == smp_processor_id()) {
+	if (cpu == raw_smp_processor_id()) {
 		pr_debug("launch: I am cpu%d!\n", cpu);
 		return;
 	}

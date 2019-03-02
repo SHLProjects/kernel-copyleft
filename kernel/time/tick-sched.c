@@ -126,7 +126,7 @@ static ktime_t tick_init_jiffy_update(void)
 
 static void tick_sched_do_timer(ktime_t now)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 #ifdef CONFIG_NO_HZ_COMMON
 	/*
@@ -215,7 +215,7 @@ void tick_nohz_full_check(void)
 {
 	struct tick_sched *ts = &__get_cpu_var(tick_cpu_sched);
 
-	if (tick_nohz_full_cpu(smp_processor_id())) {
+	if (tick_nohz_full_cpu(raw_smp_processor_id())) {
 		if (ts->tick_stopped && !is_idle_task(current)) {
 			if (!can_stop_full_tick())
 				tick_nohz_restart_sched_tick(ts, ktime_get());
@@ -238,7 +238,7 @@ static DEFINE_PER_CPU(struct irq_work, nohz_full_kick_work) = {
  */
 void tick_nohz_full_kick(void)
 {
-	if (tick_nohz_full_cpu(smp_processor_id()))
+	if (tick_nohz_full_cpu(raw_smp_processor_id()))
 		irq_work_queue(&__get_cpu_var(nohz_full_kick_work));
 }
 
@@ -273,7 +273,7 @@ void tick_nohz_task_switch(struct task_struct *tsk)
 
 	local_irq_save(flags);
 
-	if (!tick_nohz_full_cpu(smp_processor_id()))
+	if (!tick_nohz_full_cpu(raw_smp_processor_id()))
 		goto out;
 
 	if (tick_nohz_tick_stopped() && !can_stop_full_tick())
@@ -302,7 +302,7 @@ static int __init tick_nohz_full_setup(char *str)
 		return 1;
 	}
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	if (cpumask_test_cpu(cpu, nohz_full_mask)) {
 		pr_warning("NO_HZ: Clearing %d from nohz_full range for timekeeping\n", cpu);
 		cpumask_clear_cpu(cpu, nohz_full_mask);
@@ -350,7 +350,7 @@ static int tick_nohz_init_all(void)
 	}
 	err = 0;
 	cpumask_setall(nohz_full_mask);
-	cpumask_clear_cpu(smp_processor_id(), nohz_full_mask);
+	cpumask_clear_cpu(raw_smp_processor_id(), nohz_full_mask);
 	have_nohz_full_mask = true;
 #endif
 	return err;
@@ -455,7 +455,7 @@ update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_upda
 
 static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
 {
-	update_ts_time_stats(smp_processor_id(), ts, now, NULL);
+	update_ts_time_stats(raw_smp_processor_id(), ts, now, NULL);
 	ts->idle_active = 0;
 
 	sched_clock_idle_wakeup_event(0);
@@ -705,7 +705,7 @@ out:
 static void tick_nohz_full_stop_tick(struct tick_sched *ts)
 {
 #ifdef CONFIG_NO_HZ_FULL
-       int cpu = smp_processor_id();
+       int cpu = raw_smp_processor_id();
 
        if (!tick_nohz_full_cpu(cpu) || is_idle_task(current))
                return;
@@ -774,7 +774,7 @@ static bool can_stop_idle_tick(int cpu, struct tick_sched *ts)
 static void __tick_nohz_idle_enter(struct tick_sched *ts)
 {
 	ktime_t now, expires;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	now = tick_nohz_start_idle(ts);
 
@@ -1154,7 +1154,7 @@ static enum hrtimer_restart tick_sched_timer(struct hrtimer *timer)
 		tick_sched_handle(ts, regs);
 
 		if (rq_info.init == 1 &&
-				tick_do_timer_cpu == smp_processor_id()) {
+				tick_do_timer_cpu == raw_smp_processor_id()) {
 			/*
 			 * update run queue statistics
 			 */
@@ -1203,7 +1203,7 @@ void tick_setup_sched_timer(void)
 	if (sched_skew_tick) {
 		u64 offset = ktime_to_ns(tick_period) >> 1;
 		do_div(offset, num_possible_cpus());
-		offset *= smp_processor_id();
+		offset *= raw_smp_processor_id();
 		hrtimer_add_expires_ns(&ts->sched_timer, offset);
 	}
 

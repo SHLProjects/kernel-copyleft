@@ -61,7 +61,7 @@ static int perf_trace_write(struct file *file,
 	 * accesses happen on the same cpu
 	 */
 	preempt_disable();
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 
 	/* stop counters, call the trace function, restart them */
 

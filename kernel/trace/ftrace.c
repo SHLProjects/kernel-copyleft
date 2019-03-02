@@ -2321,7 +2321,7 @@ static int ftrace_update_code(struct module *mod)
 		}
 	}
 
-	start = ftrace_now(raw_smp_processor_id());
+	start = ftrace_now(raw_raw_smp_processor_id());
 	ftrace_update_cnt = 0;
 
 	for (pg = ftrace_new_pgs; pg; pg = pg->next) {
@@ -2366,7 +2366,7 @@ static int ftrace_update_code(struct module *mod)
 
 	ftrace_new_pgs = NULL;
 
-	stop = ftrace_now(raw_smp_processor_id());
+	stop = ftrace_now(raw_raw_smp_processor_id());
 	ftrace_update_time = stop - start;
 	ftrace_update_tot_cnt += ftrace_update_cnt;
 

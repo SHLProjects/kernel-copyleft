@@ -239,7 +239,7 @@ static void uv_send_IPI_mask(const struct cpumask *mask, int vector)
 
 static void uv_send_IPI_mask_allbutself(const struct cpumask *mask, int vector)
 {
-	unsigned int this_cpu = smp_processor_id();
+	unsigned int this_cpu = raw_smp_processor_id();
 	unsigned int cpu;
 
 	for_each_cpu(cpu, mask) {
@@ -250,7 +250,7 @@ static void uv_send_IPI_mask_allbutself(const struct cpumask *mask, int vector)
 
 static void uv_send_IPI_allbutself(int vector)
 {
-	unsigned int this_cpu = smp_processor_id();
+	unsigned int this_cpu = raw_smp_processor_id();
 	unsigned int cpu;
 
 	for_each_online_cpu(cpu) {
@@ -671,7 +671,7 @@ static void uv_heartbeat(unsigned long ignored)
 	bits ^= SCIR_CPU_HEARTBEAT;
 
 	/* is this cpu idle? */
-	if (idle_cpu(raw_smp_processor_id()))
+	if (idle_cpu(raw_raw_smp_processor_id()))
 		bits &= ~SCIR_CPU_ACTIVITY;
 	else
 		bits |= SCIR_CPU_ACTIVITY;
@@ -832,7 +832,7 @@ int uv_handle_nmi(unsigned int reason, struct pt_regs *regs)
 	 * This prevents intermixed output.
 	 */
 	spin_lock(&uv_nmi_lock);
-	pr_info("UV NMI stack dump cpu %u:\n", smp_processor_id());
+	pr_info("UV NMI stack dump cpu %u:\n", raw_smp_processor_id());
 	dump_stack();
 	spin_unlock(&uv_nmi_lock);
 

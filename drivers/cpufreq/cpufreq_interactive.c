@@ -723,9 +723,9 @@ static int speed_change_task_hmp(void *data)
 		 * the process is changed, when there are no any online
 		 * CPU in tsk_cpus_allowed(p).
 		 */
-		if (!cpumask_test_cpu(smp_processor_id(), &clstr->cpus)) {
+		if (!cpumask_test_cpu(raw_smp_processor_id(), &clstr->cpus)) {
 			pr_info("change affinity mask on %d CPU, cluster id is %d\n",
-				   smp_processor_id(), clstr->id);
+				   raw_smp_processor_id(), clstr->id);
 
 			set_cpus_allowed(current, clstr->cpus);
 		}

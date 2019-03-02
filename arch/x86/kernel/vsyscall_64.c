@@ -356,7 +356,7 @@ static void __cpuinit vsyscall_set_cpu(int cpu)
 static void __cpuinit cpu_vsyscall_init(void *arg)
 {
 	/* preemption should be already off */
-	vsyscall_set_cpu(raw_smp_processor_id());
+	vsyscall_set_cpu(raw_raw_smp_processor_id());
 }
 
 static int __cpuinit

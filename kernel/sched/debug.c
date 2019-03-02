@@ -637,7 +637,7 @@ void proc_sched_show_task(struct task_struct *p, struct seq_file *m)
 #undef __P
 
 	{
-		unsigned int this_cpu = raw_smp_processor_id();
+		unsigned int this_cpu = raw_raw_smp_processor_id();
 		u64 t0, t1;
 
 		t0 = cpu_clock(this_cpu);

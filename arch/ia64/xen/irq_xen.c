@@ -250,7 +250,7 @@ __xen_register_percpu_irq(unsigned int cpu, unsigned int vec,
 static void
 xen_register_percpu_irq(ia64_vector vec, struct irqaction *action)
 {
-	__xen_register_percpu_irq(smp_processor_id(), vec, action, 1);
+	__xen_register_percpu_irq(raw_smp_processor_id(), vec, action, 1);
 }
 
 static void
@@ -263,7 +263,7 @@ xen_bind_early_percpu_irq(void)
 	 * BSP will face with such step shortly
 	 */
 	for (i = 0; i < late_irq_cnt; i++)
-		__xen_register_percpu_irq(smp_processor_id(),
+		__xen_register_percpu_irq(raw_smp_processor_id(),
 					  saved_percpu_irqs[i].irq,
 					  saved_percpu_irqs[i].action, 0);
 }
@@ -332,7 +332,7 @@ void xen_smp_intr_init_early(unsigned int cpu)
 void xen_smp_intr_init(void)
 {
 #ifdef CONFIG_SMP
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct callback_register event = {
 		.type = CALLBACKTYPE_event,
 		.address = { .ip = (unsigned long)&xen_event_callback },

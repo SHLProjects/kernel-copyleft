@@ -133,7 +133,7 @@ void kgdb_arch_set_pc(struct pt_regs *regs, unsigned long pc)
 
 static void hexagon_kgdb_nmi_hook(void *ignored)
 {
-	kgdb_nmicallback(raw_smp_processor_id(), get_irq_regs());
+	kgdb_nmicallback(raw_raw_smp_processor_id(), get_irq_regs());
 }
 
 void kgdb_roundup_cpus(unsigned long flags)
@@ -197,7 +197,7 @@ static int __kgdb_notify(struct die_args *args, unsigned long cmd)
 {
 	/* cpu roundup */
 	if (atomic_read(&kgdb_active) != -1) {
-		kgdb_nmicallback(smp_processor_id(), args->regs);
+		kgdb_nmicallback(raw_smp_processor_id(), args->regs);
 		return NOTIFY_STOP;
 	}
 

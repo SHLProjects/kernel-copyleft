@@ -47,7 +47,7 @@ void pci_config_read8(u8 *addr, u8 *ret)
 	u8 byte;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"
@@ -69,7 +69,7 @@ void pci_config_read16(u16 *addr, u16 *ret)
 	u16 word;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"
@@ -91,7 +91,7 @@ void pci_config_read32(u32 *addr, u32 *ret)
 	u32 dword;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"
@@ -112,7 +112,7 @@ void pci_config_write8(u8 *addr, u8 val)
 	unsigned long flags;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"
@@ -131,7 +131,7 @@ void pci_config_write16(u16 *addr, u16 val)
 	unsigned long flags;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"
@@ -150,7 +150,7 @@ void pci_config_write32(u32 *addr, u32 val)
 	unsigned long flags;
 
 	spin_lock_irqsave(&pci_poke_lock, flags);
-	pci_poke_cpu = smp_processor_id();
+	pci_poke_cpu = raw_smp_processor_id();
 	pci_poke_in_progress = 1;
 	pci_poke_faulted = 0;
 	__asm__ __volatile__("membar #Sync\n\t"

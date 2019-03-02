@@ -368,7 +368,7 @@ static void rcu_eqs_enter_common(struct rcu_dynticks *rdtp, long long oldval,
 {
 	trace_rcu_dyntick("Start", oldval, rdtp->dynticks_nesting);
 	if (!user && !is_idle_task(current)) {
-		struct task_struct *idle = idle_task(smp_processor_id());
+		struct task_struct *idle = idle_task(raw_smp_processor_id());
 
 		trace_rcu_dyntick("Error on entry: not idle task", oldval, 0);
 		ftrace_dump(DUMP_ORIG);
@@ -376,7 +376,7 @@ static void rcu_eqs_enter_common(struct rcu_dynticks *rdtp, long long oldval,
 			  current->pid, current->comm,
 			  idle->pid, idle->comm); /* must be idle task! */
 	}
-	rcu_prepare_for_idle(smp_processor_id());
+	rcu_prepare_for_idle(raw_smp_processor_id());
 	/* CPUs seeing atomic_inc() must see prior RCU read-side crit sects */
 	smp_mb__before_atomic();  /* See above. */
 	atomic_inc(&rdtp->dynticks);
@@ -521,10 +521,10 @@ static void rcu_eqs_exit_common(struct rcu_dynticks *rdtp, long long oldval,
 	/* CPUs seeing atomic_inc() must see later RCU read-side crit sects */
 	smp_mb__after_atomic();  /* See above. */
 	WARN_ON_ONCE(!(atomic_read(&rdtp->dynticks) & 0x1));
-	rcu_cleanup_after_idle(smp_processor_id());
+	rcu_cleanup_after_idle(raw_smp_processor_id());
 	trace_rcu_dyntick("End", oldval, rdtp->dynticks_nesting);
 	if (!user && !is_idle_task(current)) {
-		struct task_struct *idle = idle_task(smp_processor_id());
+		struct task_struct *idle = idle_task(raw_smp_processor_id());
 
 		trace_rcu_dyntick("Error on exit: not idle task",
 				  oldval, rdtp->dynticks_nesting);
@@ -935,7 +935,7 @@ static void print_other_cpu_stall(struct rcu_state *rsp, unsigned long gpnum)
 	for_each_possible_cpu(cpu)
 		totqlen += per_cpu_ptr(rsp->rda, cpu)->qlen;
 	pr_cont("(detected by %d, t=%ld jiffies, g=%lu, c=%lu, q=%lu)\n",
-	       smp_processor_id(), (long)(jiffies - rsp->gp_start),
+	       raw_smp_processor_id(), (long)(jiffies - rsp->gp_start),
 	       rsp->gpnum, rsp->completed, totqlen);
 	if (ndetected) {
 		rcu_dump_cpu_stacks(rsp);
@@ -976,7 +976,7 @@ static void print_cpu_stall(struct rcu_state *rsp)
 	 */
 	printk(KERN_ERR "INFO: %s self-detected stall on CPU", rsp->name);
 	print_cpu_stall_info_begin();
-	print_cpu_stall_info(rsp, smp_processor_id());
+	print_cpu_stall_info(rsp, raw_smp_processor_id());
 	print_cpu_stall_info_end();
 	for_each_possible_cpu(cpu)
 		totqlen += per_cpu_ptr(rsp->rda, cpu)->qlen;
@@ -2079,7 +2079,7 @@ static void rcu_do_batch(struct rcu_state *rsp, struct rcu_data *rdp)
 	 * races with call_rcu() from interrupt handlers.
 	 */
 	local_irq_save(flags);
-	WARN_ON_ONCE(cpu_is_offline(smp_processor_id()));
+	WARN_ON_ONCE(cpu_is_offline(raw_smp_processor_id()));
 	bl = rdp->blimit;
 	trace_rcu_batch_start(rsp->name, rdp->qlen_lazy, rdp->qlen, bl);
 	list = rdp->nxtlist;
@@ -2322,7 +2322,7 @@ static void rcu_process_callbacks(struct softirq_action *unused)
 {
 	struct rcu_state *rsp;
 
-	if (cpu_is_offline(smp_processor_id()))
+	if (cpu_is_offline(raw_smp_processor_id()))
 		return;
 	trace_rcu_utilization("Start RCU core");
 	for_each_rcu_flavor(rsp)
@@ -2350,7 +2350,7 @@ static void invoke_rcu_callbacks(struct rcu_state *rsp, struct rcu_data *rdp)
 
 static void invoke_rcu_core(void)
 {
-	if (cpu_online(smp_processor_id()))
+	if (cpu_online(raw_smp_processor_id()))
 		raise_softirq(RCU_SOFTIRQ);
 }
 
@@ -2366,11 +2366,11 @@ static void __call_rcu_core(struct rcu_state *rsp, struct rcu_data *rdp,
 	 * If called from an extended quiescent state, invoke the RCU
 	 * core in order to force a re-evaluation of RCU's idleness.
 	 */
-	if (rcu_is_cpu_idle() && cpu_online(smp_processor_id()))
+	if (rcu_is_cpu_idle() && cpu_online(raw_smp_processor_id()))
 		invoke_rcu_core();
 
 	/* If interrupts were disabled or CPU offline, don't invoke RCU core. */
-	if (irqs_disabled_flags(flags) || cpu_is_offline(smp_processor_id()))
+	if (irqs_disabled_flags(flags) || cpu_is_offline(raw_smp_processor_id()))
 		return;
 
 	/*

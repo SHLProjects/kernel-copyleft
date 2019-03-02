@@ -637,7 +637,7 @@ static void __vsens_cpu_pm_notify(struct vsens_chip *chip,
 			unsigned long action)
 {
 	bool rail_on, rail_on_prev;
-	int this_cpu = smp_processor_id();
+	int this_cpu = raw_smp_processor_id();
 
 	if (!(BIT(this_cpu) & chip->cpu_mask))
 		return;
@@ -654,7 +654,7 @@ static void __vsens_cpu_pm_notify(struct vsens_chip *chip,
 
 	pr_debug("%s: Enter on cpu = %d, action = %s rail_on = %d -> %d\n",
 					chip->name,
-					smp_processor_id(),
+					raw_smp_processor_id(),
 					action_to_str(action),
 					rail_on_prev,
 					rail_on);
@@ -666,7 +666,7 @@ static void __vsens_cpu_pm_notify(struct vsens_chip *chip,
 
 	pr_debug("%s: Exit on cpu = %d, action = %s rail_on = %d -> %d\n",
 					chip->name,
-					smp_processor_id(),
+					raw_smp_processor_id(),
 					action_to_str(action),
 					rail_on_prev,
 					rail_on);

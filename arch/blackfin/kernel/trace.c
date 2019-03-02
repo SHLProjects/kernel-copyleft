@@ -652,7 +652,7 @@ void dump_bfin_trace_buffer(void)
 	int tflags, i = 0, fault = 0;
 	char buf[150];
 	unsigned short *addr;
-	unsigned int cpu = raw_smp_processor_id();
+	unsigned int cpu = raw_raw_smp_processor_id();
 #ifdef CONFIG_DEBUG_BFIN_HWTRACE_EXPAND
 	int j, index;
 #endif
@@ -849,7 +849,7 @@ void show_regs(struct pt_regs *fp)
 	struct irqaction *action;
 	unsigned int i;
 	unsigned long flags = 0;
-	unsigned int cpu = raw_smp_processor_id();
+	unsigned int cpu = raw_raw_smp_processor_id();
 	unsigned char in_atomic = (bfin_read_IPEND() & 0x10) || in_atomic();
 
 	pr_notice("\n");
@@ -879,13 +879,13 @@ void show_regs(struct pt_regs *fp)
 
 	pr_notice("\nSEQUENCER STATUS:\t\t%s\n", print_tainted());
 	pr_notice(" SEQSTAT: %08lx  IPEND: %04lx  IMASK: %04lx  SYSCFG: %04lx\n",
-		(long)fp->seqstat, fp->ipend, cpu_pda[raw_smp_processor_id()].ex_imask, fp->syscfg);
+		(long)fp->seqstat, fp->ipend, cpu_pda[raw_raw_smp_processor_id()].ex_imask, fp->syscfg);
 	if (fp->ipend & EVT_IRPTEN)
 		pr_notice("  Global Interrupts Disabled (IPEND[4])\n");
-	if (!(cpu_pda[raw_smp_processor_id()].ex_imask & (EVT_IVG13 | EVT_IVG12 | EVT_IVG11 |
+	if (!(cpu_pda[raw_raw_smp_processor_id()].ex_imask & (EVT_IVG13 | EVT_IVG12 | EVT_IVG11 |
 			EVT_IVG10 | EVT_IVG9 | EVT_IVG8 | EVT_IVG7 | EVT_IVTMR)))
 		pr_notice("  Peripheral interrupts masked off\n");
-	if (!(cpu_pda[raw_smp_processor_id()].ex_imask & (EVT_IVG15 | EVT_IVG14)))
+	if (!(cpu_pda[raw_raw_smp_processor_id()].ex_imask & (EVT_IVG15 | EVT_IVG14)))
 		pr_notice("  Kernel interrupts masked off\n");
 	if ((fp->seqstat & SEQSTAT_EXCAUSE) == VEC_HWERR) {
 		pr_notice("  HWERRCAUSE: 0x%lx\n",

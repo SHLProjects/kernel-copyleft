@@ -120,7 +120,7 @@ static void __cpuinit nlm_init_secondary(void)
 {
 	int hwtid;
 
-	hwtid = hard_smp_processor_id();
+	hwtid = hard_raw_smp_processor_id();
 	current_cpu_data.core = hwtid / NLM_THREADS_PER_CORE;
 	nlm_percpu_init(hwtid);
 	nlm_smp_irq_init(hwtid);
@@ -170,7 +170,7 @@ void __init nlm_smp_setup(void)
 	int num_cpus, i, ncore;
 	char buf[64];
 
-	boot_cpu = hard_smp_processor_id();
+	boot_cpu = hard_raw_smp_processor_id();
 	cpumask_clear(&phys_cpu_present_mask);
 
 	cpumask_set_cpu(boot_cpu, &phys_cpu_present_mask);

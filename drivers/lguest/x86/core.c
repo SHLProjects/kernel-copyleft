@@ -220,7 +220,7 @@ void lguest_arch_run_guest(struct lg_cpu *cpu)
 	 * interesting happens, and we can examine its registers to see what it
 	 * was doing.
 	 */
-	run_guest_once(cpu, lguest_pages(raw_smp_processor_id()));
+	run_guest_once(cpu, lguest_pages(raw_raw_smp_processor_id()));
 
 	/*
 	 * Note that the "regs" structure contains two extra entries which are

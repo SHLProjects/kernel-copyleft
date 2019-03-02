@@ -102,7 +102,7 @@ asmlinkage int bfin_clone(unsigned long clone_flags, unsigned long newsp)
 {
 #ifdef __ARCH_SYNC_CORE_DCACHE
 	if (current->nr_cpus_allowed == num_possible_cpus())
-		set_cpus_allowed_ptr(current, cpumask_of(smp_processor_id()));
+		set_cpus_allowed_ptr(current, cpumask_of(raw_smp_processor_id()));
 #endif
 	if (newsp)
 		newsp -= 12;
@@ -305,7 +305,7 @@ int in_async(unsigned long addr, unsigned long size)
 
 int bfin_mem_access_type(unsigned long addr, unsigned long size)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	/* Check that things do not wrap around */
 	if (addr > ULONG_MAX - size)

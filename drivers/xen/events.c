@@ -1219,7 +1219,7 @@ void xen_send_IPI_one(unsigned int cpu, enum ipi_vector vector)
 irqreturn_t xen_debug_interrupt(int irq, void *dev_id)
 {
 	struct shared_info *sh = HYPERVISOR_shared_info;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	xen_ulong_t *cpu_evtchn = per_cpu(cpu_evtchn_mask, cpu);
 	int i;
 	unsigned long flags;
@@ -1901,7 +1901,7 @@ void __init xen_init_IRQ(void)
 		int rc;
 		struct physdev_pirq_eoi_gmfn eoi_gmfn;
 
-		irq_ctx_init(smp_processor_id());
+		irq_ctx_init(raw_smp_processor_id());
 		if (xen_initial_domain())
 			pci_xen_initial_domain();
 

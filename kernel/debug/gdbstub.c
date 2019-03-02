@@ -466,7 +466,7 @@ static inline int shadow_pid(int realpid)
 	if (realpid)
 		return realpid;
 
-	return -raw_smp_processor_id() - 2;
+	return -raw_raw_smp_processor_id() - 2;
 }
 
 /*

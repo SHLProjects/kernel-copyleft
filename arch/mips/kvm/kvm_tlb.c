@@ -53,13 +53,13 @@ EXPORT_SYMBOL(kvm_mips_is_error_pfn);
 
 uint32_t kvm_mips_get_kernel_asid(struct kvm_vcpu *vcpu)
 {
-	return vcpu->arch.guest_kernel_asid[smp_processor_id()] & ASID_MASK;
+	return vcpu->arch.guest_kernel_asid[raw_smp_processor_id()] & ASID_MASK;
 }
 
 
 uint32_t kvm_mips_get_user_asid(struct kvm_vcpu *vcpu)
 {
-	return vcpu->arch.guest_user_asid[smp_processor_id()] & ASID_MASK;
+	return vcpu->arch.guest_user_asid[raw_smp_processor_id()] & ASID_MASK;
 }
 
 inline uint32_t kvm_mips_get_commpage_asid (struct kvm_vcpu *vcpu)
@@ -154,7 +154,7 @@ void kvm_mips_dump_shadow_tlbs(struct kvm_vcpu *vcpu)
 
 	printk("Shadow TLBs:\n");
 	for (i = 0; i < KVM_MIPS_GUEST_TLB_SIZE; i++) {
-		tlb = vcpu->arch.shadow_tlb[smp_processor_id()][i];
+		tlb = vcpu->arch.shadow_tlb[raw_smp_processor_id()][i];
 		printk("TLB%c%3d Hi 0x%08lx ",
 		       (tlb.tlb_lo0 | tlb.tlb_lo1) & MIPS3_PG_V ? ' ' : '*',
 		       i, tlb.tlb_hi);
@@ -663,7 +663,7 @@ void kvm_shadow_tlb_put(struct kvm_vcpu *vcpu)
 	unsigned long old_entryhi;
 	unsigned long old_pagemask;
 	int entry = 0;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	local_irq_save(flags);
 
@@ -695,7 +695,7 @@ void kvm_shadow_tlb_load(struct kvm_vcpu *vcpu)
 	unsigned long flags;
 	unsigned long old_ctx;
 	int entry;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	local_irq_save(flags);
 
@@ -857,7 +857,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
 
 	local_irq_save(flags);
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 
 
 	vcpu->arch.preempt_entryhi = read_c0_entryhi();

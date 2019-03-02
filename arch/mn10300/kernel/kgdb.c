@@ -435,7 +435,7 @@ int kgdb_arch_handle_exception(int vector, int signo, int err_code,
 			kgdb_arch_do_singlestep(regs);
 			kgdb_single_step = 1;
 			atomic_set(&kgdb_cpu_doing_single_step,
-				   raw_smp_processor_id());
+				   raw_raw_smp_processor_id());
 		}
 		return 0;
 	}
@@ -490,7 +490,7 @@ void kgdb_arch_exit(void)
 #ifdef CONFIG_SMP
 void debugger_nmi_interrupt(struct pt_regs *regs, enum exception_code code)
 {
-	kgdb_nmicallback(arch_smp_processor_id(), regs);
+	kgdb_nmicallback(arch_raw_smp_processor_id(), regs);
 	debugger_local_cache_flushinv();
 }
 

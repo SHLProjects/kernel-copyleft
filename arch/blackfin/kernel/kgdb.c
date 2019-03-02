@@ -334,7 +334,7 @@ static struct call_single_data kgdb_smp_ipi_data[NR_CPUS];
 
 void kgdb_passive_cpu_callback(void *info)
 {
-	kgdb_nmicallback(raw_smp_processor_id(), get_irq_regs());
+	kgdb_nmicallback(raw_raw_smp_processor_id(), get_irq_regs());
 }
 
 void kgdb_roundup_cpus(unsigned long flags)
@@ -365,7 +365,7 @@ void kgdb_post_primary_code(struct pt_regs *regs, int e_vector, int err_code)
 
 #ifdef CONFIG_IPIPE
 	if (kgdb_arch_imask) {
-		cpu_pda[raw_smp_processor_id()].ex_imask = kgdb_arch_imask;
+		cpu_pda[raw_raw_smp_processor_id()].ex_imask = kgdb_arch_imask;
 		kgdb_arch_imask = 0;
 	}
 #endif
@@ -417,8 +417,8 @@ int kgdb_arch_handle_exception(int vector, int signo,
 
 			preempt_disable();
 #ifdef CONFIG_IPIPE
-			kgdb_arch_imask = cpu_pda[raw_smp_processor_id()].ex_imask;
-			cpu_pda[raw_smp_processor_id()].ex_imask = 0;
+			kgdb_arch_imask = cpu_pda[raw_raw_smp_processor_id()].ex_imask;
+			cpu_pda[raw_raw_smp_processor_id()].ex_imask = 0;
 #endif
 		}
 
@@ -450,7 +450,7 @@ struct kgdb_arch arch_kgdb_ops = {
 
 int kgdb_validate_break_address(unsigned long addr)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	if (addr >= 0x1000 && (addr + BREAK_INSTR_SIZE) <= physical_mem_end)
 		return 0;

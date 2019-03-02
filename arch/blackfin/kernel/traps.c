@@ -73,7 +73,7 @@ asmlinkage notrace void trap_c(struct pt_regs *fp)
 #ifdef CONFIG_BFIN_PSEUDODBG_INSNS
 	int opcode;
 #endif
-	unsigned int cpu = raw_smp_processor_id();
+	unsigned int cpu = raw_raw_smp_processor_id();
 	const char *strerror = NULL;
 	int sig = 0;
 	siginfo_t info;
@@ -511,7 +511,7 @@ asmlinkage void double_fault_c(struct pt_regs *fp)
 	printk(KERN_EMERG "Double Fault\n");
 #ifdef CONFIG_DEBUG_DOUBLEFAULT_PRINT
 	if (((long)fp->seqstat &  SEQSTAT_EXCAUSE) == VEC_UNCOV) {
-		unsigned int cpu = raw_smp_processor_id();
+		unsigned int cpu = raw_raw_smp_processor_id();
 		char buf[150];
 		decode_address(buf, cpu_pda[cpu].retx_doublefault);
 		printk(KERN_EMERG "While handling exception (EXCAUSE = 0x%x) at %s:\n",

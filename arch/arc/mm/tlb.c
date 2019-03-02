@@ -189,7 +189,7 @@ noinline void local_flush_tlb_all(void)
 {
 	unsigned long flags;
 	unsigned int entry;
-	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[smp_processor_id()].mmu;
+	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[raw_smp_processor_id()].mmu;
 
 	local_irq_save(flags);
 
@@ -469,7 +469,7 @@ void __cpuinit read_decode_mmu_bcr(void)
 	unsigned int tmp;
 	struct bcr_mmu_1_2 *mmu2;	/* encoded MMU2 attr */
 	struct bcr_mmu_3 *mmu3;		/* encoded MMU3 attr */
-	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[smp_processor_id()].mmu;
+	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[raw_smp_processor_id()].mmu;
 
 	tmp = read_aux_reg(ARC_REG_MMU_BCR);
 	mmu->ver = (tmp >> 24);
@@ -513,7 +513,7 @@ char *arc_mmu_mumbojumbo(int cpu_id, char *buf, int len)
 void __cpuinit arc_mmu_init(void)
 {
 	char str[256];
-	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[smp_processor_id()].mmu;
+	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[raw_smp_processor_id()].mmu;
 
 	printk(arc_mmu_mumbojumbo(0, str, sizeof(str)));
 
@@ -583,7 +583,7 @@ void do_tlb_overlap_fault(unsigned long cause, unsigned long address,
 	int set, way, n;
 	unsigned int pd0[4], pd1[4];	/* assume max 4 ways */
 	unsigned long flags, is_valid;
-	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[smp_processor_id()].mmu;
+	struct cpuinfo_arc_mmu *mmu = &cpuinfo_arc700[raw_smp_processor_id()].mmu;
 
 	local_irq_save(flags);
 

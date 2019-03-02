@@ -272,7 +272,7 @@ static void hardwall_setup_func(void *info)
 	struct hardwall_info *r = info;
 	struct hardwall_type *hwt = r->type;
 
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	int x = cpu % smp_width;
 	int y = cpu / smp_width;
 	int bits = 0;
@@ -323,7 +323,7 @@ void __kprobes do_hardwall_trap(struct pt_regs* regs, int fault_num)
 	struct hardwall_type *hwt;
 	struct task_struct *p;
 	struct siginfo info;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	int found_processes;
 	unsigned long flags;
 	struct pt_regs *old_regs = set_irq_regs(regs);
@@ -587,7 +587,7 @@ static int hardwall_activate(struct hardwall_info *info)
 		return -EPERM;
 
 	/* Make sure we are bound to a cpu assigned to this resource. */
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	BUG_ON(cpumask_first(&p->cpus_allowed) != cpu);
 	if (!cpumask_test_cpu(cpu, &info->cpumask))
 		return -EINVAL;
@@ -653,7 +653,7 @@ static int hardwall_deactivate(struct hardwall_type *hwt,
 		return -EINVAL;
 
 	printk(KERN_DEBUG "Pid %d (%s) deactivated for %s hardwall: cpu %d\n",
-	       task->pid, task->comm, hwt->name, smp_processor_id());
+	       task->pid, task->comm, hwt->name, raw_smp_processor_id());
 	return 0;
 }
 
@@ -794,7 +794,7 @@ static void reset_xdn_network_state(struct hardwall_type *hwt)
 #if !CHIP_HAS_REV1_XDN()
 	/* Reset UDN coordinates to their standard value */
 	{
-		unsigned int cpu = smp_processor_id();
+		unsigned int cpu = raw_smp_processor_id();
 		unsigned int x = cpu % smp_width;
 		unsigned int y = cpu / smp_width;
 		__insn_mtspr(SPR_UDN_TILE_COORD, (x << 18) | (y << 7));

@@ -4589,13 +4589,13 @@ void print_worker_info(const char *log_lvl, struct task_struct *task)
 
 static void wq_unbind_fn(struct work_struct *work)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct worker_pool *pool;
 	struct worker *worker;
 	int wi;
 
 	for_each_cpu_worker_pool(pool, cpu) {
-		WARN_ON_ONCE(cpu != smp_processor_id());
+		WARN_ON_ONCE(cpu != raw_smp_processor_id());
 
 		mutex_lock(&pool->manager_mutex);
 		spin_lock_irq(&pool->lock);

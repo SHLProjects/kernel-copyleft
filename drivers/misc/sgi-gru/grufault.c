@@ -539,13 +539,13 @@ static irqreturn_t gru_intr(int chiplet, int blade)
 	gru = &gru_base[blade]->bs_grus[chiplet];
 	if (!gru) {
 		dev_err(grudev, "GRU: invalid interrupt: cpu %d, chiplet %d\n",
-			raw_smp_processor_id(), chiplet);
+			raw_raw_smp_processor_id(), chiplet);
 		return IRQ_NONE;
 	}
 	get_clear_fault_map(gru, &imap, &dmap);
 	gru_dbg(grudev,
 		"cpu %d, chiplet %d, gid %d, imap %016lx %016lx, dmap %016lx %016lx\n",
-		smp_processor_id(), chiplet, gru->gs_gid,
+		raw_smp_processor_id(), chiplet, gru->gs_gid,
 		imap.fault_bits[0], imap.fault_bits[1],
 		dmap.fault_bits[0], dmap.fault_bits[1]);
 

@@ -76,7 +76,7 @@
 char *arc_cache_mumbojumbo(int cpu_id, char *buf, int len)
 {
 	int n = 0;
-	unsigned int c = smp_processor_id();
+	unsigned int c = raw_smp_processor_id();
 
 #define PR_CACHE(p, enb, str)						\
 {									\
@@ -104,7 +104,7 @@ void __cpuinit read_decode_cache_bcr(void)
 {
 	struct bcr_cache ibcr, dbcr;
 	struct cpuinfo_arc_cache *p_ic, *p_dc;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	p_ic = &cpuinfo_arc700[cpu].icache;
 	READ_BCR(ARC_REG_IC_BCR, ibcr);
@@ -135,7 +135,7 @@ void __cpuinit read_decode_cache_bcr(void)
 void __cpuinit arc_cache_init(void)
 {
 	unsigned int temp;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct cpuinfo_arc_cache *ic = &cpuinfo_arc700[cpu].icache;
 	struct cpuinfo_arc_cache *dc = &cpuinfo_arc700[cpu].dcache;
 	int way_pg_ratio = way_pg_ratio;

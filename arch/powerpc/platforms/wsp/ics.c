@@ -208,7 +208,7 @@ static int cache_hwirq_map(struct wsp_ics *ics, unsigned int hwirq,
 	target = hwirq % cpumask_weight(newmask);
 	for_each_cpu(cpu, newmask) {
 		if (cpu_rover++ >= target) {
-			ics->hwirq_cpu_map[index] = get_hard_smp_processor_id(cpu);
+			ics->hwirq_cpu_map[index] = get_hard_raw_smp_processor_id(cpu);
 			ret = 0;
 			goto out;
 		}
@@ -652,7 +652,7 @@ static void __init wsp_ics_set_default_server(void)
 	np = of_get_cpu_node(boot_cpuid, NULL);
 	BUG_ON(!np);
 
-	hwid = get_hard_smp_processor_id(boot_cpuid);
+	hwid = get_hard_raw_smp_processor_id(boot_cpuid);
 
 	pr_info("wsp_ics: default server is %#x, CPU %s\n", hwid, np->full_name);
 	xics_default_server = hwid;

@@ -61,7 +61,7 @@ static void remote_function(void *data)
 
 	if (p) {
 		tfc->ret = -EAGAIN;
-		if (task_cpu(p) != smp_processor_id() || !task_curr(p))
+		if (task_cpu(p) != raw_smp_processor_id() || !task_curr(p))
 			return;
 	}
 
@@ -1390,7 +1390,7 @@ core_initcall(perf_workqueue_init);
 static inline int
 event_filter_match(struct perf_event *event)
 {
-	return (event->cpu == -1 || event->cpu == smp_processor_id())
+	return (event->cpu == -1 || event->cpu == raw_smp_processor_id())
 	    && perf_cgroup_match(event);
 }
 
@@ -1712,7 +1712,7 @@ event_sched_in(struct perf_event *event,
 		return 0;
 
 	event->state = PERF_EVENT_STATE_ACTIVE;
-	event->oncpu = smp_processor_id();
+	event->oncpu = raw_smp_processor_id();
 
 	/*
 	 * Unthrottle events, since we scheduled we might have missed several

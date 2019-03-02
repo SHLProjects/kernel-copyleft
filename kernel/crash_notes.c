@@ -85,7 +85,7 @@ static DEFINE_RAW_SPINLOCK(print_trace_lock);
 
 static void crash_notes_save_nopanic_cpu(void *unused)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	raw_spin_lock(&print_trace_lock);
 	pr_crit("CPU%u: stopping\n", cpu);
@@ -126,7 +126,7 @@ static int crash_notes_save_panic_cpu(struct notifier_block *this,
 {
 	long i;
 
-	crash_notes_save_this_cpu(CRASH_NOTE_CRASHING, smp_processor_id());
+	crash_notes_save_this_cpu(CRASH_NOTE_CRASHING, raw_smp_processor_id());
 
 	bust_spinlocks(0);
 

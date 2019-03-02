@@ -225,9 +225,9 @@ void msm_cpu_postboot(void)
 #ifdef CONFIG_HOTPLUG_CPU
 static void msm_wfi_cpu_die(unsigned int cpu)
 {
-	if (unlikely(cpu != smp_processor_id())) {
+	if (unlikely(cpu != raw_smp_processor_id())) {
 		pr_crit("%s: running on %u, should be %u\n",
-			__func__, smp_processor_id(), cpu);
+			__func__, raw_smp_processor_id(), cpu);
 		BUG();
 	}
 	for (;;) {

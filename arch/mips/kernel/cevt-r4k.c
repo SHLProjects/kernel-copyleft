@@ -52,7 +52,7 @@ irqreturn_t c0_compare_interrupt(int irq, void *dev_id)
 {
 	const int r2 = cpu_has_mips_r2;
 	struct clock_event_device *cd;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/*
 	 * Suckage alert:
@@ -173,7 +173,7 @@ int c0_compare_int_usable(void)
 #ifndef CONFIG_MIPS_MT_SMTC
 int __cpuinit r4k_clockevent_init(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct clock_event_device *cd;
 	unsigned int irq;
 

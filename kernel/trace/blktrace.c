@@ -68,7 +68,7 @@ static void trace_note(struct blk_trace *bt, pid_t pid, int action,
 	struct ring_buffer_event *event = NULL;
 	struct ring_buffer *buffer = NULL;
 	int pc = 0;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	bool blk_tracer = blk_tracer_enabled;
 
 	if (blk_tracer) {
@@ -213,7 +213,7 @@ static void __blk_add_trace(struct blk_trace *bt, sector_t sector, int bytes,
 	pid = tsk->pid;
 	if (act_log_check(bt, what, sector, pid))
 		return;
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 
 	if (blk_tracer) {
 		tracing_record_cmdline(current);

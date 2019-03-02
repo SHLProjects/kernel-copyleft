@@ -1404,8 +1404,8 @@ static void req_done(struct crypto_engine *pengine)
 	}
 	pe = list_first_entry(&cp->engine_list, struct crypto_engine, elist);
 	if (pe == pengine)
-		if (cp->cpu_getting_irqs_frm_first_ce != smp_processor_id())
-			cp->cpu_getting_irqs_frm_first_ce = smp_processor_id();
+		if (cp->cpu_getting_irqs_frm_first_ce != raw_smp_processor_id())
+			cp->cpu_getting_irqs_frm_first_ce = raw_smp_processor_id();
 	spin_unlock_irqrestore(&cp->lock, flags);
 	if (atomic_read(&cp->resp_cnt) <= COMPLETION_CB_BACKLOG_LENGTH) {
 		cmpxchg(&cp->ce_req_proc_sts, STOPPED, IN_PROGRESS);

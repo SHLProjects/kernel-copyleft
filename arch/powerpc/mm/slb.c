@@ -323,7 +323,7 @@ void slb_initialize(void)
 	 * For secondary cpus, we need to bolt the kernel stack entry now.
 	 */
 	slb_shadow_clear(2);
-	if (raw_smp_processor_id() != boot_cpuid &&
+	if (raw_raw_smp_processor_id() != boot_cpuid &&
 	    (get_paca()->kstack & slb_esid_mask(mmu_kernel_ssize)) > PAGE_OFFSET)
 		create_shadowed_slbe(get_paca()->kstack,
 				     mmu_kernel_ssize, lflags, 2);

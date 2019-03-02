@@ -42,16 +42,16 @@ uint32_t acpuclk_get_switch_time(void)
 
 unsigned long acpuclk_power_collapse(void)
 {
-	unsigned long rate = acpuclk_get_rate(smp_processor_id());
-	acpuclk_set_rate(smp_processor_id(), acpuclk_data->power_collapse_khz,
+	unsigned long rate = acpuclk_get_rate(raw_smp_processor_id());
+	acpuclk_set_rate(raw_smp_processor_id(), acpuclk_data->power_collapse_khz,
 			 SETRATE_PC);
 	return rate;
 }
 
 unsigned long acpuclk_wait_for_irq(void)
 {
-	unsigned long rate = acpuclk_get_rate(smp_processor_id());
-	acpuclk_set_rate(smp_processor_id(), acpuclk_data->wait_for_irq_khz,
+	unsigned long rate = acpuclk_get_rate(raw_smp_processor_id());
+	acpuclk_set_rate(raw_smp_processor_id(), acpuclk_data->wait_for_irq_khz,
 			 SETRATE_SWFI);
 	return rate;
 }

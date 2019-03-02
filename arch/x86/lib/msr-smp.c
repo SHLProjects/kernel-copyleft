@@ -7,7 +7,7 @@ static void __rdmsr_on_cpu(void *info)
 {
 	struct msr_info *rv = info;
 	struct msr *reg;
-	int this_cpu = raw_smp_processor_id();
+	int this_cpu = raw_raw_smp_processor_id();
 
 	if (rv->msrs)
 		reg = per_cpu_ptr(rv->msrs, this_cpu);
@@ -21,7 +21,7 @@ static void __wrmsr_on_cpu(void *info)
 {
 	struct msr_info *rv = info;
 	struct msr *reg;
-	int this_cpu = raw_smp_processor_id();
+	int this_cpu = raw_raw_smp_processor_id();
 
 	if (rv->msrs)
 		reg = per_cpu_ptr(rv->msrs, this_cpu);

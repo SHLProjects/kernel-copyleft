@@ -272,7 +272,7 @@ void arch_send_call_function_ipi_mask(const struct cpumask *mask)
 void smp_send_debugger_break(void)
 {
 	int cpu;
-	int me = raw_smp_processor_id();
+	int me = raw_raw_smp_processor_id();
 
 	if (unlikely(!smp_ops))
 		return;
@@ -297,7 +297,7 @@ void crash_send_ipi(void (*crash_ipi_callback)(struct pt_regs *))
 static void stop_this_cpu(void *dummy)
 {
 	/* Remove this CPU */
-	set_cpu_online(smp_processor_id(), false);
+	set_cpu_online(raw_smp_processor_id(), false);
 
 	local_irq_disable();
 	while (1)
@@ -330,7 +330,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 	 * setup_cpu may need to be called on the boot cpu. We havent
 	 * spun any cpus up but lets be paranoid.
 	 */
-	BUG_ON(boot_cpuid != smp_processor_id());
+	BUG_ON(boot_cpuid != raw_smp_processor_id());
 
 	/* Fixup boot cpu */
 	smp_store_cpu_info(boot_cpuid);
@@ -357,7 +357,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 
 void smp_prepare_boot_cpu(void)
 {
-	BUG_ON(smp_processor_id() != boot_cpuid);
+	BUG_ON(raw_smp_processor_id() != boot_cpuid);
 #ifdef CONFIG_PPC64
 	paca[boot_cpuid].__current = current;
 #endif
@@ -368,7 +368,7 @@ void smp_prepare_boot_cpu(void)
 
 int generic_cpu_disable(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	if (cpu == boot_cpuid)
 		return -EBUSY;
@@ -400,7 +400,7 @@ void generic_mach_cpu_die(void)
 
 	local_irq_disable();
 	idle_task_exit();
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	printk(KERN_DEBUG "CPU%d offline\n", cpu);
 	__get_cpu_var(cpu_state) = CPU_DEAD;
 	smp_wmb();
@@ -612,7 +612,7 @@ static struct device_node *cpu_to_l2cache(int cpu)
 /* Activate a secondary processor. */
 __cpuinit void start_secondary(void *unused)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct device_node *l2_cache;
 	int i, base;
 
@@ -718,7 +718,7 @@ int arch_sd_sibling_asym_packing(void)
 int __cpu_disable(void)
 {
 	struct device_node *l2_cache;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	int base, i;
 	int err;
 

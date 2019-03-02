@@ -348,7 +348,7 @@ static int __init early_init_dt_scan_cpus(unsigned long node,
 		DBG("boot cpu: logical %d physical %d\n", found,
 			intserv[found_thread]);
 		boot_cpuid = found;
-		set_hard_smp_processor_id(found, intserv[found_thread]);
+		set_hard_raw_smp_processor_id(found, intserv[found_thread]);
 
 		/*
 		 * PAPR defines "logical" PVR values for cpus that

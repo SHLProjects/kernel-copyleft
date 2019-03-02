@@ -170,10 +170,10 @@ static irqreturn_t armada_370_xp_timer_interrupt(int irq, void *dev_id)
 static int __cpuinit armada_370_xp_timer_setup(struct clock_event_device *evt)
 {
 	u32 u;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* Use existing clock_event for cpu 0 */
-	if (!smp_processor_id())
+	if (!raw_smp_processor_id())
 		return 0;
 
 	u = readl(local_base + TIMER_CTRL_OFF);

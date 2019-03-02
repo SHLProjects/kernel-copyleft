@@ -652,7 +652,7 @@ void __cpuinit smtc_boot_secondary(int cpu, struct task_struct *idle)
 	int mtflags;
 
 	LOCK_MT_PRA();
-	if (cpu_data[cpu].vpe_id != cpu_data[smp_processor_id()].vpe_id) {
+	if (cpu_data[cpu].vpe_id != cpu_data[raw_smp_processor_id()].vpe_id) {
 		dvpe();
 	}
 	settc(cpu_data[cpu].tc_id);
@@ -669,7 +669,7 @@ void __cpuinit smtc_boot_secondary(int cpu, struct task_struct *idle)
 
 	smtc_status |= SMTC_MTC_ACTIVE;
 	write_tc_c0_tchalt(0);
-	if (cpu_data[cpu].vpe_id != cpu_data[smp_processor_id()].vpe_id) {
+	if (cpu_data[cpu].vpe_id != cpu_data[raw_smp_processor_id()].vpe_id) {
 		evpe(EVPE_ENABLE);
 	}
 	UNLOCK_MT_PRA();
@@ -681,7 +681,7 @@ void smtc_init_secondary(void)
 
 void smtc_smp_finish(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/*
 	 * Lowest-numbered CPU per VPE starts a clock tick.
@@ -695,7 +695,7 @@ void smtc_smp_finish(void)
 	local_irq_enable();
 
 	printk("TC %d going on-line as CPU %d\n",
-		cpu_data[smp_processor_id()].tc_id, smp_processor_id());
+		cpu_data[raw_smp_processor_id()].tc_id, raw_smp_processor_id());
 }
 
 void smtc_cpus_done(void)
@@ -862,7 +862,7 @@ void smtc_send_ipi(int cpu, int type, unsigned int action)
 	int set_resched_flag = (type == LINUX_SMP_IPI &&
 				action == SMP_RESCHEDULE_YOURSELF);
 
-	if (cpu == smp_processor_id()) {
+	if (cpu == raw_smp_processor_id()) {
 		printk("Cannot Send IPI to self!\n");
 		return;
 	}
@@ -879,7 +879,7 @@ void smtc_send_ipi(int cpu, int type, unsigned int action)
 	pipi->type = type;
 	pipi->arg = (void *)action;
 	pipi->dest = cpu;
-	if (cpu_data[cpu].vpe_id != cpu_data[smp_processor_id()].vpe_id) {
+	if (cpu_data[cpu].vpe_id != cpu_data[raw_smp_processor_id()].vpe_id) {
 		/* If not on same VPE, enqueue and send cross-VPE interrupt */
 		IPIQ[cpu].resched_flag |= set_resched_flag;
 		smtc_ipi_nq(&IPIQ[cpu], pipi);
@@ -948,7 +948,7 @@ static void post_direct_ipi(int cpu, struct smtc_ipi *pipi)
 	unsigned long tcrestart;
 	extern u32 kernelsp[NR_CPUS];
 	extern void __smtc_ipi_vector(void);
-//printk("%s: on %d for %d\n", __func__, smp_processor_id(), cpu);
+//printk("%s: on %d for %d\n", __func__, raw_smp_processor_id(), cpu);
 
 	/* Extract Status, EPC from halted TC */
 	tcstatus = read_tc_c0_tcstatus();
@@ -1002,7 +1002,7 @@ DECLARE_PER_CPU(struct clock_event_device, mips_clockevent_device);
 
 static void __irq_entry smtc_clock_tick_interrupt(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct clock_event_device *cd;
 	int irq = MIPS_CPU_IRQ_BASE + 1;
 
@@ -1061,7 +1061,7 @@ void ipi_decode(struct smtc_ipi *pipi)
 
 void deferred_smtc_ipi(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/*
 	 * Test is not atomic, but much faster than a dequeue,
@@ -1112,8 +1112,8 @@ static int cpu_ipi_irq = MIPS_CPU_IRQ_BASE + MIPS_CPU_IPI_IRQ;
 
 static irqreturn_t ipi_interrupt(int irq, void *dev_idm)
 {
-	int my_vpe = cpu_data[smp_processor_id()].vpe_id;
-	int my_tc = cpu_data[smp_processor_id()].tc_id;
+	int my_vpe = cpu_data[raw_smp_processor_id()].vpe_id;
+	int my_tc = cpu_data[raw_smp_processor_id()].tc_id;
 	int cpu;
 	struct smtc_ipi *pipi;
 	unsigned long tcstatus;
@@ -1219,7 +1219,7 @@ static void setup_cross_vpe_interrupts(unsigned int nvpe)
 
 void smtc_ipi_replay(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	/*
 	 * To the extent that we've ever turned interrupts off,
@@ -1339,7 +1339,7 @@ void smtc_idle_loop_hook(void)
 	emt(mtflags);
 	local_irq_restore(flags);
 	if (pdb_msg != &id_ho_db_msg[0])
-		printk("CPU%d: %s", smp_processor_id(), id_ho_db_msg);
+		printk("CPU%d: %s", raw_smp_processor_id(), id_ho_db_msg);
 #endif /* CONFIG_SMTC_IDLE_HOOK_DEBUG */
 
 	smtc_ipi_replay();
@@ -1403,7 +1403,7 @@ void smtc_get_new_mmu_context(struct mm_struct *mm, unsigned long cpu)
 				 * We don't need to worry about our own CPU, nor those of
 				 * CPUs who don't share our TLB.
 				 */
-				if ((i != smp_processor_id()) &&
+				if ((i != raw_smp_processor_id()) &&
 				    ((smtc_status & SMTC_TLB_SHARED) ||
 				     (cpu_data[i].vpe_id == cpu_data[cpu].vpe_id))) {
 					settc(cpu_data[i].tc_id);
@@ -1497,7 +1497,7 @@ void smtc_cflush_lockdown(void)
 	int cpu;
 
 	for_each_online_cpu(cpu) {
-		if (cpu != smp_processor_id()) {
+		if (cpu != raw_smp_processor_id()) {
 			settc(cpu_data[cpu].tc_id);
 			halt_state_save[cpu] = read_tc_c0_tchalt();
 			write_tc_c0_tchalt(TCHALT_H);
@@ -1519,7 +1519,7 @@ void smtc_cflush_release(void)
 	mips_ihb();
 
 	for_each_online_cpu(cpu) {
-		if (cpu != smp_processor_id()) {
+		if (cpu != raw_smp_processor_id()) {
 			settc(cpu_data[cpu].tc_id);
 			write_tc_c0_tchalt(halt_state_save[cpu]);
 		}

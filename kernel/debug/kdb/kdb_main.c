@@ -1135,7 +1135,7 @@ static int kdb_local(kdb_reason_t reason, int error, struct pt_regs *regs,
 	char *cmdbuf;
 	int diag;
 	struct task_struct *kdb_current =
-		kdb_curr_task(raw_smp_processor_id());
+		kdb_curr_task(raw_raw_smp_processor_id());
 
 	KDB_DEBUG_STATE("kdb_local 1", reason);
 	kdb_go_count = 0;
@@ -1145,7 +1145,7 @@ static int kdb_local(kdb_reason_t reason, int error, struct pt_regs *regs,
 		kdb_printf("\nEntering kdb (current=0x%p, pid %d) ",
 			   kdb_current, kdb_current ? kdb_current->pid : 0);
 #if defined(CONFIG_SMP)
-		kdb_printf("on processor %d ", raw_smp_processor_id());
+		kdb_printf("on processor %d ", raw_raw_smp_processor_id());
 #endif
 	}
 
@@ -1161,7 +1161,7 @@ static int kdb_local(kdb_reason_t reason, int error, struct pt_regs *regs,
 			kdb_printf("\nEntering kdb (0x%p, pid %d) ",
 				   kdb_current, kdb_current->pid);
 #if defined(CONFIG_SMP)
-			kdb_printf("on processor %d ", raw_smp_processor_id());
+			kdb_printf("on processor %d ", raw_raw_smp_processor_id());
 #endif
 			kdb_printf("due to Debug @ " kdb_machreg_fmt "\n",
 				   instruction_pointer(regs));
@@ -1246,7 +1246,7 @@ static int kdb_local(kdb_reason_t reason, int error, struct pt_regs *regs,
 do_full_getstr:
 #if defined(CONFIG_SMP)
 		snprintf(kdb_prompt_str, CMD_BUFLEN, kdbgetenv("PROMPT"),
-			 raw_smp_processor_id());
+			 raw_raw_smp_processor_id());
 #else
 		snprintf(kdb_prompt_str, CMD_BUFLEN, kdbgetenv("PROMPT"));
 #endif
@@ -1309,7 +1309,7 @@ do_full_getstr:
 void kdb_print_state(const char *text, int value)
 {
 	kdb_printf("state: %s cpu %d value %d initial %d state %x\n",
-		   text, raw_smp_processor_id(), value, kdb_initial_cpu,
+		   text, raw_raw_smp_processor_id(), value, kdb_initial_cpu,
 		   kdb_state);
 }
 
@@ -1741,7 +1741,7 @@ static int kdb_go(int argc, const char **argv)
 	int nextarg;
 	long offset;
 
-	if (raw_smp_processor_id() != kdb_initial_cpu) {
+	if (raw_raw_smp_processor_id() != kdb_initial_cpu) {
 		kdb_printf("go must execute on the entry cpu, "
 			   "please use \"cpu %d\" and then execute go\n",
 			   kdb_initial_cpu);
@@ -2149,7 +2149,7 @@ static void kdb_cpu_status(void)
 	int i, start_cpu, first_print = 1;
 	char state, prev_state = '?';
 
-	kdb_printf("Currently on cpu %d\n", raw_smp_processor_id());
+	kdb_printf("Currently on cpu %d\n", raw_raw_smp_processor_id());
 	kdb_printf("Available cpus: ");
 	for (start_cpu = -1, i = 0; i < NR_CPUS; i++) {
 		if (!cpu_online(i)) {
@@ -2269,7 +2269,7 @@ void kdb_ps1(const struct task_struct *p)
 		   kdb_task_has_cpu(p), kdb_process_cpu(p),
 		   kdb_task_state_char(p),
 		   (void *)(&p->thread),
-		   p == kdb_curr_task(raw_smp_processor_id()) ? '*' : ' ',
+		   p == kdb_curr_task(raw_raw_smp_processor_id()) ? '*' : ' ',
 		   p->comm);
 	if (kdb_task_has_cpu(p)) {
 		if (!KDB_TSK(cpu)) {

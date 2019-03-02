@@ -120,7 +120,7 @@ const char *arc_platform_smp_cpuinfo(void)
 void __cpuinit start_kernel_secondary(void)
 {
 	struct mm_struct *mm = &init_mm;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	/* MMU, Caches, Vector Table, Interrupts etc */
 	setup_processor();
@@ -135,7 +135,7 @@ void __cpuinit start_kernel_secondary(void)
 	pr_info("## CPU%u LIVE ##: Executing Code...\n", cpu);
 
 	if (machine_desc->init_smp)
-		machine_desc->init_smp(smp_processor_id());
+		machine_desc->init_smp(raw_smp_processor_id());
 
 	arc_local_timer_setup(cpu);
 
@@ -248,7 +248,7 @@ void smp_send_stop(void)
 {
 	struct cpumask targets;
 	cpumask_copy(&targets, cpu_online_mask);
-	cpumask_clear_cpu(smp_processor_id(), &targets);
+	cpumask_clear_cpu(raw_smp_processor_id(), &targets);
 	ipi_send_msg(&targets, IPI_CPU_STOP);
 }
 
@@ -304,7 +304,7 @@ static inline void __do_IPI(unsigned long *ops, struct ipi_data *ipi, int cpu)
  */
 irqreturn_t do_IPI(int irq, void *dev_id)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct ipi_data *ipi = &per_cpu(ipi_data, cpu);
 	unsigned long ops;
 
@@ -327,6 +327,6 @@ irqreturn_t do_IPI(int irq, void *dev_id)
 static DEFINE_PER_CPU(int, ipi_dev);
 int smp_ipi_irq_setup(int cpu, int irq)
 {
-	int *dev_id = &per_cpu(ipi_dev, smp_processor_id());
+	int *dev_id = &per_cpu(ipi_dev, raw_smp_processor_id());
 	return request_percpu_irq(irq, do_IPI, "IPI Interrupt", dev_id);
 }

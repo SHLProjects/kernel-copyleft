@@ -137,7 +137,7 @@ void kvm_async_pf_task_wait(u32 token)
 	}
 
 	n.token = token;
-	n.cpu = smp_processor_id();
+	n.cpu = raw_smp_processor_id();
 	n.halted = is_idle_task(current) || preempt_count() > 1;
 	init_waitqueue_head(&n.wq);
 	hlist_add_head(&n.link, &b->list);
@@ -191,7 +191,7 @@ static void apf_task_wake_all(void)
 		hlist_for_each_safe(p, next, &b->list) {
 			struct kvm_task_sleep_node *n =
 				hlist_entry(p, typeof(*n), link);
-			if (n->cpu == smp_processor_id())
+			if (n->cpu == raw_smp_processor_id())
 				apf_task_wake_one(n);
 		}
 		spin_unlock(&b->lock);
@@ -228,7 +228,7 @@ again:
 			goto again;
 		}
 		n->token = token;
-		n->cpu = smp_processor_id();
+		n->cpu = raw_smp_processor_id();
 		init_waitqueue_head(&n->wq);
 		hlist_add_head(&n->link, &b->list);
 	} else
@@ -298,7 +298,7 @@ static void __init paravirt_ops_setup(void)
 
 static void kvm_register_steal_time(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct kvm_steal_time *st = &per_cpu(steal_time, cpu);
 
 	if (!has_steal_clock)
@@ -341,7 +341,7 @@ void __cpuinit kvm_guest_cpu_init(void)
 		wrmsrl(MSR_KVM_ASYNC_PF_EN, pa | KVM_ASYNC_PF_ENABLED);
 		__get_cpu_var(apf_reason).enabled = 1;
 		printk(KERN_INFO"KVM setup async PF for cpu %d\n",
-		       smp_processor_id());
+		       raw_smp_processor_id());
 	}
 
 	if (kvm_para_has_feature(KVM_FEATURE_PV_EOI)) {
@@ -367,7 +367,7 @@ static void kvm_pv_disable_apf(void)
 	__get_cpu_var(apf_reason).enabled = 0;
 
 	printk(KERN_INFO"Unregister pv shared memory for cpu %d\n",
-	       smp_processor_id());
+	       raw_smp_processor_id());
 }
 
 static void kvm_pv_guest_cpu_reboot(void *unused)

@@ -79,7 +79,7 @@ static void set_mm_context(struct mm_struct *mm, unsigned int asid)
 	/*
 	 * Set the mm_cpumask(mm) bit for the current CPU.
 	 */
-	cpumask_set_cpu(smp_processor_id(), mm_cpumask(mm));
+	cpumask_set_cpu(raw_smp_processor_id(), mm_cpumask(mm));
 }
 
 /*
@@ -89,7 +89,7 @@ static void set_mm_context(struct mm_struct *mm, unsigned int asid)
 static void reset_context(void *info)
 {
 	unsigned int asid;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct mm_struct *mm = current->active_mm;
 
 	smp_rmb();
@@ -107,7 +107,7 @@ static void reset_context(void *info)
 static inline void set_mm_context(struct mm_struct *mm, unsigned int asid)
 {
 	mm->context.id = asid;
-	cpumask_copy(mm_cpumask(mm), cpumask_of(smp_processor_id()));
+	cpumask_copy(mm_cpumask(mm), cpumask_of(raw_smp_processor_id()));
 }
 
 #endif
@@ -124,7 +124,7 @@ void __new_context(struct mm_struct *mm)
 	 * CPU before we acquired the lock.
 	 */
 	if (!unlikely((mm->context.id ^ cpu_last_asid) >> MAX_ASID_BITS)) {
-		cpumask_set_cpu(smp_processor_id(), mm_cpumask(mm));
+		cpumask_set_cpu(raw_smp_processor_id(), mm_cpumask(mm));
 		raw_spin_unlock(&cpu_asid_lock);
 		return;
 	}
@@ -145,7 +145,7 @@ void __new_context(struct mm_struct *mm)
 		cpu_last_asid += (1 << MAX_ASID_BITS) - (1 << bits);
 		if (cpu_last_asid == 0)
 			cpu_last_asid = ASID_FIRST_VERSION;
-		asid = cpu_last_asid + smp_processor_id();
+		asid = cpu_last_asid + raw_smp_processor_id();
 		flush_context();
 #ifdef CONFIG_SMP
 		smp_wmb();

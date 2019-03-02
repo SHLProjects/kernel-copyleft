@@ -268,7 +268,7 @@ int trace_graph_entry(struct ftrace_graph_ent *trace)
 		return 0;
 
 	local_irq_save(flags);
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	data = per_cpu_ptr(tr->trace_buffer.data, cpu);
 	disabled = atomic_inc_return(&data->disabled);
 	if (likely(disabled == 1)) {
@@ -353,7 +353,7 @@ void trace_graph_return(struct ftrace_graph_ret *trace)
 	int pc;
 
 	local_irq_save(flags);
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	data = per_cpu_ptr(tr->trace_buffer.data, cpu);
 	disabled = atomic_inc_return(&data->disabled);
 	if (likely(disabled == 1)) {

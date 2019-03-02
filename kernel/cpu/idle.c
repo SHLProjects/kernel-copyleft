@@ -64,13 +64,13 @@ __setup("hlt", cpu_idle_nopoll_setup);
 static inline int cpu_idle_poll(void)
 {
 	rcu_idle_enter();
-	trace_cpu_idle_rcuidle(0, smp_processor_id());
+	trace_cpu_idle_rcuidle(0, raw_smp_processor_id());
 	local_irq_enable();
 	while (!tif_need_resched() && (cpu_idle_force_poll ||
 		__get_cpu_var(idle_force_poll) ||
 		tick_check_broadcast_expired()))
 		cpu_relax();
-	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, smp_processor_id());
+	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, raw_smp_processor_id());
 	rcu_idle_exit();
 	return 1;
 }
@@ -134,7 +134,7 @@ static void cpu_idle_loop(void)
 		}
 		tick_nohz_idle_exit();
 		schedule_preempt_disabled();
-		if (cpu_is_offline(smp_processor_id()))
+		if (cpu_is_offline(raw_smp_processor_id()))
 			arch_cpu_idle_dead();
 
 	}
@@ -159,6 +159,6 @@ void cpu_startup_entry(enum cpuhp_state state)
 #endif
 	__current_set_polling();
 	arch_cpu_idle_prepare();
-	per_cpu(idle_force_poll, smp_processor_id()) = 0;
+	per_cpu(idle_force_poll, raw_smp_processor_id()) = 0;
 	cpu_idle_loop();
 }

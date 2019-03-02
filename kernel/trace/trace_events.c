@@ -2772,7 +2772,7 @@ function_test_events_call(unsigned long ip, unsigned long parent_ip,
 
 	pc = preempt_count();
 	preempt_disable_notrace();
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	disabled = atomic_inc_return(&per_cpu(ftrace_test_event_disable, cpu));
 
 	if (disabled != 1)

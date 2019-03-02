@@ -82,7 +82,7 @@ static void tick_periodic(int cpu)
  */
 void tick_handle_periodic(struct clock_event_device *dev)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	ktime_t next;
 
 	tick_periodic(cpu);
@@ -255,7 +255,7 @@ void tick_check_new_device(struct clock_event_device *newdev)
 
 	raw_spin_lock_irqsave(&tick_device_lock, flags);
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	if (!cpumask_test_cpu(cpu, newdev->cpumask))
 		goto out_bc;
 

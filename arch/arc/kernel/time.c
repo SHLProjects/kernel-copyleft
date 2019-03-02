@@ -257,7 +257,7 @@ void __init time_init(void)
 		clocksource_register_hz(&arc_counter, arc_get_core_freq());
 
 	/* sets up the periodic event timer */
-	arc_local_timer_setup(smp_processor_id());
+	arc_local_timer_setup(raw_smp_processor_id());
 
 	if (machine_desc->init_time)
 		machine_desc->init_time();

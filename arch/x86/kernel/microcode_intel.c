@@ -132,7 +132,7 @@ int apply_microcode(int cpu)
 	struct microcode_intel *mc_intel;
 	struct ucode_cpu_info *uci;
 	unsigned int val[2];
-	int cpu_num = raw_smp_processor_id();
+	int cpu_num = raw_raw_smp_processor_id();
 	struct cpuinfo_x86 *c = &cpu_data(cpu_num);
 
 	uci = ucode_cpu_info + cpu;

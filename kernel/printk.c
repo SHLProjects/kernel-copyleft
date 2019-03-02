@@ -1577,7 +1577,7 @@ static void call_console_drivers(int level, const char *text, size_t len)
 			continue;
 		if (!con->write)
 			continue;
-		if (!cpu_online(smp_processor_id()) &&
+		if (!cpu_online(raw_smp_processor_id()) &&
 		    !(con->flags & CON_ANYTIME))
 			continue;
 		con->write(con, text, len);
@@ -1804,7 +1804,7 @@ asmlinkage int vprintk_emit(int facility, int level,
 
 	/* This stops the holder of console_sem just where we want him */
 	local_irq_save(flags);
-	this_cpu = smp_processor_id();
+	this_cpu = raw_smp_processor_id();
 
 	/*
 	 * Ouch, printk recursed into itself!

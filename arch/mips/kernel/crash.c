@@ -18,7 +18,7 @@ static cpumask_t cpus_in_crash = CPU_MASK_NONE;
 static void crash_shutdown_secondary(void *ignore)
 {
 	struct pt_regs *regs;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	regs = task_pt_regs(current);
 
@@ -64,7 +64,7 @@ static void crash_kexec_prepare_cpus(void) {}
 void default_machine_crash_shutdown(struct pt_regs *regs)
 {
 	local_irq_disable();
-	crashing_cpu = smp_processor_id();
+	crashing_cpu = raw_smp_processor_id();
 	crash_save_cpu(regs, crashing_cpu);
 	crash_kexec_prepare_cpus();
 	cpu_set(crashing_cpu, cpus_in_crash);

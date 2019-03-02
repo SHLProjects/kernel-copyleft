@@ -23,7 +23,7 @@ static struct cpuidle_driver * __cpuidle_get_cpu_driver(int cpu);
 
 static void cpuidle_setup_broadcast_timer(void *arg)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	clockevents_notify((long)(arg), &cpu);
 }
 

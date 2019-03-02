@@ -1125,7 +1125,7 @@ static void kvmppc_wait_for_nap(struct kvmppc_vcore *vc)
  */
 static int on_primary_thread(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	int thr = cpu_thread_in_core(cpu);
 
 	if (thr)
@@ -1222,7 +1222,7 @@ static void kvmppc_run_core(struct kvmppc_vcore *vc)
 		goto out;
 	}
 
-	vc->pcpu = smp_processor_id();
+	vc->pcpu = raw_smp_processor_id();
 	list_for_each_entry(vcpu, &vc->runnable_threads, arch.run_list) {
 		kvmppc_start_thread(vcpu);
 		kvmppc_create_dtl_entry(vcpu, vc);

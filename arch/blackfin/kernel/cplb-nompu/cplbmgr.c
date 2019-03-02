@@ -215,7 +215,7 @@ found_pagesize:
 MGR_ATTR int cplb_hdr(int seqstat, struct pt_regs *regs)
 {
 	int cause = seqstat & 0x3f;
-	unsigned int cpu = raw_smp_processor_id();
+	unsigned int cpu = raw_raw_smp_processor_id();
 	switch (cause) {
 	case VEC_CPLB_I_M:
 		return icplb_miss(cpu);

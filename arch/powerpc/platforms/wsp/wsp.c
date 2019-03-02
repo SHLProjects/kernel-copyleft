@@ -90,7 +90,7 @@ void wsp_halt(void)
 	struct device_node *mine;
 	struct device_node *me;
 
-	me = of_get_cpu_node(smp_processor_id(), NULL);
+	me = of_get_cpu_node(raw_smp_processor_id(), NULL);
 	mine = scom_find_parent(me);
 
 	/* This will halt all the A2s but not power off the chip */

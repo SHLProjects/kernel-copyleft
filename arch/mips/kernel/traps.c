@@ -606,7 +606,7 @@ static int simulate_rdhwr(struct pt_regs *regs, int rd, int rt)
 			1, regs, 0);
 	switch (rd) {
 	case 0:		/* CPU number */
-		regs->regs[rt] = smp_processor_id();
+		regs->regs[rt] = raw_smp_processor_id();
 		return 0;
 	case 1:		/* SYNCI length */
 		regs->regs[rt] = min(current_cpu_data.dcache.linesz,
@@ -1655,7 +1655,7 @@ __setup("noulri", ulri_disable);
 
 void __cpuinit per_cpu_trap_init(bool is_boot_cpu)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	unsigned int status_set = ST0_CU0;
 	unsigned int hwrena = cpu_hwrena_impl_bits;
 #ifdef CONFIG_MIPS_MT_SMTC

@@ -155,7 +155,7 @@ static inline unsigned int mpic_processor_id(struct mpic *mpic)
 	unsigned int cpu = 0;
 
 	if (!(mpic->flags & MPIC_SECONDARY))
-		cpu = hard_smp_processor_id();
+		cpu = hard_raw_smp_processor_id();
 
 	return cpu;
 }
@@ -622,7 +622,7 @@ static inline u32 mpic_physmask(u32 cpumask)
 	u32 mask = 0;
 
 	for (i = 0; i < min(32, NR_CPUS); ++i, cpumask >>= 1)
-		mask |= (cpumask & 1) << get_hard_smp_processor_id(i);
+		mask |= (cpumask & 1) << get_hard_raw_smp_processor_id(i);
 	return mask;
 }
 
@@ -1411,7 +1411,7 @@ struct mpic * __init mpic_alloc(struct device_node *node,
 
 	/* Map the per-CPU registers */
 	for_each_possible_cpu(i) {
-		unsigned int cpu = get_hard_smp_processor_id(i);
+		unsigned int cpu = get_hard_raw_smp_processor_id(i);
 
 		mpic_map(mpic, mpic->paddr, &mpic->cpuregs[cpu],
 			 MPIC_INFO(CPU_BASE) + cpu * MPIC_INFO(CPU_STRIDE),
@@ -1550,7 +1550,7 @@ void __init mpic_init(struct mpic *mpic)
 
 		mpic_write(mpic->tmregs,
 			   offset + MPIC_INFO(TIMER_DESTINATION),
-			   1 << hard_smp_processor_id());
+			   1 << hard_raw_smp_processor_id());
 		mpic_write(mpic->tmregs,
 			   offset + MPIC_INFO(TIMER_VECTOR_PRI),
 			   MPIC_VECPRI_MASK |
@@ -1689,12 +1689,12 @@ void mpic_setup_this_cpu(void)
 #ifdef CONFIG_SMP
 	struct mpic *mpic = mpic_primary;
 	unsigned long flags;
-	u32 msk = 1 << hard_smp_processor_id();
+	u32 msk = 1 << hard_raw_smp_processor_id();
 	unsigned int i;
 
 	BUG_ON(mpic == NULL);
 
-	DBG("%s: setup_this_cpu(%d)\n", mpic->name, hard_smp_processor_id());
+	DBG("%s: setup_this_cpu(%d)\n", mpic->name, hard_raw_smp_processor_id());
 
 	raw_spin_lock_irqsave(&mpic_lock, flags);
 
@@ -1735,12 +1735,12 @@ void mpic_teardown_this_cpu(int secondary)
 {
 	struct mpic *mpic = mpic_primary;
 	unsigned long flags;
-	u32 msk = 1 << hard_smp_processor_id();
+	u32 msk = 1 << hard_raw_smp_processor_id();
 	unsigned int i;
 
 	BUG_ON(mpic == NULL);
 
-	DBG("%s: teardown_this_cpu(%d)\n", mpic->name, hard_smp_processor_id());
+	DBG("%s: teardown_this_cpu(%d)\n", mpic->name, hard_raw_smp_processor_id());
 	raw_spin_lock_irqsave(&mpic_lock, flags);
 
 	/* let the mpic know we don't want intrs.  */
@@ -1862,7 +1862,7 @@ void smp_mpic_message_pass(int cpu, int msg)
 	/* make sure we're sending something that translates to an IPI */
 	if ((unsigned int)msg > 3) {
 		printk("SMP %d: smp_message_pass: unknown msg %d\n",
-		       smp_processor_id(), msg);
+		       raw_smp_processor_id(), msg);
 		return;
 	}
 
@@ -1870,7 +1870,7 @@ void smp_mpic_message_pass(int cpu, int msg)
 	DBG("%s: send_ipi(ipi_no: %d)\n", mpic->name, msg);
 #endif
 
-	physmask = 1 << get_hard_smp_processor_id(cpu);
+	physmask = 1 << get_hard_raw_smp_processor_id(cpu);
 
 	mpic_cpu_write(MPIC_INFO(CPU_IPI_DISPATCH_0) +
 		       msg * MPIC_INFO(CPU_IPI_DISPATCH_STRIDE), physmask);
@@ -1901,7 +1901,7 @@ void mpic_reset_core(int cpu)
 {
 	struct mpic *mpic = mpic_primary;
 	u32 pir;
-	int cpuid = get_hard_smp_processor_id(cpu);
+	int cpuid = get_hard_raw_smp_processor_id(cpu);
 	int i;
 
 	/* Set target bit for core reset */

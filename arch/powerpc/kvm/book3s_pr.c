@@ -66,7 +66,7 @@ void kvmppc_core_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
 	svcpu->slb_max = to_book3s(vcpu)->slb_shadow_max;
 	svcpu_put(svcpu);
 #endif
-	vcpu->cpu = smp_processor_id();
+	vcpu->cpu = raw_smp_processor_id();
 #ifdef CONFIG_PPC_BOOK3S_32
 	current->thread.kvm_shadow_vcpu = to_book3s(vcpu)->shadow_vcpu;
 #endif

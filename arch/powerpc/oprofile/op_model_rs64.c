@@ -121,9 +121,9 @@ static int rs64_cpu_setup(struct op_counter_config *ctr)
 	mmcr0 |= MMCR0_PMC1CE|MMCR0_PMCjCE;
 	mtspr(SPRN_MMCR0, mmcr0);
 
-	dbg("setup on cpu %d, mmcr0 %lx\n", smp_processor_id(),
+	dbg("setup on cpu %d, mmcr0 %lx\n", raw_smp_processor_id(),
 	    mfspr(SPRN_MMCR0));
-	dbg("setup on cpu %d, mmcr1 %lx\n", smp_processor_id(),
+	dbg("setup on cpu %d, mmcr1 %lx\n", raw_smp_processor_id(),
 	    mfspr(SPRN_MMCR1));
 
 	return 0;
@@ -156,7 +156,7 @@ static int rs64_start(struct op_counter_config *ctr)
 	mmcr0 &= ~MMCR0_FC;
 	mtspr(SPRN_MMCR0, mmcr0);
 
-	dbg("start on cpu %d, mmcr0 %x\n", smp_processor_id(), mmcr0);
+	dbg("start on cpu %d, mmcr0 %x\n", raw_smp_processor_id(), mmcr0);
 	return 0;
 }
 
@@ -169,7 +169,7 @@ static void rs64_stop(void)
 	mmcr0 |= MMCR0_FC;
 	mtspr(SPRN_MMCR0, mmcr0);
 
-	dbg("stop on cpu %d, mmcr0 %x\n", smp_processor_id(), mmcr0);
+	dbg("stop on cpu %d, mmcr0 %x\n", raw_smp_processor_id(), mmcr0);
 
 	mb();
 }

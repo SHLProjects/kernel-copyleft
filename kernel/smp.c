@@ -100,7 +100,7 @@ static struct notifier_block __cpuinitdata hotplug_cfd_notifier = {
 
 void __init call_function_init(void)
 {
-	void *cpu = (void *)(long)smp_processor_id();
+	void *cpu = (void *)(long)raw_smp_processor_id();
 	int i;
 
 	for_each_possible_cpu(i) {
@@ -225,10 +225,10 @@ static void flush_smp_call_function_queue(bool warn_cpu_offline)
 	raw_spin_unlock(&q->lock);
 
 	/* There shouldn't be any pending callbacks on an offline CPU. */
-	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
+	if (unlikely(warn_cpu_offline && !cpu_online(raw_smp_processor_id()) &&
 		     !warned && !list_empty(&q->list))) {
 		warned = true;
-		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
+		WARN(1, "IPI on offline CPU %d\n", raw_smp_processor_id());
 	}
 
 	while (!list_empty(&list)) {
@@ -392,7 +392,7 @@ void __smp_call_function_single(int cpu, struct call_single_data *csd,
 	 * send smp call function interrupt to this cpu and as such deadlocks
 	 * can't happen.
 	 */
-	WARN_ON_ONCE(cpu_online(smp_processor_id()) && wait && irqs_disabled()
+	WARN_ON_ONCE(cpu_online(raw_smp_processor_id()) && wait && irqs_disabled()
 		     && !oops_in_progress);
 
 	if (cpu == this_cpu) {
@@ -424,7 +424,7 @@ void smp_call_function_many(const struct cpumask *mask,
 			    smp_call_func_t func, void *info, bool wait)
 {
 	struct call_function_data *cfd;
-	int cpu, next_cpu, this_cpu = smp_processor_id();
+	int cpu, next_cpu, this_cpu = raw_smp_processor_id();
 
 	/*
 	 * Can deadlock when called with interrupts disabled.

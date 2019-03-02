@@ -247,11 +247,11 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
 			 * page really not being present is the most common.
 			 */
 			pr_debug("secondary hit for 0x%08lx CPU %d.\n",
-				 addr, smp_processor_id());
+				 addr, raw_smp_processor_id());
 
 			if (!faultpage->old_presence)
 				pr_info("unexpected secondary hit for address 0x%08lx on CPU %d.\n",
-					addr, smp_processor_id());
+					addr, raw_smp_processor_id());
 		} else {
 			/*
 			 * Prevent overwriting already in-flight context.
@@ -259,7 +259,7 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
 			 * least prevents a panic.
 			 */
 			pr_emerg("recursive probe hit on CPU %d, for address 0x%08lx. Ignoring.\n",
-				 smp_processor_id(), addr);
+				 raw_smp_processor_id(), addr);
 			pr_emerg("previous hit was at 0x%08lx.\n", ctx->addr);
 			disarm_kmmio_fault_page(faultpage);
 		}
@@ -320,7 +320,7 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
 		 * mmio tracing enabled), or erroneous behaviour
 		 */
 		pr_warning("unexpected debug trap on CPU %d.\n",
-			   smp_processor_id());
+			   raw_smp_processor_id());
 		goto out;
 	}
 

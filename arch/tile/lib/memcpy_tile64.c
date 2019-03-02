@@ -158,7 +158,7 @@ retry_source:
 		    !hv_pte_get_readable(src_pte) ||
 		    hv_pte_get_mode(src_pte) != HV_PTE_MODE_CACHE_TILE_L3)
 			break;
-		if (get_remote_cache_cpu(src_pte) == smp_processor_id())
+		if (get_remote_cache_cpu(src_pte) == raw_smp_processor_id())
 			break;
 		src_page = pfn_to_page(pte_pfn(src_pte));
 		get_page(src_page);

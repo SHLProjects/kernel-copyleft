@@ -223,7 +223,7 @@ static int apply_microcode_amd(int cpu)
 	struct ucode_patch *p;
 	u32 rev, dummy;
 
-	BUG_ON(raw_smp_processor_id() != cpu);
+	BUG_ON(raw_raw_smp_processor_id() != cpu);
 
 	uci = ucode_cpu_info + cpu;
 

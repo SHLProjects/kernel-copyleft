@@ -149,7 +149,7 @@ static DEFINE_PER_CPU(struct mct_context *, gmct);
 static void mct_apply_cpu_register(void *arg)
 {
 	uint32_t value;
-	unsigned int cpu_index = smp_processor_id();
+	unsigned int cpu_index = raw_smp_processor_id();
 
 	if (!per_cpu(gmct, cpu_index))
 		return;
@@ -174,7 +174,7 @@ static void mct_apply_cpu_register(void *arg)
 static void mct_read_cntr_register(void *arg)
 {
 	uint32_t value;
-	unsigned int cpu_index = smp_processor_id();
+	unsigned int cpu_index = raw_smp_processor_id();
 
 	read_mct_cntr(value);
 	per_cpu(gmct, cpu_index)->mct_cntr = value;

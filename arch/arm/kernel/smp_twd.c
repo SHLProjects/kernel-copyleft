@@ -268,7 +268,7 @@ static void twd_get_clock(struct device_node *np)
 static int __cpuinit twd_timer_setup(struct clock_event_device *clk)
 {
 	struct clock_event_device **this_cpu_clk;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/*
 	 * If the basic setup for this CPU has been done before don't

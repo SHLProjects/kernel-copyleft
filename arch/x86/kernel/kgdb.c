@@ -211,7 +211,7 @@ static void kgdb_correct_hw_break(void)
 		struct perf_event *bp;
 		struct arch_hw_breakpoint *info;
 		int val;
-		int cpu = raw_smp_processor_id();
+		int cpu = raw_raw_smp_processor_id();
 		if (!breakinfo[breakno].enabled)
 			continue;
 		if (dbg_is_early) {
@@ -312,7 +312,7 @@ kgdb_remove_hw_break(unsigned long addr, int len, enum kgdb_bptype bptype)
 static void kgdb_remove_all_hw_break(void)
 {
 	int i;
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	struct perf_event *bp;
 
 	for (i = 0; i < HBP_NUM; i++) {
@@ -398,7 +398,7 @@ kgdb_set_hw_break(unsigned long addr, int len, enum kgdb_bptype bptype)
 static void kgdb_disable_hw_debug(struct pt_regs *regs)
 {
 	int i;
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 	struct perf_event *bp;
 
 	/* Disable hardware debugging while we are in kgdb: */
@@ -482,7 +482,7 @@ int kgdb_arch_handle_exception(int e_vector, int signo, int err_code,
 		if (remcomInBuffer[0] == 's') {
 			linux_regs->flags |= X86_EFLAGS_TF;
 			atomic_set(&kgdb_cpu_doing_single_step,
-				   raw_smp_processor_id());
+				   raw_raw_smp_processor_id());
 		}
 
 		return 0;
@@ -520,16 +520,16 @@ static int kgdb_nmi_handler(unsigned int cmd, struct pt_regs *regs)
 	case NMI_LOCAL:
 		if (atomic_read(&kgdb_active) != -1) {
 			/* KGDB CPU roundup */
-			kgdb_nmicallback(raw_smp_processor_id(), regs);
-			was_in_debug_nmi[raw_smp_processor_id()] = 1;
+			kgdb_nmicallback(raw_raw_smp_processor_id(), regs);
+			was_in_debug_nmi[raw_raw_smp_processor_id()] = 1;
 			touch_nmi_watchdog();
 			return NMI_HANDLED;
 		}
 		break;
 
 	case NMI_UNKNOWN:
-		if (was_in_debug_nmi[raw_smp_processor_id()]) {
-			was_in_debug_nmi[raw_smp_processor_id()] = 0;
+		if (was_in_debug_nmi[raw_raw_smp_processor_id()]) {
+			was_in_debug_nmi[raw_raw_smp_processor_id()] = 0;
 			return NMI_HANDLED;
 		}
 		break;

@@ -276,7 +276,7 @@ static int __init armada_370_xp_mpic_of_init(struct device_node *node,
 	 * from acknowledging the same interrupt.
 	 */
 	cpumask_clear(irq_default_affinity);
-	cpumask_set_cpu(smp_processor_id(), irq_default_affinity);
+	cpumask_set_cpu(raw_smp_processor_id(), irq_default_affinity);
 
 #endif
 

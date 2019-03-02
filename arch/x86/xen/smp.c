@@ -72,7 +72,7 @@ static void __cpuinit cpu_bringup(void)
 	xen_enable_sysenter();
 	xen_enable_syscall();
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	smp_store_cpu_info(cpu);
 	cpu_data(cpu).x86_max_cores = 1;
 	set_cpu_sibling_map(cpu);
@@ -238,7 +238,7 @@ static void __init xen_filter_cpu_maps(void)
 
 static void __init xen_smp_prepare_boot_cpu(void)
 {
-	BUG_ON(smp_processor_id() != 0);
+	BUG_ON(raw_smp_processor_id() != 0);
 	native_smp_prepare_boot_cpu();
 
 	/* We've switched to the "real" per-cpu gdt, so make sure the
@@ -426,7 +426,7 @@ static void xen_smp_cpus_done(unsigned int max_cpus)
 #ifdef CONFIG_HOTPLUG_CPU
 static int xen_cpu_disable(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	if (cpu == 0)
 		return -EBUSY;
 
@@ -455,7 +455,7 @@ static void xen_cpu_die(unsigned int cpu)
 static void __cpuinit xen_play_dead(void) /* used only with HOTPLUG_CPU */
 {
 	play_dead_common();
-	HYPERVISOR_vcpu_op(VCPUOP_down, smp_processor_id(), NULL);
+	HYPERVISOR_vcpu_op(VCPUOP_down, raw_smp_processor_id(), NULL);
 	cpu_bringup();
 	/*
 	 * commit 4b0c0f294 (tick: Cleanup NOHZ per cpu data on cpu down)
@@ -485,7 +485,7 @@ static void xen_play_dead(void)
 #endif
 static void stop_self(void *v)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* make sure we're not pinning something down */
 	load_cr3(swapper_pg_dir);
@@ -585,14 +585,14 @@ void xen_send_IPI_self(int vector)
 	int xen_vector = xen_map_vector(vector);
 
 	if (xen_vector >= 0)
-		xen_send_IPI_one(smp_processor_id(), xen_vector);
+		xen_send_IPI_one(raw_smp_processor_id(), xen_vector);
 }
 
 void xen_send_IPI_mask_allbutself(const struct cpumask *mask,
 				int vector)
 {
 	unsigned cpu;
-	unsigned int this_cpu = smp_processor_id();
+	unsigned int this_cpu = raw_smp_processor_id();
 	int xen_vector = xen_map_vector(vector);
 
 	if (!(num_online_cpus() > 1) || (xen_vector < 0))

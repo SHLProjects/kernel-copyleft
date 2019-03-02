@@ -296,9 +296,9 @@ void arch_cpu_idle(void)
  */
 void default_idle(void)
 {
-	trace_cpu_idle_rcuidle(1, smp_processor_id());
+	trace_cpu_idle_rcuidle(1, raw_smp_processor_id());
 	safe_halt();
-	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, smp_processor_id());
+	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, raw_smp_processor_id());
 }
 #ifdef CONFIG_APM_MODULE
 EXPORT_SYMBOL(default_idle);
@@ -320,7 +320,7 @@ void stop_this_cpu(void *dummy)
 	/*
 	 * Remove this CPU:
 	 */
-	set_cpu_online(smp_processor_id(), false);
+	set_cpu_online(raw_smp_processor_id(), false);
 	disable_local_APIC();
 
 	for (;;)
@@ -359,7 +359,7 @@ static void amd_e400_idle(void)
 	}
 
 	if (amd_e400_c1e_detected) {
-		int cpu = smp_processor_id();
+		int cpu = raw_smp_processor_id();
 
 		if (!cpumask_test_cpu(cpu, amd_e400_c1e_mask)) {
 			cpumask_set_cpu(cpu, amd_e400_c1e_mask);

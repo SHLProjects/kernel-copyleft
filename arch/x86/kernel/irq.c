@@ -192,7 +192,7 @@ unsigned int __irq_entry do_IRQ(struct pt_regs *regs)
 
 		if (printk_ratelimit())
 			pr_emerg("%s: %d.%d No irq handler for vector (irq %d)\n",
-				__func__, smp_processor_id(), vector, irq);
+				__func__, raw_smp_processor_id(), vector, irq);
 	}
 
 	irq_exit();

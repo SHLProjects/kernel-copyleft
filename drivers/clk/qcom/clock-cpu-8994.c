@@ -1703,7 +1703,7 @@ static DEFINE_PER_CPU(struct clkcpu_8994_idle_data, idle_data_clk_8994);
 
 static void do_low_power_poll(void *unused)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct clkcpu_8994_idle_data *idle_data;
 
 	idle_data = &per_cpu(idle_data_clk_8994, cpu);
@@ -1728,7 +1728,7 @@ static inline void __init_idle_data(struct clkcpu_8994_idle_data *id)
 static void __low_power_pre_mux_switch(struct mux_clk *mux)
 {
 	struct clkcpu_8994_idle_data *idle_data, *this_idle_data;
-	int cpu, this_cpu = smp_processor_id();
+	int cpu, this_cpu = raw_smp_processor_id();
 	struct mux_priv_data *data = (struct mux_priv_data *)mux->priv;
 
 	/*
@@ -1756,7 +1756,7 @@ static void __low_power_pre_mux_switch(struct mux_clk *mux)
 	spin_lock(data->exit_idle_lock);
 
 	for_each_online_cpu(cpu) {
-		if (cpu == smp_processor_id() ||
+		if (cpu == raw_smp_processor_id() ||
 			!cpumask_test_cpu(cpu, &data->cpumask))
 			continue;
 		idle_data = &per_cpu(idle_data_clk_8994, cpu);
@@ -1782,7 +1782,7 @@ static void __low_power_pre_mux_switch(struct mux_clk *mux)
 static void __low_power_post_mux_switch(struct mux_clk *mux)
 {
 	struct clkcpu_8994_idle_data *this_idle_data;
-	int cpu, this_cpu = smp_processor_id();
+	int cpu, this_cpu = raw_smp_processor_id();
 	struct mux_priv_data *data = (struct mux_priv_data *)mux->priv;
 
 	/*
@@ -1873,7 +1873,7 @@ static int clock_cpu_8994_idle_notifier(struct notifier_block *nb,
 					     unsigned long val,
 					     void *data)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct clkcpu_8994_idle_data *id = &per_cpu(idle_data_clk_8994, cpu);
 
 	if (!id->low_power_mux_switch)

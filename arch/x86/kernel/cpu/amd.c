@@ -296,7 +296,7 @@ static void __cpuinit amd_get_topology(struct cpuinfo_x86 *c)
 {
 	u32 nodes, cores_per_cu = 1;
 	u8 node_id;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* get information required for multi-node processors */
 	if (cpu_has_topoext) {
@@ -346,7 +346,7 @@ static void __cpuinit amd_detect_cmp(struct cpuinfo_x86 *c)
 {
 #ifdef CONFIG_X86_HT
 	unsigned bits;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	bits = c->x86_coreid_bits;
 	/* Low order bits define the core id (index of core in socket) */
@@ -372,7 +372,7 @@ EXPORT_SYMBOL_GPL(amd_get_nb_id);
 static void __cpuinit srat_detect_node(struct cpuinfo_x86 *c)
 {
 #ifdef CONFIG_NUMA
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	int node;
 	unsigned apicid = c->apicid;
 
@@ -579,7 +579,7 @@ static void __cpuinit init_amd(struct cpuinfo_x86 *c)
 		set_cpu_cap(c, X86_FEATURE_REP_GOOD);
 
 	/* get apicid instead of initial apic id from cpuid */
-	c->apicid = hard_smp_processor_id();
+	c->apicid = hard_raw_smp_processor_id();
 #else
 
 	/*

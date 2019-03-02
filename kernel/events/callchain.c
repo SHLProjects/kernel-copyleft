@@ -142,7 +142,7 @@ static struct perf_callchain_entry *get_callchain_entry(int *rctx)
 	if (!entries)
 		return NULL;
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 
 	return &entries->cpu_entries[cpu][*rctx];
 }

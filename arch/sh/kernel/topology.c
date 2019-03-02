@@ -74,7 +74,7 @@ static int __init topology_init(void)
 	 */
 	for_each_online_node(i)
 		if (i != numa_node_id())
-			register_cpu_under_node(raw_smp_processor_id(), i);
+			register_cpu_under_node(raw_raw_smp_processor_id(), i);
 #endif
 
 	return 0;

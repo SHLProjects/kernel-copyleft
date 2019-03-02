@@ -1712,7 +1712,7 @@ static int tile_net_tx(struct sk_buff *skb, struct net_device *dev)
 /* Return subqueue id on this core (one per core). */
 static u16 tile_net_select_queue(struct net_device *dev, struct sk_buff *skb)
 {
-	return smp_processor_id();
+	return raw_smp_processor_id();
 }
 
 /* Deal with a transmit timeout. */
@@ -1870,7 +1870,7 @@ static void tile_net_dev_init(const char *name, const uint8_t *mac)
 static void tile_net_init_module_percpu(void *unused)
 {
 	struct tile_net_info *info = &__get_cpu_var(per_cpu_info);
-	int my_cpu = smp_processor_id();
+	int my_cpu = raw_smp_processor_id();
 
 	info->has_iqueue = false;
 

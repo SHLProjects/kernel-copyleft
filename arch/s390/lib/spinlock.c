@@ -27,7 +27,7 @@ __setup("spin_retry=", spin_retry_setup);
 void arch_spin_lock_wait(arch_spinlock_t *lp)
 {
 	int count = spin_retry;
-	unsigned int cpu = ~smp_processor_id();
+	unsigned int cpu = ~raw_smp_processor_id();
 	unsigned int owner;
 
 	while (1) {
@@ -55,7 +55,7 @@ EXPORT_SYMBOL(arch_spin_lock_wait);
 void arch_spin_lock_wait_flags(arch_spinlock_t *lp, unsigned long flags)
 {
 	int count = spin_retry;
-	unsigned int cpu = ~smp_processor_id();
+	unsigned int cpu = ~raw_smp_processor_id();
 	unsigned int owner;
 
 	local_irq_restore(flags);
@@ -87,7 +87,7 @@ EXPORT_SYMBOL(arch_spin_lock_wait_flags);
 
 int arch_spin_trylock_retry(arch_spinlock_t *lp)
 {
-	unsigned int cpu = ~smp_processor_id();
+	unsigned int cpu = ~raw_smp_processor_id();
 	int count;
 
 	for (count = spin_retry; count > 0; count--) {

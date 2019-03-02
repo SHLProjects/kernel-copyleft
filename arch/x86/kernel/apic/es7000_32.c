@@ -432,7 +432,7 @@ static const struct cpumask *target_cpus_cluster(void)
 
 static const struct cpumask *es7000_target_cpus(void)
 {
-	return cpumask_of(smp_processor_id());
+	return cpumask_of(raw_smp_processor_id());
 }
 
 static unsigned long es7000_check_apicid_used(physid_mask_t *map, int apicid)
@@ -468,7 +468,7 @@ static unsigned long calculate_ldr(int cpu)
 static void es7000_init_apic_ldr_cluster(void)
 {
 	unsigned long val;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	apic_write(APIC_DFR, APIC_DFR_CLUSTER);
 	val = calculate_ldr(cpu);
@@ -478,7 +478,7 @@ static void es7000_init_apic_ldr_cluster(void)
 static void es7000_init_apic_ldr(void)
 {
 	unsigned long val;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	apic_write(APIC_DFR, APIC_DFR_FLAT);
 	val = calculate_ldr(cpu);
@@ -487,7 +487,7 @@ static void es7000_init_apic_ldr(void)
 
 static void es7000_setup_apic_routing(void)
 {
-	int apic = per_cpu(x86_bios_cpu_apicid, smp_processor_id());
+	int apic = per_cpu(x86_bios_cpu_apicid, raw_smp_processor_id());
 
 	pr_info("Enabling APIC mode:  %s. Using %d I/O APICs, target cpus %lx\n",
 		(apic_version[apic] == 0x14) ?

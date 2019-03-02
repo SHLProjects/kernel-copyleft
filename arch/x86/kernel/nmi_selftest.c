@@ -53,7 +53,7 @@ static void __init cleanup_nmi_testsuite(void)
 
 static int __init test_nmi_ipi_callback(unsigned int val, struct pt_regs *regs)
 {
-        int cpu = raw_smp_processor_id();
+        int cpu = raw_raw_smp_processor_id();
 
         if (cpumask_test_and_clear_cpu(cpu, to_cpumask(nmi_ipi_mask)))
                 return NMI_HANDLED;
@@ -92,7 +92,7 @@ static void __init test_nmi_ipi(struct cpumask *mask)
 static void __init remote_ipi(void)
 {
 	cpumask_copy(to_cpumask(nmi_ipi_mask), cpu_online_mask);
-	cpumask_clear_cpu(smp_processor_id(), to_cpumask(nmi_ipi_mask));
+	cpumask_clear_cpu(raw_smp_processor_id(), to_cpumask(nmi_ipi_mask));
 	if (!cpumask_empty(to_cpumask(nmi_ipi_mask)))
 		test_nmi_ipi(to_cpumask(nmi_ipi_mask));
 }
@@ -100,7 +100,7 @@ static void __init remote_ipi(void)
 static void __init local_ipi(void)
 {
 	cpumask_clear(to_cpumask(nmi_ipi_mask));
-	cpumask_set_cpu(smp_processor_id(), to_cpumask(nmi_ipi_mask));
+	cpumask_set_cpu(raw_smp_processor_id(), to_cpumask(nmi_ipi_mask));
 	test_nmi_ipi(to_cpumask(nmi_ipi_mask));
 }
 

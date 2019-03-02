@@ -136,7 +136,7 @@ static inline int which_bucket(unsigned int duration)
 	 * This allows us to calculate
 	 * E(duration)|iowait
 	 */
-	if (nr_iowait_cpu(smp_processor_id()))
+	if (nr_iowait_cpu(raw_smp_processor_id()))
 		bucket = BUCKETS/2;
 
 	if (duration < 10)
@@ -164,7 +164,7 @@ static inline int performance_multiplier(void)
 	int mult = 1;
 
 	/* for IO wait tasks (per cpu!) we add 5x each */
-	mult += 10 * nr_iowait_cpu(smp_processor_id());
+	mult += 10 * nr_iowait_cpu(raw_smp_processor_id());
 
 	return mult;
 }

@@ -405,7 +405,7 @@ static int stop_machine_cpu_stop(void *data)
 {
 	struct stop_machine_data *smdata = data;
 	enum stopmachine_state curstate = STOPMACHINE_NONE;
-	int cpu = smp_processor_id(), err = 0;
+	int cpu = raw_smp_processor_id(), err = 0;
 	unsigned long flags;
 	bool is_active;
 

@@ -1542,7 +1542,7 @@ static int cpufreq_bp_suspend(void)
 {
 	int ret = 0;
 
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct cpufreq_policy *policy;
 
 	pr_debug("suspending cpu %u\n", cpu);
@@ -1580,7 +1580,7 @@ static void cpufreq_bp_resume(void)
 {
 	int ret = 0;
 
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	struct cpufreq_policy *policy;
 
 	pr_debug("resuming cpu %u\n", cpu);

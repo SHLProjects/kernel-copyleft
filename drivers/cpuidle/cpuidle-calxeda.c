@@ -80,7 +80,7 @@ static int calxeda_pwrdown_idle(struct cpuidle_device *dev,
 				struct cpuidle_driver *drv,
 				int index)
 {
-	highbank_set_cpu_jump(smp_processor_id(), cpu_resume);
+	highbank_set_cpu_jump(raw_smp_processor_id(), cpu_resume);
 	cpu_suspend(0, calxeda_idle_finish);
 	return index;
 }

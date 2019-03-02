@@ -53,7 +53,7 @@ void (*tegra_tear_down_cpu)(void);
  */
 static void restore_cpu_complex(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	BUG_ON(cpu != 0);
 
@@ -77,7 +77,7 @@ static void restore_cpu_complex(void)
  */
 static void suspend_cpu_complex(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	BUG_ON(cpu != 0);
 

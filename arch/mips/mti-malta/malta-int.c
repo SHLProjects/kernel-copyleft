@@ -284,7 +284,7 @@ asmlinkage void plat_irq_dispatch(void)
 
 	if (irq == MIPSCPU_INT_I8259A)
 		malta_hw0_irqdispatch();
-	else if (gic_present && ((1 << irq) & ipi_map[smp_processor_id()]))
+	else if (gic_present && ((1 << irq) & ipi_map[raw_smp_processor_id()]))
 		malta_ipi_irqdispatch();
 	else
 		do_IRQ(MIPS_CPU_IRQ_BASE + irq);
@@ -592,11 +592,11 @@ void __init arch_init_irq(void)
 			set_vi_handler(MIPSCPU_INT_IPI1, malta_ipi_irqdispatch);
 		}
 		/* Argh.. this really needs sorting out.. */
-		printk("CPU%d: status register was %08x\n", smp_processor_id(), read_c0_status());
+		printk("CPU%d: status register was %08x\n", raw_smp_processor_id(), read_c0_status());
 		write_c0_status(read_c0_status() | STATUSF_IP3 | STATUSF_IP4);
-		printk("CPU%d: status register now %08x\n", smp_processor_id(), read_c0_status());
+		printk("CPU%d: status register now %08x\n", raw_smp_processor_id(), read_c0_status());
 		write_c0_status(0x1100dc00);
-		printk("CPU%d: status register frc %08x\n", smp_processor_id(), read_c0_status());
+		printk("CPU%d: status register frc %08x\n", raw_smp_processor_id(), read_c0_status());
 		for (i = 0; i < NR_CPUS; i++) {
 			arch_init_ipiirq(MIPS_GIC_IRQ_BASE +
 					 GIC_RESCHED_INT(i), &irq_resched);

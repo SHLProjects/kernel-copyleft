@@ -66,7 +66,7 @@ void __init paging_init(void)
 
 asmlinkage void __init init_pda(void)
 {
-	unsigned int cpu = raw_smp_processor_id();
+	unsigned int cpu = raw_raw_smp_processor_id();
 
 	early_shadow_stamp();
 

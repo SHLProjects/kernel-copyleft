@@ -279,7 +279,7 @@ static int enable_monitor_mode(void)
 	ARM_DBG_READ(c0, c1, 0, dscr);
 	if (!(dscr & ARM_DSCR_MDBGEN)) {
 		pr_warn_once("Failed to enable monitor mode on CPU %d.\n",
-				smp_processor_id());
+				raw_smp_processor_id());
 		return -EPERM;
 	}
 
@@ -902,7 +902,7 @@ static cpumask_t debug_err_mask;
 
 static int debug_reg_trap(struct pt_regs *regs, unsigned int instr)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	pr_warning("Debug register access (0x%x) caused undefined instruction on CPU %d\n",
 		   instr, cpu);
@@ -938,7 +938,7 @@ static bool core_has_os_save_restore(void)
 
 static void reset_ctrl_regs(void *unused)
 {
-	int i, raw_num_brps, err = 0, cpu = smp_processor_id();
+	int i, raw_num_brps, err = 0, cpu = raw_smp_processor_id();
 	u32 val;
 
 	/*

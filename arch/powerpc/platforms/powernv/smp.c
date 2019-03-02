@@ -64,7 +64,7 @@ static int pnv_smp_cpu_bootable(unsigned int nr)
 
 int pnv_smp_kick_cpu(int nr)
 {
-	unsigned int pcpu = get_hard_smp_processor_id(nr);
+	unsigned int pcpu = get_hard_raw_smp_processor_id(nr);
 	unsigned long start_here = __pa(*((unsigned long *)
 					  generic_secondary_smp_init));
 	long rc;
@@ -140,7 +140,7 @@ int pnv_smp_kick_cpu(int nr)
 
 static int pnv_smp_cpu_disable(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 
 	/* This is identical to pSeries... might consolidate by
 	 * moving migrate_irqs_away to a ppc_md with default to
@@ -162,7 +162,7 @@ static void pnv_smp_cpu_kill_self(void)
 	local_irq_disable();
 	idle_task_exit();
 	current->active_mm = NULL; /* for sanity */
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	DBG("CPU%d offline\n", cpu);
 	generic_set_cpu_dead(cpu);
 	smp_wmb();

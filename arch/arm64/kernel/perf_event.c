@@ -870,7 +870,7 @@ static inline int armv8pmu_counter_has_overflowed(u32 pmnc, int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u checking wrong counter %d overflow status\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 	} else {
 		counter = ARMV8_IDX_TO_COUNTER(idx);
 		ret = pmnc & BIT(counter);
@@ -885,7 +885,7 @@ static inline int armv8pmu_select_counter(int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u selecting wrong PMNC counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return -EINVAL;
 	}
 
@@ -902,7 +902,7 @@ static inline u32 armv8pmu_read_counter(int idx)
 
 	if (!armv8pmu_counter_valid(idx))
 		pr_err("CPU%u reading wrong counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 	else if (idx == ARMV8_IDX_CYCLE_COUNTER)
 		asm volatile("mrs %0, pmccntr_el0" : "=r" (value));
 	else if (armv8pmu_select_counter(idx) == idx)
@@ -915,7 +915,7 @@ static inline void armv8pmu_write_counter(int idx, u32 value)
 {
 	if (!armv8pmu_counter_valid(idx))
 		pr_err("CPU%u writing wrong counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 	else if (idx == ARMV8_IDX_CYCLE_COUNTER)
 		asm volatile("msr pmccntr_el0, %0" :: "r" (value));
 	else if (armv8pmu_select_counter(idx) == idx)
@@ -936,7 +936,7 @@ static inline int armv8pmu_enable_counter(int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u enabling wrong PMNC counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return -EINVAL;
 	}
 
@@ -951,7 +951,7 @@ static inline int armv8pmu_disable_counter(int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u disabling wrong PMNC counter %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return -EINVAL;
 	}
 
@@ -966,7 +966,7 @@ static inline int armv8pmu_enable_intens(int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u enabling wrong PMNC counter IRQ enable %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return -EINVAL;
 	}
 
@@ -981,7 +981,7 @@ static inline int armv8pmu_disable_intens(int idx)
 
 	if (!armv8pmu_counter_valid(idx)) {
 		pr_err("CPU%u disabling wrong PMNC counter IRQ enable %d\n",
-			smp_processor_id(), idx);
+			raw_smp_processor_id(), idx);
 		return -EINVAL;
 	}
 
@@ -1486,7 +1486,7 @@ static void armpmu_hotplug_enable(void *parm_pmu)
 		event->state = event->hotplug_save_state;
 		pmu->start(event, 0);
 	}
-	per_cpu(hotplug_down, smp_processor_id()) = 0;
+	per_cpu(hotplug_down, raw_smp_processor_id()) = 0;
 }
 
 static void armpmu_hotplug_disable(void *parm_pmu)
@@ -1510,7 +1510,7 @@ static void armpmu_hotplug_disable(void *parm_pmu)
 		event->state = PERF_EVENT_STATE_OFF;
 		pmu->stop(event, 0);
 	}
-	per_cpu(hotplug_down, smp_processor_id()) = 1;
+	per_cpu(hotplug_down, raw_smp_processor_id()) = 1;
 }
 
 /*
@@ -1590,7 +1590,7 @@ static int perf_cpu_pm_notifier(struct notifier_block *self, unsigned long cmd,
 		void *v)
 {
 	struct pmu *pmu;
-	u64 lcpu = smp_processor_id();
+	u64 lcpu = raw_smp_processor_id();
 	int cpu = (int)lcpu;
 
 	if (!cpu_pmu)

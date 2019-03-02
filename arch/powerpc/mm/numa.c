@@ -1414,7 +1414,7 @@ static long hcall_vphn(unsigned long cpu, unsigned int *associativity)
 	long rc;
 	long retbuf[PLPAR_HCALL9_BUFSIZE] = {0};
 	u64 flags = 1;
-	int hwcpu = get_hard_smp_processor_id(cpu);
+	int hwcpu = get_hard_raw_smp_processor_id(cpu);
 
 	rc = plpar_hcall9(H_HOME_NODE_ASSOCIATIVITY, retbuf, flags, hwcpu);
 	vphn_unpack_associativity(retbuf, associativity);
@@ -1458,7 +1458,7 @@ static int update_cpu_topology(void *data)
 	if (!data)
 		return -EINVAL;
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 
 	for (update = data; update; update = update->next) {
 		if (cpu != update->cpu)
@@ -1573,7 +1573,7 @@ int arch_update_cpu_topology(void)
 	 * machine context.
 	 */
 	stop_machine(update_lookup_table, &updates[0],
-					cpumask_of(raw_smp_processor_id()));
+					cpumask_of(raw_raw_smp_processor_id()));
 
 	for (ud = &updates[0]; ud; ud = ud->next) {
 		unregister_cpu_under_node(ud->cpu, ud->old_nid);

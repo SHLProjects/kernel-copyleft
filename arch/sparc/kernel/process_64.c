@@ -73,7 +73,7 @@ void arch_cpu_idle(void)
 			: "=&r" (pstate)
 			: "i" (PSTATE_IE));
 
-		if (!need_resched() && !cpu_is_offline(smp_processor_id()))
+		if (!need_resched() && !cpu_is_offline(raw_smp_processor_id()))
 			sun4v_cpu_yield();
 
 		/* Re-enable interrupts. */
@@ -252,7 +252,7 @@ void arch_trigger_all_cpu_backtrace(void)
 
 	memset(global_cpu_snapshot, 0, sizeof(global_cpu_snapshot));
 
-	this_cpu = raw_smp_processor_id();
+	this_cpu = raw_raw_smp_processor_id();
 
 	__global_reg_self(tp, regs, this_cpu);
 
@@ -339,7 +339,7 @@ static void pmu_snapshot_all_cpus(void)
 
 	memset(global_cpu_snapshot, 0, sizeof(global_cpu_snapshot));
 
-	this_cpu = raw_smp_processor_id();
+	this_cpu = raw_raw_smp_processor_id();
 
 	__global_pmu_self(this_cpu);
 

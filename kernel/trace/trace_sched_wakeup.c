@@ -89,7 +89,7 @@ func_prolog_preempt_disable(struct trace_array *tr,
 	*pc = preempt_count();
 	preempt_disable_notrace();
 
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	if (cpu != wakeup_current_cpu)
 		goto out_enable;
 
@@ -399,7 +399,7 @@ probe_wakeup_sched_switch(void *ignore,
 	pc = preempt_count();
 
 	/* disable local data, not wakeup_cpu data */
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	disabled = atomic_inc_return(&per_cpu_ptr(wakeup_trace->trace_buffer.data, cpu)->disabled);
 	if (likely(disabled != 1))
 		goto out;
@@ -466,7 +466,7 @@ static void
 probe_wakeup(void *ignore, struct task_struct *p, int success)
 {
 	struct trace_array_cpu *data;
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	unsigned long flags;
 	long disabled;
 	int pc;

@@ -50,7 +50,7 @@ void perf_event_print_debug(void)
 
 	local_irq_save(flags);
 
-	cpu = smp_processor_id();
+	cpu = raw_smp_processor_id();
 	memset(&cf_info, 0, sizeof(cf_info));
 	if (!qctri(&cf_info)) {
 		pr_info("CPU[%i] CPUM_CF: ver=%u.%u A=%04x E=%04x C=%04x\n",

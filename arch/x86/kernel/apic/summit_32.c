@@ -220,7 +220,7 @@ static int summit_early_logical_apicid(int cpu)
 
 static void summit_init_apic_ldr(void)
 {
-	int cpu = smp_processor_id();
+	int cpu = raw_smp_processor_id();
 	unsigned long id = early_per_cpu(x86_cpu_to_logical_apicid, cpu);
 	unsigned long val;
 
@@ -312,13 +312,13 @@ summit_cpu_mask_to_apicid_and(const struct cpumask *inmask,
 /*
  * cpuid returns the value latched in the HW at reset, not the APIC ID
  * register's value.  For any box whose BIOS changes APIC IDs, like
- * clustered APIC systems, we must use hard_smp_processor_id.
+ * clustered APIC systems, we must use hard_raw_smp_processor_id.
  *
  * See Intel's IA-32 SW Dev's Manual Vol2 under CPUID.
  */
 static int summit_phys_pkg_id(int cpuid_apic, int index_msb)
 {
-	return hard_smp_processor_id() >> index_msb;
+	return hard_raw_smp_processor_id() >> index_msb;
 }
 
 static int probe_summit(void)

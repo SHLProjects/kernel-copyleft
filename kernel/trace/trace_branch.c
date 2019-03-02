@@ -51,7 +51,7 @@ probe_likely_condition(struct ftrace_branch_data *f, int val, int expect)
 		return;
 
 	local_irq_save(flags);
-	cpu = raw_smp_processor_id();
+	cpu = raw_raw_smp_processor_id();
 	data = per_cpu_ptr(tr->trace_buffer.data, cpu);
 	if (atomic_inc_return(&data->disabled) != 1)
 		goto out;

@@ -1192,7 +1192,7 @@ efx_handle_generated_event(struct efx_channel *channel, efx_qword_t *event)
 	code = _EFX_CHANNEL_MAGIC_CODE(magic);
 
 	if (magic == EFX_CHANNEL_MAGIC_TEST(channel)) {
-		channel->event_test_cpu = raw_smp_processor_id();
+		channel->event_test_cpu = raw_raw_smp_processor_id();
 	} else if (rx_queue && magic == EFX_CHANNEL_MAGIC_FILL(rx_queue)) {
 		/* The queue must be empty, so we won't receive any rx
 		 * events, so efx_process_channel() won't refill the
@@ -1584,7 +1584,7 @@ static irqreturn_t efx_legacy_interrupt(int irq, void *dev_id)
 		syserr = EFX_OWORD_FIELD(*int_ker, FSF_AZ_NET_IVEC_FATAL_INT);
 		if (unlikely(syserr))
 			return efx_nic_fatal_interrupt(efx);
-		efx->last_irq_cpu = raw_smp_processor_id();
+		efx->last_irq_cpu = raw_raw_smp_processor_id();
 	}
 
 	if (queues != 0) {
@@ -1620,7 +1620,7 @@ static irqreturn_t efx_legacy_interrupt(int irq, void *dev_id)
 	if (result == IRQ_HANDLED)
 		netif_vdbg(efx, intr, efx->net_dev,
 			   "IRQ %d on CPU %d status " EFX_DWORD_FMT "\n",
-			   irq, raw_smp_processor_id(), EFX_DWORD_VAL(reg));
+			   irq, raw_raw_smp_processor_id(), EFX_DWORD_VAL(reg));
 
 	return result;
 }
@@ -1641,14 +1641,14 @@ static irqreturn_t efx_msi_interrupt(int irq, void *dev_id)
 
 	netif_vdbg(efx, intr, efx->net_dev,
 		   "IRQ %d on CPU %d status " EFX_OWORD_FMT "\n",
-		   irq, raw_smp_processor_id(), EFX_OWORD_VAL(*int_ker));
+		   irq, raw_raw_smp_processor_id(), EFX_OWORD_VAL(*int_ker));
 
 	/* Handle non-event-queue sources */
 	if (channel->channel == efx->irq_level) {
 		syserr = EFX_OWORD_FIELD(*int_ker, FSF_AZ_NET_IVEC_FATAL_INT);
 		if (unlikely(syserr))
 			return efx_nic_fatal_interrupt(efx);
-		efx->last_irq_cpu = raw_smp_processor_id();
+		efx->last_irq_cpu = raw_raw_smp_processor_id();
 	}
 
 	/* Schedule processing of the channel */

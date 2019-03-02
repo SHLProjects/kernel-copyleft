@@ -63,7 +63,7 @@ void *kmap_atomic(struct page *page)
 
 	type = kmap_atomic_idx_push();
 
-	idx = type + KM_TYPE_NR * smp_processor_id();
+	idx = type + KM_TYPE_NR * raw_smp_processor_id();
 	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
 #ifdef CONFIG_DEBUG_HIGHMEM
 	/*
@@ -90,7 +90,7 @@ void __kunmap_atomic(void *kvaddr)
 
 	if (kvaddr >= (void *)FIXADDR_START) {
 		type = kmap_atomic_idx();
-		idx = type + KM_TYPE_NR * smp_processor_id();
+		idx = type + KM_TYPE_NR * raw_smp_processor_id();
 
 		if (cache_is_vivt())
 			__cpuc_flush_dcache_area((void *)vaddr, PAGE_SIZE);
@@ -117,7 +117,7 @@ void *kmap_atomic_pfn(unsigned long pfn)
 	pagefault_disable();
 
 	type = kmap_atomic_idx_push();
-	idx = type + KM_TYPE_NR * smp_processor_id();
+	idx = type + KM_TYPE_NR * raw_smp_processor_id();
 	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
 #ifdef CONFIG_DEBUG_HIGHMEM
 	BUG_ON(!pte_none(get_top_pte(vaddr)));
@@ -159,7 +159,7 @@ static void kmap_remove_unused_cpu(int cpu)
 
 static void kmap_remove_unused(void *unused)
 {
-	kmap_remove_unused_cpu(smp_processor_id());
+	kmap_remove_unused_cpu(raw_smp_processor_id());
 }
 
 void kmap_atomic_flush_unused(void)

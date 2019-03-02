@@ -132,7 +132,7 @@ static void smp_store_cpu_info(unsigned int cpuid)
 asmlinkage void __cpuinit secondary_start_kernel(void)
 {
 	struct mm_struct *mm = &init_mm;
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	/*
 	 * All kernel threads share the same mm context; grab a
@@ -142,7 +142,7 @@ asmlinkage void __cpuinit secondary_start_kernel(void)
 	current->active_mm = mm;
 	cpumask_set_cpu(cpu, mm_cpumask(mm));
 
-	set_my_cpu_offset(per_cpu_offset(smp_processor_id()));
+	set_my_cpu_offset(per_cpu_offset(raw_smp_processor_id()));
 	pr_debug("CPU%u: Booted secondary processor\n", cpu);
 
 	/*
@@ -208,7 +208,7 @@ static int op_cpu_disable(unsigned int cpu)
  */
 int __cpu_disable(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	int ret;
 
 	ret = op_cpu_disable(cpu);
@@ -281,7 +281,7 @@ void __cpu_die(unsigned int cpu)
  */
 void __ref cpu_die(void)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 
 	idle_task_exit();
 
@@ -317,7 +317,7 @@ void __init smp_cpus_done(unsigned int max_cpus)
 
 void __init smp_prepare_boot_cpu(void)
 {
-	set_my_cpu_offset(per_cpu_offset(smp_processor_id()));
+	set_my_cpu_offset(per_cpu_offset(raw_smp_processor_id()));
 }
 
 static void (*smp_cross_call)(const struct cpumask *, unsigned int);
@@ -449,7 +449,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 
 	init_cpu_topology();
 
-	smp_store_cpu_info(smp_processor_id());
+	smp_store_cpu_info(raw_smp_processor_id());
 
 	/*
 	 * are we trying to boot more cores than exist?
@@ -473,7 +473,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 		if (max_cpus == 0)
 			break;
 
-		if (cpu == smp_processor_id())
+		if (cpu == raw_smp_processor_id())
 			continue;
 
 		if (!cpu_ops[cpu])
@@ -512,7 +512,7 @@ void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
 void arch_irq_work_raise(void)
 {
 	if (smp_cross_call)
-		smp_cross_call(cpumask_of(smp_processor_id()), IPI_IRQ_WORK);
+		smp_cross_call(cpumask_of(raw_smp_processor_id()), IPI_IRQ_WORK);
 }
 #endif
 
@@ -657,7 +657,7 @@ void arch_trigger_all_cpu_backtrace(void)
  */
 void handle_IPI(int ipinr, struct pt_regs *regs)
 {
-	unsigned int cpu = smp_processor_id();
+	unsigned int cpu = raw_smp_processor_id();
 	struct pt_regs *old_regs = set_irq_regs(regs);
 
 	if (ipinr >= IPI_RESCHEDULE && ipinr < IPI_RESCHEDULE + NR_IPI)
@@ -737,7 +737,7 @@ void smp_send_stop(void)
 		cpumask_t mask;
 
 		cpumask_copy(&mask, cpu_online_mask);
-		cpu_clear(smp_processor_id(), mask);
+		cpu_clear(raw_smp_processor_id(), mask);
 
 		smp_cross_call_common(&mask, IPI_CPU_STOP);
 	}

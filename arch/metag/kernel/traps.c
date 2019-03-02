@@ -749,7 +749,7 @@ static struct traps_context *metag_traps_context;
 
 int traps_save_context(void)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	PTBI _pTBI = per_cpu(pTBI, cpu);
 	struct traps_context *context;
 
@@ -765,7 +765,7 @@ int traps_save_context(void)
 
 int traps_restore_context(void)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	PTBI _pTBI = per_cpu(pTBI, cpu);
 	struct traps_context *context = metag_traps_context;
 
@@ -781,7 +781,7 @@ int traps_restore_context(void)
 #ifdef CONFIG_SMP
 static inline unsigned int _get_trigger_mask(void)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	return per_cpu(trigger_mask, cpu);
 }
 
@@ -793,7 +793,7 @@ EXPORT_SYMBOL(get_trigger_mask);
 
 static void set_trigger_mask(unsigned int mask)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	per_cpu(trigger_mask, cpu) = mask;
 }
 
@@ -833,7 +833,7 @@ void __cpuinit per_cpu_trap_init(unsigned long cpu)
 
 void __init trap_init(void)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	PTBI _pTBI = per_cpu(pTBI, cpu);
 
 	_pTBI->fnSigs[TBID_SIGNUM_XXF] = fault_handler;
@@ -853,7 +853,7 @@ void __init trap_init(void)
 
 void tbi_startup_interrupt(int irq)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	PTBI _pTBI = per_cpu(pTBI, cpu);
 
 	BUG_ON(irq > TBID_SIGNUM_MAX);
@@ -869,7 +869,7 @@ void tbi_startup_interrupt(int irq)
 
 void tbi_shutdown_interrupt(int irq)
 {
-	unsigned long cpu = smp_processor_id();
+	unsigned long cpu = raw_smp_processor_id();
 	PTBI _pTBI = per_cpu(pTBI, cpu);
 
 	BUG_ON(irq > TBID_SIGNUM_MAX);

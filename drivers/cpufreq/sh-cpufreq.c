@@ -52,7 +52,7 @@ static int sh_cpufreq_target(struct cpufreq_policy *policy,
 	cpus_allowed = current->cpus_allowed;
 	set_cpus_allowed_ptr(current, cpumask_of(cpu));
 
-	BUG_ON(smp_processor_id() != cpu);
+	BUG_ON(raw_smp_processor_id() != cpu);
 
 	dev = get_cpu_device(cpu);
 

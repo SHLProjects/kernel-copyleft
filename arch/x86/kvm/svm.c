@@ -626,7 +626,7 @@ static int svm_hardware_enable(void *garbage)
 	uint64_t efer;
 	struct desc_ptr gdt_descr;
 	struct desc_struct *gdt;
-	int me = raw_smp_processor_id();
+	int me = raw_raw_smp_processor_id();
 
 	rdmsrl(MSR_EFER, efer);
 	if (efer & EFER_SVME)
@@ -698,12 +698,12 @@ static int svm_hardware_enable(void *garbage)
 
 static void svm_cpu_uninit(int cpu)
 {
-	struct svm_cpu_data *sd = per_cpu(svm_data, raw_smp_processor_id());
+	struct svm_cpu_data *sd = per_cpu(svm_data, raw_raw_smp_processor_id());
 
 	if (!sd)
 		return;
 
-	per_cpu(svm_data, raw_smp_processor_id()) = NULL;
+	per_cpu(svm_data, raw_raw_smp_processor_id()) = NULL;
 	__free_page(sd->save_area);
 	kfree(sd);
 }
@@ -3490,7 +3490,7 @@ static int handle_exit(struct kvm_vcpu *vcpu)
 
 static void reload_tss(struct kvm_vcpu *vcpu)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	struct svm_cpu_data *sd = per_cpu(svm_data, cpu);
 	sd->tss_desc->type = 9; /* available 32/64-bit TSS */
@@ -3499,7 +3499,7 @@ static void reload_tss(struct kvm_vcpu *vcpu)
 
 static void pre_svm_run(struct vcpu_svm *svm)
 {
-	int cpu = raw_smp_processor_id();
+	int cpu = raw_raw_smp_processor_id();
 
 	struct svm_cpu_data *sd = per_cpu(svm_data, cpu);
 

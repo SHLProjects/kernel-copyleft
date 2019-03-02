@@ -119,7 +119,7 @@ int kgdb_skipexception(int exception, struct pt_regs *regs)
 
 static int kgdb_call_nmi_hook(struct pt_regs *regs)
 {
-	kgdb_nmicallback(raw_smp_processor_id(), regs);
+	kgdb_nmicallback(raw_raw_smp_processor_id(), regs);
 	return 0;
 }
 
@@ -434,7 +434,7 @@ int kgdb_arch_handle_exception(int vector, int signo, int err_code,
 			linux_regs->msr |= MSR_SE;
 #endif
 			atomic_set(&kgdb_cpu_doing_single_step,
-				   raw_smp_processor_id());
+				   raw_raw_smp_processor_id());
 		}
 		return 0;
 	}
