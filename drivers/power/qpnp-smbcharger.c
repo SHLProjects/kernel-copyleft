@@ -1493,7 +1493,7 @@ static int smbchg_charging_en(struct smbchg_chip *chip, bool en)
 #define CURRENT_500_MA		600
 #define CURRENT_900_MA		1000
 #define CURRENT_1500_MA		1600
-#define CURRENT_2000_MA		2000
+#define CURRENT_2000_MA		2100
 #define SUSPEND_CURRENT_MA	2
 #define ICL_OVERRIDE_BIT	BIT(2)
 static int smbchg_usb_suspend(struct smbchg_chip *chip, bool suspend)
@@ -7974,7 +7974,7 @@ static struct of_device_id smbchg_match_table[] = {
 };
 
 #define DC_MA_MIN 300
-#define DC_MA_MAX 2000
+#define DC_MA_MAX 2100
 #define OF_PROP_READ(chip, prop, dt_property, retval, optional)		\
 do {									\
 	if (retval)							\
@@ -8773,7 +8773,7 @@ static int smbchg_probe(struct spmi_device *spmi)
 
 	chip->fcc_votable = create_votable(&spmi->dev,
 			"SMBCHG: fcc",
-			VOTE_MIN, NUM_FCC_VOTER, 2000,
+			VOTE_MIN, NUM_FCC_VOTER, 2100,
 			set_fastchg_current_vote_cb);
 	if (IS_ERR(chip->fcc_votable))
 		return PTR_ERR(chip->fcc_votable);
