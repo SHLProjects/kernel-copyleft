@@ -1133,7 +1133,7 @@
 
 		qcom,bw-upstep = <520>;
 		qcom,bw-dwnstep = <3640>;
-		qcom,max-vote = <7104>;
+		qcom,max-vote = <8010>;
 		qcom,up-step-multp = <2>;
 		qcom,spdm-interval = <50>;
 
