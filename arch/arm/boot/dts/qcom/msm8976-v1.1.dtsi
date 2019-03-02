@@ -36,9 +36,9 @@
 		/delete-property/ qcom,cpr-quotient-adjustment;
 
 		qcom,cpr-speed-bin-max-corners =
-				<0 0 2 4 8>,
-				<2 0 2 4 8>,
-				<3 0 2 4 8>;
+				<0 0 2 4 10>,
+				<2 0 2 4 10>,
+				<3 0 2 4 10>;
 
 		qcom,cpr-fuse-version-map =
 		/* <Speed_bits PVS_version CPR_Rev - - -> */
@@ -58,9 +58,9 @@
 		/delete-property/ qcom,cpr-quotient-adjustment;
 
 		qcom,cpr-speed-bin-max-corners =
-				<0 0 2 4 7>,
-				<2 0 2 4 8>,
-				<3 0 2 4 8>;
+				<0 0 2 4 9>,
+				<2 0 2 4 9>,
+				<3 0 2 4 9>;
 
 		qcom,cpr-fuse-version-map =
 		/* <Speed_bits PVS_version CPR_Rev - - -> */
