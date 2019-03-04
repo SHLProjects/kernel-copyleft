@@ -8371,7 +8371,6 @@ static int __init migration_init(void)
 	return 0;
 }
 early_initcall(migration_init);
-#endif
 
 #ifdef CONFIG_SMP
 
