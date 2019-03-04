@@ -63,7 +63,7 @@
 	qcom,fastchg-current-ma = <3000>;
 	qcom,ibat-ocp-threshold-ua = <3200000>;
 	somc,usb-9v-current-max = <1500>;
-	somc,usb-5v-current-max = <2100>;
+	somc,usb-5v-current-max = <2200>;
 	somc,usb-6v-current-max = <2000>;
 	somc,usb-7v-current-max = <1800>;
 	somc,usb-8v-current-max = <1600>;
@@ -75,7 +75,7 @@
 	somc,thermal-mitigation-usb-8v = <1600 1500 1500 1500 1400 1400 1200 1100 1100 900 700 500 500 500 500>;
 	somc,thermal-mitigation-usb-7v = <1800 1800 1700 1700 1600 1500 1400 1200 1100 900 700 500 500 500 500>;
 	somc,thermal-mitigation-usb-6v = <2000 1900 1800 1700 1600 1500 1400 1200 1100 900 700 500 500 500 500>;
-	somc,thermal-mitigation-usb-5v = <2100 2000 1800 1600 1600 1500 1500 1500 1500 1400 1200 1100 1000 1000 1000>;
+	somc,thermal-mitigation-usb-5v = <2200 2100 2000 1800 1600 1500 1500 1500 1500 1400 1200 1100 1000 1000 1000>;
 	somc,limit-usb-5v-level = <15>;
 	qcom,autoadjust-vfloat;
 	qcom,auto-voltage-comp-mv = <20>;

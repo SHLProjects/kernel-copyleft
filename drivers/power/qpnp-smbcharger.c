@@ -454,7 +454,7 @@ module_param_named(
 	int, S_IRUSR | S_IWUSR
 );
 
-int smbchg_default_dcp_icl_ma = 2100;
+int smbchg_default_dcp_icl_ma = 2200;
 module_param_named(
 	default_dcp_icl_ma, smbchg_default_dcp_icl_ma,
 	int, S_IRUSR | S_IWUSR
@@ -1493,7 +1493,7 @@ static int smbchg_charging_en(struct smbchg_chip *chip, bool en)
 #define CURRENT_500_MA		600
 #define CURRENT_900_MA		1000
 #define CURRENT_1500_MA		1600
-#define CURRENT_2000_MA		2100
+#define CURRENT_2000_MA		2200
 #define SUSPEND_CURRENT_MA	2
 #define ICL_OVERRIDE_BIT	BIT(2)
 static int smbchg_usb_suspend(struct smbchg_chip *chip, bool suspend)
@@ -4637,7 +4637,7 @@ static int smbchg_set_optimal_charging_mode(struct smbchg_chip *chip, int type)
 #else
 #define DEFAULT_SDP_MA		0
 #endif
-#define DEFAULT_CDP_MA		2100
+#define DEFAULT_CDP_MA		2200
 static int smbchg_change_usb_supply_type(struct smbchg_chip *chip,
 						enum power_supply_type type)
 {
@@ -7974,7 +7974,7 @@ static struct of_device_id smbchg_match_table[] = {
 };
 
 #define DC_MA_MIN 300
-#define DC_MA_MAX 2100
+#define DC_MA_MAX 2200
 #define OF_PROP_READ(chip, prop, dt_property, retval, optional)		\
 do {									\
 	if (retval)							\
@@ -8773,7 +8773,7 @@ static int smbchg_probe(struct spmi_device *spmi)
 
 	chip->fcc_votable = create_votable(&spmi->dev,
 			"SMBCHG: fcc",
-			VOTE_MIN, NUM_FCC_VOTER, 2100,
+			VOTE_MIN, NUM_FCC_VOTER, 2200,
 			set_fastchg_current_vote_cb);
 	if (IS_ERR(chip->fcc_votable))
 		return PTR_ERR(chip->fcc_votable);
