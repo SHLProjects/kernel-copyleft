@@ -28,8 +28,8 @@
 /*
  * qpnp-smbcharger_extension_usb.c macros
  */
-#define DEFAULT_PROP1000_MA		1000
-#define DEFAULT_PROP500_MA		500
+#define DEFAULT_PROP1000_MA		1200
+#define DEFAULT_PROP500_MA		700
 
 #ifdef CONFIG_QPNP_SMBCHARGER_ID_POLL
 #define USB_ID_POLL_UP_INTERVAL		1000
@@ -329,13 +329,13 @@ static int get_prop_proprietary_charger(struct smbchg_chip *chip)
 		{{3000000, 2400000}, {3000000, 2400000},
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY,
 				"Proprietary 12w"},
-		{{3000000, 2400000}, {2300000, 2200000},
+		{{3000000, 2400000}, {2300000, 2100000},
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY,
 				"Proprietary 10w"},
-		{{2300000, 2200000}, {3000000, 2400000},
+		{{2300000, 2100000}, {3000000, 2400000},
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY_1000MA,
 				"Proprietary 5w"},
-		{{2300000, 2200000}, {2300000, 2200000},
+		{{2300000, 2100000}, {2300000, 2100000},
 				POWER_SUPPLY_SUB_TYPE_PROPRIETARY_500MA,
 				"Proprietary 2.5w"},
 	};

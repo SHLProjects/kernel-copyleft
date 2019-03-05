@@ -419,22 +419,22 @@ static ssize_t qns_param_store(struct class *dev,
 
 				if(batt_temp < 456)
 				{
-					qns_set_ibat(3000); //Push charging current to QC turbo
+					qns_set_ibat(2400); //Push charging current to QC turbo
 				}
 				if(batt_temp > 456)
 				{
-					qns_set_ibat(2300); //Higher temp, lower current
+					qns_set_ibat(1600); //Higher temp, lower current
 				}
 			}
 			if(capacity > 45 && capacity < 75)
 			{
 				if(batt_temp < 456)
 				{
-					qns_set_ibat(2500); //Sets charging current to QC fast
+					qns_set_ibat(1850); //Sets charging current to QC fast
 				}
 				if(batt_temp > 456)
 				{
-					qns_set_ibat(2100); //Higher temp, lower current
+					qns_set_ibat(1500); //Higher temp, lower current
 				}
 			}
 			if(capacity > 75)
@@ -443,7 +443,7 @@ static ssize_t qns_param_store(struct class *dev,
 			}
 			return count;
 		}
-		if (!ret && (val > 0) && full_charge < 2350)
+		if (!ret && (val > 0) && full_charge < 2400)
 		{
 			qns_set_ibat(val); //Sets charging current to QNS profile
 			return count;

@@ -722,10 +722,10 @@ err:
 	return ERR_USBIN_VOLTAGE;
 }
 
-#define HVDCP3_THERM_USBIN_HYS_5V 5500000
-#define HVDCP3_THERM_USBIN_HYS_6V 6500000
-#define HVDCP3_THERM_USBIN_HYS_7V 7500000
-#define HVDCP3_THERM_USBIN_HYS_8V 8500000
+#define HVDCP3_THERM_USBIN_HYS_5V 5200000
+#define HVDCP3_THERM_USBIN_HYS_6V 6200000
+#define HVDCP3_THERM_USBIN_HYS_7V 7200000
+#define HVDCP3_THERM_USBIN_HYS_8V 8200000
 static int somc_chg_therm_get_therm_mitigation(struct smbchg_chip *chip)
 {
 	struct chg_somc_params *params = &chip->somc_params;
