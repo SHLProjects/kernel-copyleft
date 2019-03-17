@@ -513,8 +513,8 @@
 			qcom,vref-mv = <350>;
 			qcom,switch-freq-khz = <800>;
 			qcom,ovp-mv = <29500>;
-			qcom,ilim-ma = <980>;
-			qcom,boost-duty-ns = <24>;
+			qcom,ilim-ma = <950>;
+			qcom,boost-duty-ns = <26>;
 			qcom,mod-freq-khz = <9600>;
 			qcom,dim-mode = "analog";
 			qcom,dim-method = "linear";
