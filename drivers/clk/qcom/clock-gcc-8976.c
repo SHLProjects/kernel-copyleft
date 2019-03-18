@@ -929,6 +929,7 @@ static struct clk_freq_tbl ftbl_vfe0_clk_src[] = {
 	F( 300000000,      gpll4_out,    4,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
+	F( 466000000,      gpll2_aux,    2,    0,     0),
 	F_END
 };
 
@@ -941,9 +942,9 @@ static struct rcg_clk vfe0_clk_src = {
 	.c = {
 		.dbg_name = "vfe0_clk_src",
 		.ops = &clk_ops_rcg,
-		VDD_DIG_FMAX_MAP5(LOWER, 160000000, LOW, 266000000,
-		NOMINAL, 300000000, NOM_PLUS, 320000000,
-		HIGH, 400000000),
+		VDD_DIG_FMAX_MAP5(LOWER, 160000000, LOW, 300000000,
+		NOMINAL, 320000000, NOM_PLUS, 400000000,
+		HIGH, 466000000),
 		CLK_INIT(vfe0_clk_src.c),
 	},
 };
@@ -960,6 +961,7 @@ static struct clk_freq_tbl ftbl_vfe1_clk_src[] = {
 	F( 300000000,      gpll4_out,    4,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
+	F( 466000000,      gpll2_aux,    2,    0,     0),
 	F_END
 };
 
@@ -972,9 +974,9 @@ static struct rcg_clk vfe1_clk_src = {
 	.c = {
 		.dbg_name = "vfe1_clk_src",
 		.ops = &clk_ops_rcg,
-		VDD_DIG_FMAX_MAP5(LOWER, 160000000, LOW, 266000000,
-		NOMINAL, 300000000, NOM_PLUS, 320000000,
-		HIGH, 400000000),
+		VDD_DIG_FMAX_MAP5(LOWER, 160000000, LOW, 300000000,
+		NOMINAL, 320000000, NOM_PLUS, 400000000,
+		HIGH, 466000000),
 		CLK_INIT(vfe1_clk_src.c),
 	},
 };
@@ -1146,7 +1148,6 @@ static struct rcg_clk esc0_clk_src = {
 	.c = {
 		.dbg_name = "esc0_clk_src",
 		.ops = &clk_ops_rcg,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP1(LOWER, 19200000),
 		CLK_INIT(esc0_clk_src.c),
 	},
@@ -1166,7 +1167,6 @@ static struct rcg_clk esc1_clk_src = {
 	.c = {
 		.dbg_name = "esc1_clk_src",
 		.ops = &clk_ops_rcg,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP1(LOWER, 19200000),
 		CLK_INIT(esc1_clk_src.c),
 	},
@@ -1195,7 +1195,6 @@ static struct rcg_clk mdp_clk_src = {
 	.c = {
 		.dbg_name = "mdp_clk_src",
 		.ops = &clk_ops_rcg,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP4(LOWER, 177780000, LOW, 270000000,
 		NOMINAL, 320000000, HIGH, 420000000),
 		CLK_INIT(mdp_clk_src.c),
@@ -1351,7 +1350,6 @@ static struct rcg_clk gfx3d_clk_src = {
 	.c = {
 		.dbg_name = "gfx3d_clk_src",
 		.ops = &clk_ops_rcg,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		.vdd_class = &vdd_gfx,
 		CLK_INIT(gfx3d_clk_src.c),
 	},
@@ -1433,7 +1431,6 @@ static struct rcg_clk sdcc1_apps_clk_src = {
 	.c = {
 		.dbg_name = "sdcc1_apps_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP2(LOWER, 100000000, NOMINAL, 400000000),
 		CLK_INIT(sdcc1_apps_clk_src.c),
 	},
@@ -1454,7 +1451,6 @@ static struct rcg_clk sdcc1_ice_core_clk_src = {
 	.c = {
 		.dbg_name = "sdcc1_ice_core_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP2(LOWER, 100000000, NOMINAL, 200000000),
 		CLK_INIT(sdcc1_ice_core_clk_src.c),
 	},
@@ -1483,7 +1479,6 @@ static struct rcg_clk sdcc2_apps_clk_src = {
 	.c = {
 		.dbg_name = "sdcc2_apps_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP2(LOWER, 50000000, NOMINAL, 200000000),
 		CLK_INIT(sdcc2_apps_clk_src.c),
 	},
@@ -1498,7 +1493,6 @@ static struct rcg_clk sdcc3_apps_clk_src = {
 	.c = {
 		.dbg_name = "sdcc3_apps_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP2(LOWER, 50000000, NOMINAL, 200000000),
 		CLK_INIT(sdcc3_apps_clk_src.c),
 	},
@@ -1574,6 +1568,7 @@ static struct clk_freq_tbl ftbl_vcodec0_clk_src[] = {
 	F( 310667000,      gpll2_aux,    3,    0,     0),
 	F( 360000000,      gpll6_aux,    3,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
+	F( 466000000,      gpll2_aux,    2,    0,     0),
 	F_END
 };
 
@@ -1586,10 +1581,9 @@ static struct rcg_clk vcodec0_clk_src = {
 	.c = {
 		.dbg_name = "vcodec0_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		.flags = CLKFLAG_NO_RATE_CACHE,
-		VDD_DIG_FMAX_MAP5(LOWER, 133333333, LOW, 228570000,
-		NOMINAL, 310667000, NOM_PLUS, 360000000,
-		HIGH, 400000000),
+		VDD_DIG_FMAX_MAP5(LOWER, 228570000, LOW, 310667000,
+		NOMINAL, 360000000, NOM_PLUS, 400000000,
+		HIGH, 466000000),
 		CLK_INIT(vcodec0_clk_src.c),
 	},
 };
