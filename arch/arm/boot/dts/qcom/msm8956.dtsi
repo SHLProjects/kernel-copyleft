@@ -249,10 +249,10 @@
 		gpu_handle = <&msm_gpu>;
 		qcom,gfxfreq-corner-v0 =
 			<         0   0 >,
-			< 133333333   1 >,  /* Min SVS   */
-			< 200000000   2 >,  /* Low SVS   */
-			< 266666667   3 >,  /* SVS Minus */
-			< 300000000   4 >,  /* SVS       */
+			< 80000000    1 >,  /* Min SVS   */
+			< 100000000   2 >,  /* Low SVS   */
+			< 133333333   3 >,  /* SVS Minus */
+			< 240000000   4 >,  /* SVS       */
 			< 366670000   5 >,  /* SVS Plus  */
 			< 432000000   6 >,  /* NOM       */
 			< 480000000   7 >,  /* Turbo     */
@@ -1911,7 +1911,7 @@
 			<108000 80000000 0xffffffff>,  /* SVS--, 720p30D  */
 			<108000 100000000 0x55555555>, /* SVS- , 720p30E  */
 			<36000 72727200 0xffffffff>,   /* SVS--, 480p30D  */
-			<36000 80000000 0x55555555>;   /* SVS--, 480p30E  */
+			<36000 80000000 0x55555555>; /* SVS--, 480p30E */
 
 		qcom,qdss-presets =
 			<0x6025000 0x1000>,
@@ -2062,7 +2062,7 @@
 					 "bus_clk", "scm_core_clk",
 					 "scm_iface_clk", "scm_bus_clk",
 					 "scm_core_clk_src";
-		qcom,scm_core_clk_src-freq = <80000000>;
+		qcom,scm_core_clk_src-freq = <100000000>;
 
 		qcom,msm-bus,name = "pil-venus";
 		qcom,msm-bus,num-cases = <2>;
@@ -2094,7 +2094,7 @@
 				"scm_bus_clk", "scm_core_clk_src";
 		qcom,proxy-clock-names = "xo", "scm_core_clk", "scm_iface_clk",
 				 "scm_bus_clk", "scm_core_clk_src";
-		qcom,scm_core_clk_src-freq = <80000000>;
+		qcom,scm_core_clk_src-freq = <100000000>;
 
 		qcom,pas-id = <1>;
 		qcom,proxy-timeout-ms = <10000>;
@@ -2180,7 +2180,7 @@
 				"scm_bus_clk", "scm_core_clk_src";
 		qcom,proxy-clock-names = "xo", "scm_core_clk", "scm_iface_clk",
 				 "scm_bus_clk", "scm_core_clk_src";
-		qcom,scm_core_clk_src = <80000000>;
+		qcom,scm_core_clk_src = <100000000>;
 
 		qcom,pas-id = <6>;
 		qcom,proxy-timeout-ms = <10000>;
