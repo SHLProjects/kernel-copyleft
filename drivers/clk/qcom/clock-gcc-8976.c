@@ -928,8 +928,7 @@ static struct clk_freq_tbl ftbl_vfe0_clk_src[] = {
 	F( 300000000,      gpll4_out,    4,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
-	F( 466000000,      gpll2_aux,    2,    0,     0),
-	F( 541000000,      gpll2_aux,    2,    0,     0),
+	F( 541000000,      gpll2_aux,  1.5,    0,     0),
 	F_END
 };
 
@@ -961,8 +960,7 @@ static struct clk_freq_tbl ftbl_vfe1_clk_src[] = {
 	F( 300000000,      gpll4_out,    4,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
-	F( 466000000,      gpll2_aux,    2,    0,     0),
-	F( 541000000,      gpll2_aux,    2,    0,     0),
+	F( 541000000,      gpll2_aux,  1.5,    0,     0),
 	F_END
 };
 
@@ -999,6 +997,7 @@ static struct rcg_clk crypto_clk_src = {
 	.c = {
 		.dbg_name = "crypto_clk_src",
 		.ops = &clk_ops_rcg,
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		VDD_DIG_FMAX_MAP2(LOWER, 80000000, NOMINAL, 160000000),
 		CLK_INIT(crypto_clk_src.c),
 	},
@@ -1351,6 +1350,7 @@ static struct rcg_clk gfx3d_clk_src = {
 	.c = {
 		.dbg_name = "gfx3d_clk_src",
 		.ops = &clk_ops_rcg,
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		.vdd_class = &vdd_gfx,
 		CLK_INIT(gfx3d_clk_src.c),
 	},
@@ -1569,8 +1569,7 @@ static struct clk_freq_tbl ftbl_vcodec0_clk_src[] = {
 	F( 310667000,      gpll2_aux,    3,    0,     0),
 	F( 360000000,      gpll6_aux,    3,    0,     0),
 	F( 400000000,          gpll0,    2,    0,     0),
-	F( 466000000,      gpll2_aux,    2,    0,     0),
-	F( 541000000,      gpll2_aux,    2,    0,     0),
+	F( 541000000,      gpll2_aux,  1.5,    0,     0),
 	F_END
 };
 
@@ -2603,6 +2602,7 @@ static struct branch_clk gcc_oxili_gfx3d_clk = {
 		VDD_DIG_FMAX_MAP5(LOWER, 300000000, LOW, 366670000,
 				NOMINAL, 432000000, NOM_PLUS, 480000000,
 				HIGH, 753333333),
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		.ops = &clk_ops_branch,
 		CLK_INIT(gcc_oxili_gfx3d_clk.c),
 	},
@@ -2957,6 +2957,7 @@ static struct local_vote_clk gcc_crypto_ahb_clk = {
 	.c = {
 		.dbg_name = "gcc_crypto_ahb_clk",
 		.ops = &clk_ops_vote,
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		CLK_INIT(gcc_crypto_ahb_clk.c),
 	},
 };
@@ -2969,6 +2970,7 @@ static struct local_vote_clk gcc_crypto_axi_clk = {
 	.c = {
 		.dbg_name = "gcc_crypto_axi_clk",
 		.ops = &clk_ops_vote,
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		CLK_INIT(gcc_crypto_axi_clk.c),
 	},
 };
@@ -2982,6 +2984,7 @@ static struct local_vote_clk gcc_crypto_clk = {
 		.dbg_name = "gcc_crypto_clk",
 		.parent = &crypto_clk_src.c,
 		.ops = &clk_ops_vote,
+		.flags = CLKFLAG_NO_RATE_CACHE,
 		CLK_INIT(gcc_crypto_clk.c),
 	},
 };
