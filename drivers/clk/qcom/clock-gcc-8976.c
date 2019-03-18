@@ -782,7 +782,6 @@ static struct clk_freq_tbl ftbl_jpeg0_clk_src[] = {
 	F( 266666667,          gpll0,    3,    0,     0),
 	F( 300000000,      gpll4_out,    4,    0,     0),
 	F( 320000000,          gpll0,  2.5,    0,     0),
-	F( 400000000,          gpll0,    2,    0,     0),
 	F_END
 };
 
@@ -797,7 +796,7 @@ static struct rcg_clk jpeg0_clk_src = {
 		.ops = &clk_ops_rcg,
 		VDD_DIG_FMAX_MAP5(LOWER, 133330000, LOW, 200000000,
 		NOMINAL, 266670000, NOM_PLUS, 300000000,
-		HIGH, 400000000),
+		HIGH, 320000000),
 		CLK_INIT(jpeg0_clk_src.c),
 	},
 };
