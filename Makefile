@@ -379,7 +379,8 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -fno-delete-null-pointer-checks \
-		   -std=gnu89
+		   -std=gnu89 -O3 -pipe -mtls-dialect=desc -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 \
+		   -march=armv8-a+crc+simd+crypto+fp -mtune=cortex-a57.cortex-a53
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
