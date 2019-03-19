@@ -165,9 +165,9 @@
 				/* SUPER TURBO PLUS */
 				qcom,gpu-pwrlevel@0 {
 					reg = <0>;
-					qcom,gpu-freq = <753333333>;
+					qcom,gpu-freq = <685000000>;
 					qcom,bus-freq = <11>;
-					qcom,bus-min = <10>;
+					qcom,bus-min = <11>;
 					qcom,bus-max = <11>;
 				};
 
