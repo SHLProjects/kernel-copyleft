@@ -870,7 +870,7 @@
 	qcom,capacity-learning-on;
 	qcom,capacity-learning-feedback;
 	qcom,capacity-estimation-on;
-	qcom,aging-eval-current-ma = <200>;
+	qcom,aging-eval-current-ma = <30>;
 	qcom,cl-max-increment-deciperc = <19>;
 	qcom,cl-max-decrement-deciperc = <32>;
 	qcom,cl-max-start-capacity = <35>;
@@ -882,7 +882,7 @@
 	qcom,fg-cutoff-voltage-mv = <3100>;
 	qcom,vbat-estimate-diff-mv = <200>;
 	qcom,cl-vbat-est-thr-uv = <200000>;
-	qcom,fg-cc-cv-threshold-mv = <4325>;
+	qcom,fg-cc-cv-threshold-mv = <4300>;
 	somc,resume-soc-raw-full-normal = <0xF3>;
 	somc,resume-soc-raw-full-aging = <0xE3>;
 	somc,resume-soc-raw-not-full-normal = <0xFD>;
@@ -896,12 +896,12 @@
 	qcom,usb_dp-vadc = <&pmi8950_vadc>;
 	qcom,usb_dm-vadc = <&pmi8950_vadc>;
 	qcom,usbin-vadc = <&pmi8950_vadc>;
-	qcom,float-voltage-mv = <4355>;
+	qcom,float-voltage-mv = <4275>;
 	qcom,precharging-timeout-mins = <24>;
 	qcom,charging-timeout-mins = <768>;
 	qcom,bmd-pin-src = "bpd_none";
-	qcom,parallel-main-chg-fcc-percent = <70>;
-	qcom,parallel-main-chg-icl-percent = <80>;
+	qcom,parallel-main-chg-fcc-percent = <50>;
+	qcom,parallel-main-chg-icl-percent = <60>;
 	qcom,batt-aging-comp;
 	qcom,low-volt-dcin;
 	qcom,force-aicl-rerun;
