@@ -140,7 +140,7 @@
 #define WCD9335_DEC_PWR_LVL_HP 0x04
 #define WCD9335_DEC_PWR_LVL_DF 0x00
 
-#define CALCULATE_VOUT_D(req_mv) (((req_mv - 170) * 10) / 25)
+#define CALCULATE_VOUT_D(req_mv) (((req_mv - 110) * 10) / 25)
 
 #define DAPM_LDO_H_STANDALONE "LDO_H"
 
@@ -164,8 +164,8 @@ enum {
 };
 
 enum tasha_sido_voltage {
-	SIDO_VOLTAGE_SVS_MV = 1100,
-	SIDO_VOLTAGE_NOMINAL_MV = 1400,
+	SIDO_VOLTAGE_SVS_MV = 1050,
+	SIDO_VOLTAGE_NOMINAL_MV = 1350,
 };
 
 static int dig_core_collapse_enable = 1;
