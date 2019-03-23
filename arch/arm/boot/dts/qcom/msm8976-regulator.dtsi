@@ -375,7 +375,7 @@
 			regulator-min-microvolt = <500000>;
 			regulator-max-microvolt = <1165000>;
 			qcom,auto-mode-enable = <1>;
-			qcom,ocp-enable = <1>;
+			qcom,ocp-enable = <0>;
 			qcom,enable-time = <500>;
 		};
 	};
@@ -479,8 +479,8 @@
 			<0 37 150>, /* NOM + 15mv, TURBO + 60mv */
 			<0  0   0>;
 		qcom,cpr-voltage-floor-override =
-			<(-1) (-1) 760000 770000 815000 830000
-			945000 945000 960000 970000 990000 1055000>;
+			<(-1) (-1) 760000 770000 810000 830000
+			945000 945000 960000 970000 990000 1035000>;
 		qcom,cpr-enable;
 	};
 
@@ -579,7 +579,7 @@
 			<0    0  0>;
 		qcom,cpr-voltage-floor-override =
 			<(-1) (-1) 770000 790000 820000 840000
-			940000 970000 970000 990000 1000000>;
+			940000 970000 970000 990000 1025000>;
 
 		qcom,cpr-enable;
 	};
