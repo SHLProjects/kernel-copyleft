@@ -417,24 +417,24 @@ static ssize_t qns_param_store(struct class *dev,
 			if(capacity > 25 && capacity < 45)
 			{
 
-				if(batt_temp < 456)
+				if(batt_temp < 465)
 				{
 					qns_set_ibat(2400); //Push charging current to QC turbo
 				}
-				if(batt_temp > 456)
+				if(batt_temp > 450)
 				{
-					qns_set_ibat(1600); //Higher temp, lower current
+					qns_set_ibat(1850); //Higher temp, lower current
 				}
 			}
 			if(capacity > 45 && capacity < 75)
 			{
-				if(batt_temp < 456)
+				if(batt_temp < 465)
 				{
-					qns_set_ibat(1850); //Sets charging current to QC fast
+					qns_set_ibat(2000); //Sets charging current to QC fast
 				}
-				if(batt_temp > 456)
+				if(batt_temp > 450)
 				{
-					qns_set_ibat(1500); //Higher temp, lower current
+					qns_set_ibat(1600); //Higher temp, lower current
 				}
 			}
 			if(capacity > 75)
