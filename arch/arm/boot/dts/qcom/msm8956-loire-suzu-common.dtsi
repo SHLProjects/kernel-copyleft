@@ -81,7 +81,7 @@
 	qcom,auto-voltage-comp-mv = <20>;
 	qcom,rparasitics-uohm = <122500>;
 	qcom,dc-psy-type = "Mains";
-	qcom,dc-psy-ma = <2000>;
+	qcom,dc-psy-ma = <2100>;
 };
 
 &spmi_bus {
@@ -90,7 +90,7 @@
 			somc,init-br-ua = <3500>;
 			somc-s1,br-power-save-ua = <800>;
 			qcom,led-strings-list = [00 01 02];
-			qcom,ilim-ma = <660>;
+			qcom,ilim-ma = <750>;
 		};
 	};
 };

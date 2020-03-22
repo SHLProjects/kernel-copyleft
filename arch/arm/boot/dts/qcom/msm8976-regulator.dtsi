@@ -346,7 +346,7 @@
 			compatible = "qcom,spm-regulator";
 			reg = <0x2000 0x100>;
 			regulator-name = "pm8950_s5";
-			qcom,init-quiet-mode = <1>; //Regulator EMI noise reduction enabled
+			qcom,init-quiet-mode = <0>; //Regulator EMI noise reduction disabled
 			regulator-min-microvolt = <500000>;
 			regulator-max-microvolt = <1165000>;
 			qcom,cpu-num = <0>;
@@ -359,7 +359,7 @@
 			compatible = "qcom,spm-regulator";
 			reg = <0x1700 0x100>;
 			regulator-name = "pm8004_s2";
-			qcom,init-quiet-mode = <1>; //Regulator EMI noise reduction enabled
+			qcom,init-quiet-mode = <0>; //Regulator EMI noise reduction disabled
 			regulator-min-microvolt = <500000>;
 			regulator-max-microvolt = <1165000>;
 			qcom,cpu-num = <4>;
@@ -371,7 +371,7 @@
 			reg = <0x2000 0x100>;
 			regulator-name = "pm8004_s5";
 			qcom,init-smps-mode = <1>;
-			qcom,init-quiet-mode = <1>; //Regulator EMI noise reduction enabled
+			qcom,init-quiet-mode = <0>; //Regulator EMI noise reduction disabled
 			regulator-min-microvolt = <500000>;
 			regulator-max-microvolt = <1165000>;
 			qcom,auto-mode-enable = <0>; //Disables automatic selection
@@ -481,7 +481,7 @@
 			<0  0   0>;
 		qcom,cpr-voltage-floor-override =
 			<(-1) (-1) 760000 770000 810000 830000
-			945000 945000 960000 970000 990000 1010000>;
+			945000 945000 960000 970000 990000 1015000>;
 		qcom,cpr-enable;
 	};
 
@@ -580,7 +580,7 @@
 			<0    0  0>;
 		qcom,cpr-voltage-floor-override =
 			<(-1) (-1) 770000 790000 820000 840000
-			940000 970000 970000 990000 1010000>;
+			940000 970000 970000 990000 1015000>;
 
 		qcom,cpr-enable;
 	};
@@ -617,8 +617,8 @@
 				<810000 865000 900000 950000 1010000
 				1050000 1110000 1145000 1165000>;
 		qcom,cpr-voltage-floor =
-				<720000 740000 750000 770000 780000
-				855000 920000 960000 985000>;
+				<730000 750000 760000 775000 800000
+				875000 935000 975000 990000>;
 		vdd-gfx-supply = <&pm8004_s5>;
 
 		vdd-mx-supply = <&pm8950_s6_level_ao>;
